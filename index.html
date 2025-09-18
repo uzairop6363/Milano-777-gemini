@@ -97,6 +97,13 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 15px; padding: 20px 10px; overflow-y: auto;
         }
+
+        /* === CHANGE 2: Added this small rule to make sure the link looks right === */
+        .game-grid a.game-card {
+            text-decoration: none; /* Removes the underline */
+            color: #ffffff;       /* Ensures the text is white */
+        }
+        
         .game-card {
             background-color: rgba(23, 32, 42, 0.7); border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.2); display: flex;
@@ -247,7 +254,9 @@
             <div class="game-card"> <i class="fas fa-dice"></i> <span>Ludo</span> </div>
             <div class="game-card"> <i class="fas fa-crown"></i> <span>Rummy</span> </div>
             <div class="game-card"> <i class="fas fa-layer-group"></i> <span>Teen Patti</span> </div>
-            <div class="game-card"> <i class="fas fa-dragon"></i> <span>Dragon Tiger</span> </div>
+
+            <a href="game.html" class="game-card"> <i class="fas fa-dragon"></i> <span>Dragon Tiger</span> </a>
+            
             <div class="game-card"> <i class="fas fa-arrow-up-down-dots"></i> <span>7 Up Down</span> </div>
             <div class="game-card"> <i class="fas fa-diamond"></i> <span>Poker</span> </div>
             <div class="game-card"> <i class="fas fa-shuffle"></i> <span>Andar Bahar</span> </div>
