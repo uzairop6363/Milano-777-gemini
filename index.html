@@ -19,8 +19,10 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #1a1a2e;
-            background-image: url('https://i.imgur.com/gJZmGAb.jpg'); /* Placeholder background */
+            /* === THIS IS THE GUARANTEED BACKGROUND FIX === */
+            background-color: #1c1f3a; /* Fallback for very old browsers */
+            background-image: linear-gradient(135deg, #121421 0%, #383a59 100%);
+            /* ============================================== */
             background-size: cover;
             background-position: center;
             color: #ffffff;
@@ -36,6 +38,7 @@
             flex-direction: column;
             flex-grow: 1;
             padding: 15px;
+            background-color: rgba(0, 0, 0, 0.1);
         }
 
         /* --- Top Bar --- */
@@ -139,7 +142,7 @@
             text-align: center;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            aspect-ratio: 1.3 / 1; /* Makes cards wider than they are tall */
+            aspect-ratio: 1.3 / 1;
         }
 
         .game-card:hover {
@@ -180,7 +183,6 @@
         .nav-item i {
             font-size: 1.8rem;
         }
-
     </style>
 </head>
 <body>
@@ -210,7 +212,7 @@
         <main class="game-grid">
             <div class="game-card"> <i class="fas fa-dice"></i> <span>Ludo</span> </div>
             <div class="game-card"> <i class="fas fa-crown"></i> <span>Rummy</span> </div>
-            <div class="fas fa-layer-group game-card"> <i class="fas fa-layer-group"></i> <span>Teen Patti</span> </div>
+            <div class="game-card"> <i class="fas fa-layer-group"></i> <span>Teen Patti</span> </div>
             <div class="game-card"> <i class="fas fa-dragon"></i> <span>Dragon Tiger</span> </div>
             <div class="game-card"> <i class="fas fa-arrow-up-down-dots"></i> <span>7 Up Down</span> </div>
             <div class="game-card"> <i class="fas fa-diamond"></i> <span>Poker</span> </div>
