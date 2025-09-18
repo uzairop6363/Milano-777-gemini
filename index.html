@@ -19,12 +19,13 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            /* === This code loads your local background.jpg image === */
             background-color: #2c1d27; /* Dark fallback color */
             background-image: url('background.jpg');
-            /* ========================================================= */
             background-size: cover;
             background-position: center;
+            /* === THIS IS THE FIX FOR THE ROTATION PROBLEM === */
+            background-attachment: fixed;
+            /* ================================================= */
             color: #ffffff;
             display: flex;
             flex-direction: column;
