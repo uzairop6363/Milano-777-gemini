@@ -53,26 +53,25 @@
             right: 10%; /* ESTIMATE: Adjust left/right */
         }
 
-        /* Message Display (e.g., 'DRAGON WINS!') */
+        /* === THIS IS THE SECTION I FIXED === */
         #message-display {
             position: absolute;
-            top: 30%; /* ESTIMATE: Adjust up/down */
+            top: 38.5%; /* MOVED UP: Was 30% to fit in the purple line */
             left: 50%;
             transform: translateX(-50%);
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ffc107;
-            text-shadow: 0 0 10px rgba(255, 193, 7, 0.8);
+            font-size: 0.9rem; /* MADE SMALLER: Was 2rem */
+            font-weight: 600; /* Adjusted weight */
+            color: #ffffff; /* Changed to crisp white */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Refined shadow for small text */
             width: 100%;
             text-align: center;
+            letter-spacing: 1px; /* Add some spacing to the letters */
         }
 
         /* Invisible Betting Hotspots */
         .bet-box {
             position: absolute;
             cursor: pointer;
-            /* Use a semi-transparent background for DEBUGGING, then set to 'transparent' */
-            /* background: rgba(255, 0, 0, 0.3); */
             background: transparent;
             border-radius: 15px; /* Match the radius in your image */
             display: flex;
@@ -111,7 +110,6 @@
             font-weight: 700;
             line-height: 1;
             text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
-            /* We will use absolute positioning for content too */
             position: absolute;
             top: 45%;
             left: 50%;
@@ -171,7 +169,6 @@
             box-shadow: 0 0 20px #ffdd00;
         }
         
-        /* Controls are hidden, as the main actions are clicking boxes and chips now */
         #controls { display: none; }
 
     </style>
@@ -189,15 +186,15 @@
             <div class="bet-amount" id="dragon-bet-display">$0</div>
         </div>
         <div class="bet-box" id="tie-box">
-            <div class="card-display" id="tie-card"></div> <div class="bet-amount" id="tie-bet-display">$0</div>
+            <div class="card-display" id="tie-card"></div>
+            <div class="bet-amount" id="tie-bet-display">$0</div>
         </div>
         <div class="bet-box" id="tiger-box">
             <div class="card-display" id="tiger-card"></div>
             <div class="bet-amount" id="tiger-bet-display">$0</div>
         </div>
 
-        <div id="chip-rail">
-            </div>
+        <div id="chip-rail"></div>
 
         <div id="controls" style="display: none;">
             <button id="deal-btn">Deal</button>
@@ -206,11 +203,6 @@
         </div>
     </div>
     
-    <script>
-        // Minor JS update needed for this new UI
-        const dealBtn = document.getElementById('deal-btn');
-        // We will now trigger 'deal' automatically after a bet is placed.
-    </script>
     <script src="script.js"></script>
 
 </body>
