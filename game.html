@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dragon Tiger</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,8 +34,7 @@
             position: relative;
         }
 
-        /* === THIS SECTION IS FIXED === */
-        /* Balance and Total Bet text - positioned absolutely */
+        /* Balance and Total Bet text */
         .info-display {
             position: absolute;
             font-size: 1.2rem;
@@ -43,15 +42,15 @@
             text-shadow: 2px 2px 4px #000;
         }
         #balance-display {
-            top: 10%;   /* MOVED UP */
-            left: 19%;  /* MOVED IN */
+            top: 10%;
+            left: 19%;
         }
         #total-bet-display {
-            top: 10%;   /* MOVED UP */
-            right: 19%; /* MOVED IN */
+            top: 10%;
+            right: 19%;
         }
 
-        /* Message Display (e.g., 'Place your bets!') */
+        /* Message Display */
         #message-display {
             position: absolute;
             top: 38.5%;
@@ -66,20 +65,14 @@
             letter-spacing: 1px;
         }
 
-        /* === THIS SECTION IS FIXED === */
+        /* === THIS IS THE MAIN FIX === */
         /* Invisible Betting Hotspots */
         .bet-box {
-            position: absolute;
+            position: absolute; /* This positions the box on the screen */
             cursor: pointer;
             background: transparent;
             border-radius: 15px;
-            /* Using FLEXBOX to correctly position content INSIDE the box */
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* This will now work correctly */
-            align-items: center;
-            padding: 10px; /* Add some padding for content spacing */
-            gap: 15%; /* Create space between card and amount */
+            /* CRITICAL: It now acts as the positioning parent for its children */
         }
 
         /* POSITIONING FOR BET BOXES */
@@ -87,22 +80,29 @@
         #tie-box { top: 41%; left: 36%; width: 28%; height: 38%; }
         #tiger-box { top: 41%; left: 66%; width: 28%; height: 38%; }
 
-        /* === THIS SECTION IS FIXED === */
         /* Content inside the invisible boxes */
         .card-display {
-            font-size: 3rem; /* Adjusted size */
+            /* This is now positioned absolutely INSIDE its parent .bet-box */
+            position: absolute;
+            top: 40%; /* 40% from the top of the box */
+            left: 50%; /* 50% from the left of the box */
+            transform: translate(-50%, -50%); /* Center it perfectly */
+            font-size: 3rem;
             font-weight: 700;
             line-height: 1;
             text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
-            display: none; /* Hidden by default, shown by JS when dealt */
-            order: 1; /* Appears first */
+            display: none; /* Hidden by default */
         }
 
         .bet-amount {
-            font-size: 1.2rem; /* Small size as requested */
+            /* This is now positioned absolutely INSIDE its parent .bet-box */
+            position: absolute;
+            bottom: 12%; /* 12% from the bottom of the box */
+            left: 50%; /* 50% from the left of the box */
+            transform: translateX(-50%); /* Center it horizontally */
+            font-size: 1.2rem;
             font-weight: 700;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-            order: 2; /* Appears second */
         }
 
         /* Chip Rail */
