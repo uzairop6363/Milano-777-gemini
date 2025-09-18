@@ -53,29 +53,29 @@
             right: 10%; /* ESTIMATE: Adjust left/right */
         }
 
-        /* === THIS IS THE SECTION I FIXED === */
+        /* Message Display (e.g., 'Place your bets!') */
         #message-display {
             position: absolute;
-            top: 38.5%; /* MOVED UP: Was 30% to fit in the purple line */
+            top: 38.5%;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.9rem; /* MADE SMALLER: Was 2rem */
-            font-weight: 600; /* Adjusted weight */
-            color: #ffffff; /* Changed to crisp white */
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Refined shadow for small text */
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
             width: 100%;
             text-align: center;
-            letter-spacing: 1px; /* Add some spacing to the letters */
+            letter-spacing: 1px;
         }
 
         /* Invisible Betting Hotspots */
         .bet-box {
             position: absolute;
             cursor: pointer;
-            background: transparent;
+            background: transparent; /* Invisible */
             border-radius: 15px; /* Match the radius in your image */
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Stack contents vertically within the hotspot */
             justify-content: center;
             align-items: center;
             transition: transform 0.2s;
@@ -110,20 +110,27 @@
             font-weight: 700;
             line-height: 1;
             text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
-            position: absolute;
-            top: 45%;
+            /* Position cards in the middle of the betting boxes */
+            position: absolute; /* Position relative to .bet-box */
+            top: 40%; /* Adjust to move card up/down */
             left: 50%;
             transform: translate(-50%, -50%);
+            display: none; /* Cards are hidden by default, shown when dealt */
         }
 
+        /* === THIS IS THE SECTION I FIXED === */
         .bet-amount {
-            font-size: 1.5rem;
+            font-size: 1.1rem; /* Smaller size as requested */
             font-weight: 700;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
-            position: absolute;
-            bottom: 12%; /* Position from the bottom of the box */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* Adjusted shadow */
+            position: absolute; /* Position relative to .bet-box */
+            bottom: 12%; /* Moves it towards the bottom of the box */
             left: 50%;
             transform: translateX(-50%);
+            /* Optional: You might want a slightly transparent background if it's hard to read */
+            /* background-color: rgba(0,0,0,0.2); */
+            /* padding: 2px 5px; */
+            /* border-radius: 5px; */
         }
 
         /* Chip Rail */
