@@ -19,12 +19,12 @@
 
         html, body {
             height: 100%;
-            overflow: hidden; /* Prevents scrolling on the whole page */
+            overflow: hidden;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #2c1d27; /* Dark fallback color */
+            background-color: #2c1d27;
             background-image: url('background.jpg');
             background-size: cover;
             background-position: center;
@@ -32,7 +32,6 @@
             color: #ffffff;
         }
 
-        /* --- Main Layout Container --- */
         .game-container {
             display: flex;
             flex-direction: column;
@@ -41,13 +40,12 @@
             background-color: rgba(0, 0, 0, 0.3); 
         }
 
-        /* --- Top Bar --- */
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 5px;
-            flex-shrink: 0; /* Prevents the top bar from shrinking */
+            flex-shrink: 0;
         }
 
         .user-profile {
@@ -68,7 +66,7 @@
         .user-info {
             margin: 0 8px;
         }
-        /* Using clamp for responsive font size */
+        
         .user-info .name {
             font-weight: 600;
             font-size: clamp(0.8rem, 2.5vw, 1rem);
@@ -123,15 +121,13 @@
             gap: 5px;
         }
 
-        /* --- Game Grid (Mobile Portrait First Design) --- */
         .game-grid {
             flex-grow: 1;
             display: grid;
-            /* DEFAULT: 2 columns for portrait mode */
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             padding: 20px 10px;
-            overflow-y: auto; /* Allow scrolling only in the game area */
+            overflow-y: auto;
         }
 
         .game-card {
@@ -145,7 +141,7 @@
             text-align: center;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            aspect-ratio: 1.2 / 1; /* Adjust card shape slightly */
+            aspect-ratio: 1.2 / 1;
         }
 
         .game-card:hover {
@@ -164,14 +160,13 @@
             font-size: clamp(0.7rem, 2.5vw, 0.9rem);
         }
 
-        /* --- Bottom Navigation Bar --- */
         .bottom-nav {
             background-color: rgba(0, 0, 0, 0.6);
             display: flex;
             justify-content: space-around;
             padding: 8px 0;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
-            flex-shrink: 0; /* Prevents the bottom bar from shrinking */
+            flex-shrink: 0;
         }
 
         .nav-item {
@@ -189,33 +184,119 @@
             font-size: 1.6rem;
         }
 
-        /*
-        ====================================================
-        === RESPONSIVE FIX: Styles for Landscape Mode ===
-        ====================================================
-        */
         @media (orientation: landscape) {
             .game-container {
                 padding: 15px;
             }
-
             .game-grid {
-                /* SWITCH to 4 columns in landscape mode */
                 grid-template-columns: repeat(4, 1fr);
                 gap: 20px;
                 padding: 25px;
             }
-
             .user-profile img {
                 width: 45px;
                 height: 45px;
             }
-
             .bottom-nav {
                 padding: 10px 0;
             }
         }
+        
+        /* === NEW: Styles for the Withdrawal Modal === */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
 
+        .modal-content {
+            background: linear-gradient(135deg, #4c3c64, #2a2a4e);
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px solid #ffc107;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.8rem;
+            color: #ffffff;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+        
+        .modal-content h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffc107;
+        }
+        
+        .payment-options {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .payment-option {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #888;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .payment-option.selected {
+            border-color: #ffc107;
+            background-color: rgba(255, 193, 7, 0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #ddd;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #888;
+            background-color: #333;
+            color: #fff;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(180deg, #ffc107, #ff9800);
+            color: #000;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -260,9 +341,118 @@
             <a href="#" class="nav-item"> <i class="fas fa-envelope"></i> <span>E-Mail</span> </a>
             <a href="#" class="nav-item"> <i class="fas fa-headset"></i> <span>Support</span> </a>
             <a href="#" class="nav-item"> <i class="fas fa-bell"></i> <span>Notice</span> </a>
-            <a href="#" class="nav-item"> <i class="fas fa-money-bill-wave"></i> <span>Withdraw</span> </a>
+            <a href="#" class="nav-item" id="withdraw-btn"> <i class="fas fa-money-bill-wave"></i> <span>Withdraw</span> </a>
         </footer>
     </div>
+
+    <div class="modal-overlay" id="withdraw-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="close-modal-btn">&times;</button>
+            <h2>Withdraw Funds</h2>
+            
+            <div class="payment-options">
+                <div class="payment-option" data-method="Easypaisa">Easypaisa</div>
+                <div class="payment-option" data-method="Jazzcash">Jazzcash</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="account-number">Account Number</label>
+                <input type="tel" id="account-number" placeholder="e.g., 03xxxxxxxxx">
+            </div>
+            
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" placeholder="Enter amount in PKR">
+            </div>
+            
+            <button class="submit-btn" id="confirm-withdraw-btn">Confirm Withdrawal</button>
+        </div>
+    </div>
+
+    <script>
+        // Get all the necessary elements from the page
+        const withdrawBtn = document.getElementById('withdraw-btn');
+        const withdrawModal = document.getElementById('withdraw-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        const accountNumberInput = document.getElementById('account-number');
+        const amountInput = document.getElementById('amount');
+        const confirmWithdrawBtn = document.getElementById('confirm-withdraw-btn');
+        
+        let selectedPaymentMethod = null;
+
+        // --- Event Listeners ---
+
+        // Show the modal when the main "Withdraw" button is clicked
+        withdrawBtn.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent the link from navigating
+            withdrawModal.style.display = 'flex';
+        });
+
+        // Hide the modal when the 'X' close button is clicked
+        closeModalBtn.addEventListener('click', () => {
+            withdrawModal.style.display = 'none';
+        });
+        
+        // Hide the modal if the user clicks on the dark overlay area
+        withdrawModal.addEventListener('click', (event) => {
+            if (event.target === withdrawModal) {
+                withdrawModal.style.display = 'none';
+            }
+        });
+
+        // Handle the selection of a payment method
+        paymentOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove 'selected' class from all options
+                paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                // Add 'selected' class to the clicked option
+                option.classList.add('selected');
+                // Store the selected method's name
+                selectedPaymentMethod = option.getAttribute('data-method');
+            });
+        });
+
+        // Handle the final withdrawal confirmation
+        confirmWithdrawBtn.addEventListener('click', () => {
+            const accountNumber = accountNumberInput.value;
+            const amount = amountInput.value;
+
+            // --- Basic Validation ---
+            if (!selectedPaymentMethod) {
+                alert('Please select a payment method.');
+                return; // Stop the function
+            }
+            if (accountNumber.trim() === '') {
+                alert('Please enter an account number.');
+                return;
+            }
+            if (amount.trim() === '' || parseFloat(amount) <= 0) {
+                alert('Please enter a valid amount.');
+                return;
+            }
+
+            // --- Simulation of a successful request ---
+            // In a real app, this is where you would send the data to your server
+            const confirmationMessage = `Withdrawal request submitted:
+            
+Method: ${selectedPaymentMethod}
+Account: ${accountNumber}
+Amount: PKR ${amount}
+
+Your request is being processed.`;
+            
+            alert(confirmationMessage);
+
+            // Hide the modal and clear the form for next time
+            withdrawModal.style.display = 'none';
+            accountNumberInput.value = '';
+            amountInput.value = '';
+            paymentOptions.forEach(opt => opt.classList.remove('selected'));
+            selectedPaymentMethod = null;
+        });
+
+    </script>
 
 </body>
 </html>
