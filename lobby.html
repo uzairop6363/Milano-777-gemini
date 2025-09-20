@@ -98,10 +98,9 @@
             gap: 15px; padding: 20px 10px; overflow-y: auto;
         }
 
-        /* === CHANGE 2: Added this small rule to make sure the link looks right === */
         .game-grid a.game-card {
-            text-decoration: none; /* Removes the underline */
-            color: #ffffff;       /* Ensures the text is white */
+            text-decoration: none;
+            color: #ffffff;
         }
         
         .game-card {
@@ -133,12 +132,12 @@
             .bottom-nav { padding: 10px 0; }
         }
         
-        /* === Styles for the Withdrawal Modal (NOW FULLY RESPONSIVE) === */
+        /* Styles for the Withdrawal Modal */
         .modal-overlay {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
-            display: none; /* Hidden by default */
+            display: none;
             justify-content: center; align-items: center;
             z-index: 1000; padding: 10px;
         }
@@ -150,7 +149,6 @@
             width: 100%; max-width: 400px;
             position: relative;
             box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
-            /* === RESPONSIVE FIX 1: Add max-height and scrolling === */
             max-height: 95%;
             overflow-y: auto;
         }
@@ -165,66 +163,22 @@
             text-align: center; margin-bottom: 20px; color: #ffc107;
         }
         
-        .payment-options {
-            display: flex; justify-content: space-around; margin-bottom: 20px;
-        }
-        
-        .payment-option {
-            padding: 10px 20px; border-radius: 10px;
-            border: 2px solid #888; cursor: pointer;
-            font-weight: 600; transition: all 0.2s;
-        }
-
-        .payment-option.selected {
-            border-color: #ffc107; background-color: rgba(255, 193, 7, 0.2);
-        }
-        
+        .payment-options { display: flex; justify-content: space-around; margin-bottom: 20px; }
+        .payment-option { padding: 10px 20px; border-radius: 10px; border: 2px solid #888; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .payment-option.selected { border-color: #ffc107; background-color: rgba(255, 193, 7, 0.2); }
         .form-group { margin-bottom: 15px; }
-        
-        .form-group label {
-            display: block; margin-bottom: 5px;
-            font-weight: 500; color: #ddd;
-        }
-        
-        .form-group input {
-            width: 100%; padding: 12px; border-radius: 8px;
-            border: 1px solid #888; background-color: #333;
-            color: #fff; font-size: 1rem;
-        }
-        
-        .submit-btn {
-            width: 100%; padding: 12px; border-radius: 8px; border: none;
-            background: linear-gradient(180deg, #ffc107, #ff9800);
-            color: #000; font-size: 1.1rem; font-weight: 700;
-            cursor: pointer; margin-top: 10px;
-        }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; color: #ddd; }
+        .form-group input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #888; background-color: #333; color: #fff; font-size: 1rem; }
+        .submit-btn { width: 100%; padding: 12px; border-radius: 8px; border: none; background: linear-gradient(180deg, #ffc107, #ff9800); color: #000; font-size: 1.1rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
 
-        /* === RESPONSIVE FIX 2: Optimize for short landscape screens === */
         @media (orientation: landscape) and (max-height: 500px) {
-            .modal-content {
-                padding: 15px; /* Reduce padding */
-            }
-            .modal-content h2 {
-                font-size: 1.2rem; /* Smaller title */
-                margin-bottom: 10px;
-            }
-            .payment-options {
-                margin-bottom: 10px;
-            }
-            .payment-option {
-                padding: 8px 15px;
-                font-size: 0.9rem;
-            }
-            .form-group {
-                margin-bottom: 10px;
-            }
-            .form-group input {
-                padding: 10px;
-            }
-            .submit-btn {
-                padding: 10px;
-                margin-top: 5px;
-            }
+            .modal-content { padding: 15px; }
+            .modal-content h2 { font-size: 1.2rem; margin-bottom: 10px; }
+            .payment-options { margin-bottom: 10px; }
+            .payment-option { padding: 8px 15px; font-size: 0.9rem; }
+            .form-group { margin-bottom: 10px; }
+            .form-group input { padding: 10px; }
+            .submit-btn { padding: 10px; margin-top: 5px; }
         }
     </style>
 </head>
@@ -235,15 +189,15 @@
             <div class="user-profile">
                 <img src="https://i.imgur.com/3G4y6xS.png" alt="Avatar">
                 <div class="user-info">
-                    <span class="name">MilanoPlayer</span>
-                    <span class="id">ID: 77712345</span>
+                    <span class="name" id="user-name">Loading...</span>
+                    <span class="id" id="user-id">ID: ...</span>
                 </div>
                 <button class="refresh-btn"><i class="fas fa-sync-alt"></i></button>
             </div>
             <div class="balance-area">
                 <div class="currency-chip">
                     <i class="fas fa-wallet"></i>
-                    <span>PKR 9,999.99</span>
+                    <span>PKR <span id="user-coins">0.00</span></span>
                 </div>
                 <button class="add-cash-btn">
                     <i class="fas fa-plus-circle"></i> ADD CASH
@@ -254,9 +208,7 @@
             <div class="game-card"> <i class="fas fa-dice"></i> <span>Ludo</span> </div>
             <div class="game-card"> <i class="fas fa-crown"></i> <span>Rummy</span> </div>
             <div class="game-card"> <i class="fas fa-layer-group"></i> <span>Teen Patti</span> </div>
-
             <a href="game.html" class="game-card"> <i class="fas fa-dragon"></i> <span>Dragon Tiger</span> </a>
-            
             <div class="game-card"> <i class="fas fa-arrow-up-down-dots"></i> <span>7 Up Down</span> </div>
             <div class="game-card"> <i class="fas fa-diamond"></i> <span>Poker</span> </div>
             <div class="game-card"> <i class="fas fa-shuffle"></i> <span>Andar Bahar</span> </div>
@@ -293,6 +245,7 @@
     </div>
 
     <script>
+        // Existing script for the withdrawal modal
         const withdrawBtn = document.getElementById('withdraw-btn');
         const withdrawModal = document.getElementById('withdraw-modal');
         const closeModalBtn = document.getElementById('close-modal-btn');
@@ -301,48 +254,43 @@
         const amountInput = document.getElementById('amount');
         const confirmWithdrawBtn = document.getElementById('confirm-withdraw-btn');
         let selectedPaymentMethod = null;
-        withdrawBtn.addEventListener('click', (event) => {
-            event.preventDefault();
-            withdrawModal.style.display = 'flex';
-        });
-        closeModalBtn.addEventListener('click', () => {
-            withdrawModal.style.display = 'none';
-        });
-        withdrawModal.addEventListener('click', (event) => {
-            if (event.target === withdrawModal) {
-                withdrawModal.style.display = 'none';
-            }
-        });
-        paymentOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                paymentOptions.forEach(opt => opt.classList.remove('selected'));
-                option.classList.add('selected');
-                selectedPaymentMethod = option.getAttribute('data-method');
-            });
-        });
-        confirmWithdrawBtn.addEventListener('click', () => {
-            const accountNumber = accountNumberInput.value;
-            const amount = amountInput.value;
-            if (!selectedPaymentMethod) {
-                alert('Please select a payment method.');
+        withdrawBtn.addEventListener('click', (event) => { event.preventDefault(); withdrawModal.style.display = 'flex'; });
+        closeModalBtn.addEventListener('click', () => { withdrawModal.style.display = 'none'; });
+        withdrawModal.addEventListener('click', (event) => { if (event.target === withdrawModal) { withdrawModal.style.display = 'none'; } });
+        paymentOptions.forEach(option => { option.addEventListener('click', () => { paymentOptions.forEach(opt => opt.classList.remove('selected')); option.classList.add('selected'); selectedPaymentMethod = option.getAttribute('data-method'); }); });
+        confirmWithdrawBtn.addEventListener('click', () => { const accountNumber = accountNumberInput.value; const amount = amountInput.value; if (!selectedPaymentMethod) { alert('Please select a payment method.'); return; } if (accountNumber.trim() === '') { alert('Please enter an account number.'); return; } if (amount.trim() === '' || parseFloat(amount) <= 0) { alert('Please enter a valid amount.'); return; } const confirmationMessage = `Withdrawal request submitted:\n\nMethod: ${selectedPaymentMethod}\nAccount: ${accountNumber}\nAmount: PKR ${amount}\n\nYour request is being processed.`; alert(confirmationMessage); withdrawModal.style.display = 'none'; accountNumberInput.value = ''; amountInput.value = ''; paymentOptions.forEach(opt => opt.classList.remove('selected')); selectedPaymentMethod = null; });
+    </script>
+
+    <script>
+        window.onload = function() {
+            // Browser ki memory (localStorage) se data hasil karein
+            const userCoins = localStorage.getItem('userCoins');
+            const userNumber = localStorage.getItem('userNumber');
+            const token = localStorage.getItem('token');
+
+            // Agar token mojood nahi, to user logged in nahi hai. Usay wapas login page par bhej dein.
+            if (!token) {
+                alert('Please login first!');
+                window.location.href = 'index.html'; // Assuming login page is index.html
                 return;
             }
-            if (accountNumber.trim() === '') {
-                alert('Please enter an account number.');
-                return;
+
+            // Data ko HTML elements mein daalein
+            const coinsElement = document.getElementById('user-coins');
+            const nameElement = document.getElementById('user-name');
+            const idElement = document.getElementById('user-id');
+            
+            if (userCoins && coinsElement) {
+                const formattedCoins = parseFloat(userCoins).toFixed(2);
+                coinsElement.textContent = formattedCoins;
             }
-            if (amount.trim() === '' || parseFloat(amount) <= 0) {
-                alert('Please enter a valid amount.');
-                return;
+            
+            if (userNumber && nameElement && idElement) {
+                // Number ko name aur ID, dono jagah display karwa rahe hain
+                nameElement.textContent = userNumber;
+                idElement.textContent = 'ID: ' + userNumber;
             }
-            const confirmationMessage = `Withdrawal request submitted:\n\nMethod: ${selectedPaymentMethod}\nAccount: ${accountNumber}\nAmount: PKR ${amount}\n\nYour request is being processed.`;
-            alert(confirmationMessage);
-            withdrawModal.style.display = 'none';
-            accountNumberInput.value = '';
-            amountInput.value = '';
-            paymentOptions.forEach(opt => opt.classList.remove('selected'));
-            selectedPaymentMethod = null;
-        });
+        };
     </script>
 
 </body>
