@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Milano 777</title>
+    <style>
+        /* Basic Reset and Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Teko:wght@700&display=swap');
+
+        :root {
+            --dark-purple: #1a0f29;
+            --mid-purple: #2c1d3e;
+            --accent-pink: #e040fb;
+            --accent-gold: #FFD700;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark-purple);
+            background: linear-gradient(to right, var(--mid-purple), var(--dark-purple));
+            color: #fff;
+        }
+
+        /* Landscape Enforcement */
+        @media (orientation: portrait) {
+            #orientation-warning { display: flex; }
+            #main-container { display: none; }
+        }
+        @media (orientation: landscape) {
+            #orientation-warning { display: none; }
+            #main-container { display: flex; }
+        }
+
+        #orientation-warning {
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #000;
+        }
+
+        /* Main container for landscape layout */
+        #main-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Image Container */
+        .image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-right: 20px;
+            position: relative;
+        }
+        
+        .casino-girl-img {
+            max-width: 100%;
+            max-height: 90vh;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 0 30px var(--accent-pink);
+            position: relative;
+            z-index: 2;
+        }
+
+        .image-container::before {
+            content: '';
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            background: linear-gradient(45deg, var(--accent-pink), var(--accent-gold), var(--accent-pink));
+            background-size: 400% 400%;
+            border-radius: 25px;
+            filter: blur(20px);
+            z-index: 1;
+            animation: glow-animation 8s ease infinite;
+        }
+
+        @keyframes glow-animation {
+            0% { opacity: 0.7; background-position: 0% 50%; }
+            50% { opacity: 1; background-position: 100% 50%; }
+            100% { opacity: 0.7; background-position: 0% 50%; }
+        }
+
+        /* Login Form Container */
+        .login-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 3;
+        }
+        
+        .game-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 4em;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-shadow: 0 0 5px var(--accent-gold), 0 0 15px var(--accent-gold), 0 0 30px var(--accent-pink), 0 0 50px var(--accent-pink);
+            margin-bottom: 20px;
+        }
+
+        .input-group, .form-view {
+            width: 100%;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--accent-gold);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1em;
+            outline: none;
+            margin-bottom: 20px;
+        }
+        
+        .input-field::placeholder { color: #ccc; }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn-login {
+            background: linear-gradient(45deg, var(--accent-gold), #FFA500);
+            color: var(--dark-purple);
+        }
+        .btn-login:hover { box-shadow: 0 0 20px var(--accent-gold); }
+
+        .btn-create {
+            background: transparent;
+            color: var(--accent-gold);
+            border: 2px solid var(--accent-gold);
+        }
+        .btn-create:hover { background: var(--accent-gold); color: var(--dark-purple); }
+
+        .btn-back {
+            background: transparent;
+            color: #ccc;
+            border: 2px solid #ccc;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        .btn-back:hover { background: #ccc; color: var(--dark-purple); }
+
+        .hidden { display: none !important; }
+
+        /* Captcha Styles */
+        .captcha-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        #captcha-text {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--accent-gold);
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            letter-spacing: 5px;
+            text-decoration: line-through;
+            user-select: none;
+        }
+        #captcha-input {
+            width: 50%;
+            padding: 15px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--accent-gold);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1em;
+            outline: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="orientation-warning">
+        <p>Please rotate your device to landscape mode to play.</p>
+    </div>
+
+    <div id="main-container">
+        <div class="image-container">
+            <img src="https://i.imgur.com/tG4tWz8.jpeg" alt="Anime Casino Girl" class="casino-girl-img">
+        </div>
+
+        <div class="login-container">
+            <h1 class="game-title">Milano 777</h1>
+
+            <div id="initial-view">
+                <button class="btn btn-create" onclick="showRegisterView()">Register</button>
+                <button class="btn btn-login" onclick="showLoginView()">Login</button>
+            </div>
+
+            <div id="register-view" class="form-view hidden">
+                <input type="tel" id="reg-number" class="input-field" placeholder="Enter Number" required>
+                <input type="password" id="reg-password" class="input-field" placeholder="Password" required>
+                <div class="captcha-box">
+                    <span id="captcha-text"></span>
+                    <input type="text" id="captcha-input" placeholder="Enter Captcha">
+                </div>
+                <button class="btn btn-create" onclick="handleCreateAccount()">Create Account</button>
+                <button class="btn btn-back" onclick="showInitialView()">Back</button>
+            </div>
+
+            <div id="login-view" class="form-view hidden">
+                <input type="tel" id="login-number" class="input-field" placeholder="Enter Number" required>
+                <input type="password" id="login-password" class="input-field" placeholder="Password" required>
+                <button class="btn btn-login" onclick="handleLogin()">Login</button>
+                <button class="btn btn-back" onclick="showInitialView()">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const initialView = document.getElementById('initial-view');
+        const registerView = document.getElementById('register-view');
+        const loginView = document.getElementById('login-view');
+        const captchaText = document.getElementById('captcha-text');
+        let currentCaptcha = '';
+
+        // --- View Management Functions ---
+        function showInitialView() {
+            initialView.classList.remove('hidden');
+            registerView.classList.add('hidden');
+            loginView.classList.add('hidden');
+        }
+
+        function showRegisterView() {
+            initialView.classList.add('hidden');
+            registerView.classList.remove('hidden');
+            loginView.classList.add('hidden');
+            generateCaptcha();
+        }
+
+        function showLoginView() {
+            initialView.classList.add('hidden');
+            registerView.classList.add('hidden');
+            loginView.classList.remove('hidden');
+        }
+
+        // --- Captcha Function ---
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < 5; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            currentCaptcha = result;
+            captchaText.textContent = currentCaptcha;
+        }
+
+        // --- Button Handler Functions ---
+        function handleCreateAccount() {
+            const number = document.getElementById('reg-number').value;
+            const password = document.getElementById('reg-password').value;
+            const captchaInput = document.getElementById('captcha-input').value;
+
+            if (number === '' || password === '') {
+                alert('Please enter both number and password.');
+                return;
+            }
+            if (captchaInput.toLowerCase() !== currentCaptcha.toLowerCase()) {
+                alert('Captcha incorrect! Please try again.');
+                generateCaptcha();
+                document.getElementById('captcha-input').value = '';
+            } else {
+                alert('Account Created Successfully!\nRedirecting to Lobby...');
+                // Account banne ke baad, user ko LOBBY PAGE (`index.html`) par bhej dein
+                window.location.href = 'index.html'; 
+            }
+        }
+        
+        function handleLogin() {
+            const number = document.getElementById('login-number').value;
+            const password = document.getElementById('login-password').value;
+
+            if (number === '' || password === '') {
+                alert('Please enter both number and password.');
+            } else {
+                alert('Login Successful!\nRedirecting to Lobby...');
+                // Login ke baad, user ko LOBBY PAGE (`index.html`) par bhej dein
+                window.location.href = 'index.html'; 
+            }
+        }
+
+        // Initialize the first view
+        document.addEventListener('DOMContentLoaded', showInitialView);
+
+    </script>
+
+</body>
+  </html>
