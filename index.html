@@ -320,7 +320,7 @@
             captchaText.textContent = currentCaptcha;
         }
 
-        // --- NAYE, UPDATED BUTTON HANDLERS ---
+        // --- FINAL, WORKING BUTTON HANDLERS ---
 
         async function handleCreateAccount() {
             const number = document.getElementById('reg-number').value;
@@ -328,8 +328,7 @@
             const captchaInput = document.getElementById('captcha-input').value;
 
             if (number === '' || password === '') {
-                alert('Please enter both number and password.');
-                return;
+                alert('Please enter both number and password.'); return;
             }
             if (captchaInput.toLowerCase() !== currentCaptcha.toLowerCase()) {
                 alert('Captcha incorrect! Please try again.');
@@ -338,19 +337,18 @@
                 return;
             }
 
-            // Backend ko data bhejne ka process
             try {
                 const response = await fetch(backendUrl + '/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ number, password }),
                 });
-
+                
                 const message = await response.text();
                 alert(message); // Server se aaya hua message dikhayein
 
-                if (response.ok) { // response.ok ka matlab hai ke status code 200-299 hai
-                    window.location.href = 'lobby.html'; // Success par lobby mein jayein
+                if (response.ok) {
+                    showLoginView(); // Register ke baad user ko login screen par bhej dein
                 }
             } catch (error) {
                 alert('Error connecting to the server. Please try again.');
@@ -367,7 +365,6 @@
                 return;
             }
 
-            // Backend ko data bhejne ka process
             try {
                 const response = await fetch(backendUrl + '/login', {
                     method: 'POST',
@@ -375,19 +372,29 @@
                     body: JSON.stringify({ number, password }),
                 });
 
-                const message = await response.text();
-                alert(message); // Server se aaya hua message dikhayein
+                // Response ko JSON mein parhne ki koshish karein
+                const data = await response.json();
 
-                if (response.ok) {
+                if (response.ok) { // Status 200-299 ka matlab hai success
+                    // Data ko browser ki memory (localStorage) mein save karein
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('userNumber', data.user.number);
+                    localStorage.setItem('userCoins', data.user.virtualCoins);
+                    
+                    alert(data.message); // Server se aaya hua success message dikhayein
                     window.location.href = 'lobby.html'; // Success par lobby mein jayein
+                } else {
+                    // Agar server ne error bheja (jaise 401), to uska message dikhayein
+                    alert(data); // `data` ab text message hoga jo server ne bheja
                 }
             } catch (error) {
-                alert('Error connecting to the server. Please try again.');
+                // Yeh error tab aata hai jab network issue ho ya server JSON na bheje
+                alert('Error connecting to the server or processing response.');
                 console.error('Error:', error);
             }
         }
 
         document.addEventListener('DOMContentLoaded', showInitialView);
     </script>
-    </body>
+</body>
 </html>
