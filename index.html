@@ -287,6 +287,9 @@
         const captchaText = document.getElementById('captcha-text');
         let currentCaptcha = '';
 
+        // Aapka backend server ka URL
+        const backendUrl = 'https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev';
+
         // --- View Management Functions ---
         function showInitialView() {
             initialView.classList.remove('hidden');
@@ -307,7 +310,6 @@
             loginView.classList.remove('hidden');
         }
 
-        // --- Captcha Function ---
         function generateCaptcha() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let result = '';
@@ -318,8 +320,9 @@
             captchaText.textContent = currentCaptcha;
         }
 
-        // --- Button Handler Functions ---
-        function handleCreateAccount() {
+        // --- NAYE, UPDATED BUTTON HANDLERS ---
+
+        async function handleCreateAccount() {
             const number = document.getElementById('reg-number').value;
             const password = document.getElementById('reg-password').value;
             const captchaInput = document.getElementById('captcha-input').value;
@@ -332,28 +335,59 @@
                 alert('Captcha incorrect! Please try again.');
                 generateCaptcha();
                 document.getElementById('captcha-input').value = '';
-            } else {
-                alert('Account Created Successfully!\nRedirecting to Lobby...');
-                window.location.href = 'lobby.html'; 
+                return;
+            }
+
+            // Backend ko data bhejne ka process
+            try {
+                const response = await fetch(backendUrl + '/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ number, password }),
+                });
+
+                const message = await response.text();
+                alert(message); // Server se aaya hua message dikhayein
+
+                if (response.ok) { // response.ok ka matlab hai ke status code 200-299 hai
+                    window.location.href = 'lobby.html'; // Success par lobby mein jayein
+                }
+            } catch (error) {
+                alert('Error connecting to the server. Please try again.');
+                console.error('Error:', error);
             }
         }
         
-        function handleLogin() {
+        async function handleLogin() {
             const number = document.getElementById('login-number').value;
             const password = document.getElementById('login-password').value;
 
             if (number === '' || password === '') {
                 alert('Please enter both number and password.');
-            } else {
-                alert('Login Successful!\nRedirecting to Lobby...');
-                window.location.href = 'lobby.html'; 
+                return;
+            }
+
+            // Backend ko data bhejne ka process
+            try {
+                const response = await fetch(backendUrl + '/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ number, password }),
+                });
+
+                const message = await response.text();
+                alert(message); // Server se aaya hua message dikhayein
+
+                if (response.ok) {
+                    window.location.href = 'lobby.html'; // Success par lobby mein jayein
+                }
+            } catch (error) {
+                alert('Error connecting to the server. Please try again.');
+                console.error('Error:', error);
             }
         }
 
-        // Initialize the first view
         document.addEventListener('DOMContentLoaded', showInitialView);
-
     </script>
-
-</body>
+    </body>
 </html>
