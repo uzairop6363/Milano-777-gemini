@@ -21,10 +21,9 @@
             padding: 10px; box-sizing: border-box;
         }
         
-        /* === NEW CSS CHANGES START HERE === */
         .top-info-bar {
             display: grid;
-            grid-template-columns: 1fr auto 1fr; /* 3 columns for perfect centering */
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
             padding: 5px;
             background: none;
@@ -35,7 +34,7 @@
             color: white; text-decoration: none;
             font-size: 1.8rem;
             text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
-            justify-self: start; /* Align to the start of the first column */
+            justify-self: start;
         }
         .timer-display {
             font-weight: 600; padding: 8px 15px;
@@ -44,29 +43,40 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.4);
             color: #000;
             border: 1px solid #ffd54f;
-            grid-column: 2; /* Place in the center column */
+            grid-column: 2;
             justify-self: center;
         }
+
+        /* === NEW CSS CHANGES START HERE === */
         .betting-area {
-            padding: 8px; background: rgba(0,0,0,0.5); border-radius: 10px;
+            padding: 8px; 
+            background: none; /* Kaali patti (overlay) hata di gayi hai */
             display: flex; justify-content: center; align-items: center;
             gap: 20px; flex-shrink: 0;
         }
+        .history-bar {
+            background: none; /* History wali patti bhi hata di gayi hai */
+            padding: 8px; margin-bottom: 8px;
+            display: flex; justify-content: center;
+            align-items: center; gap: 8px;
+            flex-shrink: 0;
+        }
+        /* ==================================== */
+
         .balance-display {
             font-weight: 600; padding: 8px 15px;
             border-radius: 20px;
             background: linear-gradient(145deg, #4caf50, #2e7d32);
             box-shadow: 0 2px 5px rgba(0,0,0,0.4);
             border: 1px solid #81c784;
-            flex-shrink: 0; /* Takay yeh chota na ho */
+            flex-shrink: 0;
         }
         .chip-selection-area { 
             display: flex; justify-content: center; 
-            align-items: center; gap: 6px; flex-wrap: nowrap; /* No wrap for better alignment */
-            overflow-x: auto; /* Agar chips zyada hon to scroll ho */
+            align-items: center; gap: 6px; flex-wrap: nowrap;
+            overflow-x: auto;
         }
-        /* ==================================== */
-
+        
         .game-area {
             flex-grow: 1; display: flex; 
             justify-content: center; align-items: center; 
@@ -92,6 +102,7 @@
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
             font-weight: bold; font-size: 0.7rem; flex-shrink: 0;
             cursor: pointer; border: 2px solid #fff; transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Thora shadow takay saaf dikhein */
         }
         .chip.selected { transform: scale(1.15); box-shadow: 0 0 15px 3px #ffeb3b; }
         .chip[data-value="20"] { background-color: #1976d2; } .chip[data-value="50"] { background-color: #388e3c; } .chip[data-value="100"] { background-color: #7b1fa2; } .chip[data-value="500"] { background-color: #ffa000; color: #000; } .chip[data-value="1000"] { background-color: #e64a19; } .chip[data-value="3000"] { background-color: #000; border-color: #ffeb3b; } .chip[data-value="5000"] { background-color: #fff; color: #000; border-color: #d32f2f; }
@@ -103,14 +114,11 @@
             display: none; padding: 20px;
             background: rgba(0,0,0,0.7); border-radius: 15px; z-index: 10;
         }
-        .history-bar {
-            background: rgba(0,0,0,0.4); border-radius: 10px;
-            padding: 8px; margin-bottom: 8px;
-            display: flex; justify-content: center;
-            align-items: center; gap: 8px;
-            flex-shrink: 0;
+        
+        .history-item { 
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px rgba(0,0,0,0.7); /* Thora shadow takay saaf dikhein */
         }
-        .history-item { font-size: 1.2rem; }
         .history-item.dragon { color: #f44336; }
         .history-item.tiger { color: #2196f3; }
 
@@ -165,7 +173,7 @@
     </div>
 
     <script>
-        // Aapka JavaScript bilkul theek tha, usmein koi tabdeeli nahi ki
+        // Aapka JavaScript bilkul theek hai, ismein koi tabdeeli nahi ki gayi
         document.addEventListener('DOMContentLoaded', function() {
             const coinsElement = document.getElementById('user-coins');
             const timerElement = document.getElementById('timer');
