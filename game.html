@@ -21,51 +21,57 @@
             padding: 10px; box-sizing: border-box;
         }
         
-        /* === YAHAN TABDEELI KI GAYI HAI === */
+        /* === NEW CSS CHANGES START HERE === */
         .top-info-bar {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr; /* 3 columns for perfect centering */
             align-items: center;
-            padding: 5px; /* Thori padding takay cheezein screen se na chipkein */
-            background: none; /* Black overlay hata diya gaya hai */
+            padding: 5px;
+            background: none;
             flex-shrink: 0;
-            z-index: 5; /* Takay yeh sab se upar rahe */
+            z-index: 5;
         }
-        .balance-display {
-            font-weight: 600;
-            padding: 8px 15px;
-            border-radius: 20px;
-            background: linear-gradient(145deg, #4caf50, #2e7d32); /* Green Box */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-            border: 1px solid #81c784;
+        .back-btn {
+            color: white; text-decoration: none;
+            font-size: 1.8rem;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+            justify-self: start; /* Align to the start of the first column */
         }
         .timer-display {
-            font-weight: 600;
-            padding: 8px 15px;
+            font-weight: 600; padding: 8px 15px;
             border-radius: 20px;
-            background: linear-gradient(145deg, #ffc107, #ff8f00); /* Golden Gradient Box */
+            background: linear-gradient(145deg, #ffc107, #ff8f00);
             box-shadow: 0 2px 5px rgba(0,0,0,0.4);
             color: #000;
             border: 1px solid #ffd54f;
+            grid-column: 2; /* Place in the center column */
+            justify-self: center;
         }
-        .back-btn {
-            color: white;
-            text-decoration: none;
-            font-size: 1.8rem; /* Thora bara takay aasani se nazar aaye */
-            padding: 5px;
-            text-shadow: 0 0 8px rgba(0, 0, 0, 0.9); /* Takay background par saaf dikhe */
+        .betting-area {
+            padding: 8px; background: rgba(0,0,0,0.5); border-radius: 10px;
+            display: flex; justify-content: center; align-items: center;
+            gap: 20px; flex-shrink: 0;
+        }
+        .balance-display {
+            font-weight: 600; padding: 8px 15px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #4caf50, #2e7d32);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            border: 1px solid #81c784;
+            flex-shrink: 0; /* Takay yeh chota na ho */
+        }
+        .chip-selection-area { 
+            display: flex; justify-content: center; 
+            align-items: center; gap: 6px; flex-wrap: nowrap; /* No wrap for better alignment */
+            overflow-x: auto; /* Agar chips zyada hon to scroll ho */
         }
         /* ==================================== */
 
         .game-area {
-            flex-grow: 1; 
-            display: flex; 
-            justify-content: center;
-            align-items: center; 
-            padding: 10px 0; 
-            overflow: hidden;
-            margin: 2vh 0;
-            gap: 20px;
+            flex-grow: 1; display: flex; 
+            justify-content: center; align-items: center; 
+            padding: 10px 0; overflow: hidden;
+            margin: 2vh 0; gap: 20px;
         }
         .card-placeholder {
             width: 30vw; max-width: 130px;
@@ -81,16 +87,10 @@
         .total-bet { font-size: 0.7rem; margin-top: 5px; }
         .vs-circle { font-size: 1.5rem; font-weight: 700; flex-shrink: 0; }
         
-        .betting-area {
-            padding: 8px; background: rgba(0,0,0,0.5); border-radius: 10px;
-            display: flex; flex-direction: column; align-items: center;
-            gap: 8px; flex-shrink: 0;
-        }
-        .chip-selection-area { display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
         .chip {
             width: 40px; height: 40px;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-weight: bold; font-size: 0.7rem;
+            font-weight: bold; font-size: 0.7rem; flex-shrink: 0;
             cursor: pointer; border: 2px solid #fff; transition: all 0.2s;
         }
         .chip.selected { transform: scale(1.15); box-shadow: 0 0 15px 3px #ffeb3b; }
@@ -115,7 +115,7 @@
         .history-item.tiger { color: #2196f3; }
 
         @media (orientation: landscape) and (max-height: 500px) {
-            .top-info-bar{padding:5px}.betting-area,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:110px;padding:5px;border-width:2px}.card-placeholder i{font-size:1.8rem}.card-placeholder span{font-size:.7rem;margin-top:5px}.total-bet{font-size:.6rem;margin-top:4px}.vs-circle{font-size:1.2rem}.betting-area{gap:5px}.chip{width:36px;height:36px;font-size:.7rem}.top-info-bar{font-size:.8rem}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}
+            .top-info-bar,.betting-area,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:110px;padding:5px;border-width:2px}.card-placeholder i{font-size:1.8rem}.card-placeholder span{font-size:.7rem;margin-top:5px}.total-bet{font-size:.6rem;margin-top:4px}.vs-circle{font-size:1.2rem}.betting-area{gap:10px}.chip{width:36px;height:36px;font-size:.7rem}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}
         }
     </style>
 </head>
@@ -124,12 +124,10 @@
     <div class="game-table">
         <div class="top-info-bar">
             <a href="lobby.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
-            <div class="balance-display">
-                <i class="fas fa-wallet"></i> Coins: <span id="user-coins">0.00</span>
-            </div>
             <div class="timer-display">
                 <i class="fas fa-clock"></i> Time: <span id="timer">--</span>
             </div>
+            <div></div> 
         </div>
 
         <div class="game-area">
@@ -149,6 +147,9 @@
         <div class="history-bar" id="history-container"></div>
 
         <div class="betting-area">
+            <div class="balance-display">
+                <i class="fas fa-wallet"></i> Coins: <span id="user-coins">0.00</span>
+            </div>
             <div class="chip-selection-area">
                 <div class="chip selected" data-value="20">20</div>
                 <div class="chip" data-value="50">50</div>
@@ -164,6 +165,7 @@
     </div>
 
     <script>
+        // Aapka JavaScript bilkul theek tha, usmein koi tabdeeli nahi ki
         document.addEventListener('DOMContentLoaded', function() {
             const coinsElement = document.getElementById('user-coins');
             const timerElement = document.getElementById('timer');
@@ -175,7 +177,6 @@
             const tigerCard = document.getElementById('tiger-side');
             const historyContainer = document.getElementById('history-container');
 
-            // ZAROORI FIX: Yahan 'token' get karna hai, 'userCoins' nahi.
             const token = localStorage.getItem('token');
             if (!token) {
                 alert('Please login first!');
