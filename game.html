@@ -13,49 +13,49 @@
             margin: 0; padding: 0; height: 100%;
             font-family: 'Poppins', sans-serif;
             background: #1a0f29; color: white;
-            overflow: hidden;
+            overflow: hidden; /* Page ko scroll hone se rokein */
         }
         .game-table {
             display: flex; flex-direction: column; height: 100%;
-            /* === CHANGE 1: NEW BACKGROUND IMAGE === */
-            background: url('https://img.freepik.com/free-vector/realistic-casino-background_52683-99238.jpg?w=1380&t=st=1709736594~exp=1709737194~hmac=a4b95f00e96030c6a5d7c3ac15f385c7d0d046c4e09f743c4908976b05217983') no-repeat center center/cover;
+            background: url('https://i.imgur.com/G2aYn1P.jpg') no-repeat center center/cover;
             padding: 10px; box-sizing: border-box;
         }
         .top-info-bar {
             display: flex; justify-content: space-between; align-items: center;
             padding: 5px 10px; background: rgba(0,0,0,0.4); border-radius: 10px;
+            flex-shrink: 0; /* Yeh bar kabhi shrink nahi hogi */
         }
         .balance-display, .timer-display { font-weight: 600; }
         .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
         .game-area {
-            flex-grow: 1; display: flex; justify-content: space-around;
-            align-items: center; padding: 10px 0; /* Reduced padding */
+            flex-grow: 1; /* Yeh area baqi saari jagah le lega */
+            display: flex; justify-content: space-around;
+            align-items: center; padding: 10px 0;
+            overflow: hidden; /* Agar content bara ho to is area ke andar hi rahe */
         }
         .card-placeholder {
-            width: 40vw; max-width: 180px; /* Adjusted width */
+            width: 40vw; max-width: 180px;
             border: 3px dashed #ffc107; border-radius: 10px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.5); /* Darker background */
+            background: rgba(0,0,0,0.5);
             text-align: center;
             padding: 10px;
-            aspect-ratio: 2 / 3; /* Card-like aspect ratio */
+            aspect-ratio: 2 / 3;
         }
         .card-placeholder i { font-size: 2.5rem; color: #ffc107; }
         .card-placeholder span { margin-top: 10px; font-weight: 700; font-size: 1rem; }
         .total-bet { font-size: 0.8rem; margin-top: 8px; }
         .vs-circle {
             font-size: 2rem; font-weight: 700;
-            flex-shrink: 0; /* Prevents VS from shrinking */
+            flex-shrink: 0;
         }
         .betting-area {
             padding: 10px; background: rgba(0,0,0,0.4); border-radius: 10px;
             display: flex; flex-direction: column; align-items: center;
             gap: 10px;
+            flex-shrink: 0; /* Yeh area bhi kabhi shrink nahi hoga */
         }
-        .bet-buttons-container {
-            display: flex;
-            gap: 20px;
-        }
+        .bet-buttons-container { display: flex; gap: 20px; }
         .bet-button {
             background: linear-gradient(180deg, #ffc107, #ff9800); border: none;
             border-radius: 10px; color: #000; padding: 12px 20px;
@@ -71,15 +71,23 @@
             background: rgba(0,0,0,0.7); border-radius: 15px;
             z-index: 10;
         }
-
-        /* === CHANGE 2: NEW MOBILE RESPONSIVE FIXES === */
-        @media (max-width: 900px) and (orientation: landscape) {
-            .card-placeholder i { font-size: 2rem; }
-            .card-placeholder span { font-size: 0.8rem; }
-            .total-bet { font-size: 0.7rem; }
-            .vs-circle { font-size: 1.5rem; }
-            .bet-button { padding: 10px 15px; font-size: 0.8rem; }
-            .top-info-bar { font-size: 0.9rem; }
+        
+        /* === FINAL FIX FOR SHORT MOBILE SCREENS === */
+        @media (orientation: landscape) and (max-height: 450px) {
+            .top-info-bar, .betting-area { padding: 5px; } /* Padding kam ki */
+            .game-area { padding: 5px 0; }
+            .card-placeholder {
+                width: 38vw; /* Card ki chaurai kam ki */
+                padding: 5px;
+                border-width: 2px;
+            }
+            .card-placeholder i { font-size: 1.8rem; }
+            .card-placeholder span { font-size: 0.7rem; margin-top: 5px; }
+            .total-bet { font-size: 0.6rem; margin-top: 4px; }
+            .vs-circle { font-size: 1.2rem; }
+            .bet-button { padding: 8px 12px; font-size: 0.7rem; }
+            .bet-info { font-size: 0.8rem; }
+            .top-info-bar { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -95,7 +103,6 @@
                 <i class="fas fa-clock"></i> Time: <span id="timer">--</span>
             </div>
         </div>
-
         <div class="game-area">
             <div class="card-placeholder" id="dragon-side">
                 <i class="fas fa-dragon"></i>
@@ -109,7 +116,6 @@
                 <div class="total-bet" id="tiger-bet-total">Total Bet: 0</div>
             </div>
         </div>
-
         <div class="betting-area">
             <div class="bet-info">
                 <span>Place Your Bet</span>
@@ -119,11 +125,11 @@
                 <button class="bet-button" id="bet-on-tiger">Bet on Tiger</button>
             </div>
         </div>
-        
         <div id="game-message">DRAGON WINS!</div>
     </div>
 
     <script>
+        // JavaScript code remains the same
         window.onload = function() {
             const userCoins = localStorage.getItem('userCoins');
             const token = localStorage.getItem('token');
@@ -137,28 +143,22 @@
                 coinsElement.textContent = parseFloat(userCoins).toFixed(2);
             }
         };
-
         const socket = io("https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev");
-
         const timerElement = document.getElementById('timer');
         const gameMessageElement = document.getElementById('game-message');
         const dragonBetTotalElement = document.getElementById('dragon-bet-total');
         const tigerBetTotalElement = document.getElementById('tiger-bet-total');
-
         socket.on('connect', () => { console.log('Successfully connected!', socket.id); });
-
         socket.on('initial_state', (data) => {
             timerElement.textContent = data.timer;
             dragonBetTotalElement.textContent = `Total Bet: ${data.bets.dragon}`;
             tigerBetTotalElement.textContent = `Total Bet: ${data.bets.tiger}`;
         });
-        
         socket.on('game_update', (data) => {
             timerElement.textContent = data.timer;
             dragonBetTotalElement.textContent = `Total Bet: ${data.bets.dragon}`;
             tigerBetTotalElement.textContent = `Total Bet: ${data.bets.tiger}`;
         });
-
         socket.on('round_result', (data) => {
             gameMessageElement.textContent = `${data.winner.toUpperCase()} WINS!`;
             gameMessageElement.style.display = 'block';
