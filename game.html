@@ -1,188 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dragon Tiger</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Dragon vs Tiger</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html, body {
-            height: 100%;
-            overflow: hidden;
+        body, html {
+            margin: 0; padding: 0; height: 100%;
             font-family: 'Poppins', sans-serif;
-            color: #fff;
-            background: #000;
+            background: #1a0f29; color: white;
+            overflow: hidden;
         }
-
-        #game-wrapper {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: url('background.png') no-repeat center center;
-            background-size: contain;
-            position: relative;
+        .game-table {
+            display: flex; flex-direction: column; height: 100%;
+            background: url('https://i.imgur.com/8iAc1vV.jpg') no-repeat center center/cover;
+            padding: 10px; box-sizing: border-box;
         }
-
-        /* Balance and Total Bet text */
-        .info-display {
-            position: absolute;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px #000;
+        .top-info-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 5px 10px; background: rgba(0,0,0,0.4); border-radius: 10px;
         }
-        #balance-display {
-            top: 10%;
-            left: 19%;
+        .balance-display, .timer-display { font-weight: 600; }
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
+        .game-area {
+            flex-grow: 1; display: flex; justify-content: space-around;
+            align-items: center; padding: 20px 0;
         }
-        #total-bet-display {
-            top: 10%;
-            right: 19%;
-        }
-
-        /* Message Display */
-        #message-display {
-            position: absolute;
-            top: 38.5%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #ffffff;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-            width: 100%;
+        .card-placeholder {
+            width: 30vw; max-width: 150px; height: 42vw; max-height: 210px;
+            border: 3px dashed #ffc107; border-radius: 10px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.3);
             text-align: center;
-            letter-spacing: 1px;
         }
-
-        /* === THIS IS THE MAIN FIX === */
-        /* Invisible Betting Hotspots */
-        .bet-box {
-            position: absolute; /* This positions the box on the screen */
-            cursor: pointer;
-            background: transparent;
+        .card-placeholder i { font-size: 3rem; color: #ffc107; }
+        .card-placeholder span { margin-top: 10px; font-weight: 700; }
+        .vs-circle {
+            font-size: 2rem; font-weight: 700;
+        }
+        .betting-area {
+            padding: 10px; background: rgba(0,0,0,0.4); border-radius: 10px;
+            display: flex; justify-content: space-around; align-items: center;
+        }
+        .bet-button {
+            background: linear-gradient(180deg, #ffc107, #ff9800); border: none;
+            border-radius: 10px; color: #000; padding: 15px 25px;
+            font-weight: 700; font-size: 1rem; cursor: pointer;
+        }
+        .bet-info { text-align: center; }
+        #game-message {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem; font-weight: bold;
+            color: #ffc107;
+            text-shadow: 0 0 10px black;
+            display: none; /* Initially hidden */
+            padding: 20px;
+            background: rgba(0,0,0,0.7);
             border-radius: 15px;
-            /* CRITICAL: It now acts as the positioning parent for its children */
         }
-
-        /* POSITIONING FOR BET BOXES */
-        #dragon-box { top: 41%; left: 6%; width: 28%; height: 38%; }
-        #tie-box { top: 41%; left: 36%; width: 28%; height: 38%; }
-        #tiger-box { top: 41%; left: 66%; width: 28%; height: 38%; }
-
-        /* Content inside the invisible boxes */
-        .card-display {
-            /* This is now positioned absolutely INSIDE its parent .bet-box */
-            position: absolute;
-            top: 40%; /* 40% from the top of the box */
-            left: 50%; /* 50% from the left of the box */
-            transform: translate(-50%, -50%); /* Center it perfectly */
-            font-size: 3rem;
-            font-weight: 700;
-            line-height: 1;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
-            display: none; /* Hidden by default */
-        }
-
-        .bet-amount {
-            /* This is now positioned absolutely INSIDE its parent .bet-box */
-            position: absolute;
-            bottom: 12%; /* 12% from the bottom of the box */
-            left: 50%; /* 50% from the left of the box */
-            transform: translateX(-50%); /* Center it horizontally */
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-        }
-
-        /* Chip Rail */
-        #chip-rail {
-            position: absolute;
-            bottom: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            padding: 0 10px;
-        }
-
-        .chip {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            cursor: pointer;
-            border: 3px solid #eee;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.6);
-            transition: transform 0.2s, box-shadow 0.2s;
-            font-size: 0.9rem;
-        }
-        .chip[data-value="20"] { background: linear-gradient(145deg, #9b59b6, #8e44ad); border-color: #d2a4ed; }
-        .chip[data-value="30"] { background: linear-gradient(145deg, #3498db, #2980b9); border-color: #aed6f1; }
-        .chip[data-value="50"] { background: linear-gradient(145deg, #2ecc71, #27ae60); border-color: #a9dfbf; }
-        .chip[data-value="100"] { background: linear-gradient(145deg, #f1c40f, #f39c12); border-color: #f7dc6f; }
-        .chip[data-value="300"] { background: linear-gradient(145deg, #e67e22, #d35400); border-color: #f5b041; }
-        .chip[data-value="1000"] { background: linear-gradient(145deg, #e74c3c, #c0392b); border-color: #f5b7b1; }
-        .chip[data-value="3000"] { background: linear-gradient(145deg, #95a5a6, #7f8c8d); border-color: #bdc3c7; }
-        .chip[data-value="5000"] { background: linear-gradient(145deg, #1abc9c, #16a085); border-color: #76d7c4; }
-
-        .chip:hover { transform: scale(1.15); }
-        .chip.selected {
-            border-color: #ffdd00;
-            transform: scale(1.2);
-            box-shadow: 0 0 20px #ffdd00;
-        }
-        
-        #controls { display: none; }
-
     </style>
 </head>
 <body>
 
-    <div id="game-wrapper">
-        <div id="balance-display" class="info-display">$10000</div>
-        <div id="total-bet-display" class="info-display">$0</div>
+    <div class="game-table">
+        <div class="top-info-bar">
+            <a href="lobby.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <div class="balance-display">
+                <i class="fas fa-wallet"></i> Coins: <span id="user-coins">0.00</span>
+            </div>
+            <div class="timer-display">
+                <i class="fas fa-clock"></i> Time: <span id="timer">--</span>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="card-placeholder" id="dragon-side">
+                <i class="fas fa-dragon"></i>
+                <span>DRAGON</span>
+                <div class="total-bet" id="dragon-bet-total">Total Bet: 0</div>
+            </div>
+            <div class="vs-circle">VS</div>
+            <div class="card-placeholder" id="tiger-side">
+                <i class="fas fa-cat"></i>
+                <span>TIGER</span>
+                <div class="total-bet" id="tiger-bet-total">Total Bet: 0</div>
+            </div>
+        </div>
+
+        <div class="betting-area">
+            <div class="bet-info">
+                <span>Place Your Bet</span>
+            </div>
+            <div>
+                <button class="bet-button" id="bet-on-dragon">Bet on Dragon</button>
+                <button class="bet-button" id="bet-on-tiger">Bet on Tiger</button>
+            </div>
+        </div>
         
-        <div id="message-display">Place your bets!</div>
-
-        <div class="bet-box" id="dragon-box">
-            <div class="card-display" id="dragon-card"></div>
-            <div class="bet-amount" id="dragon-bet-display">$0</div>
-        </div>
-        <div class="bet-box" id="tie-box">
-            <div class="card-display" id="tie-card"></div>
-            <div class="bet-amount" id="tie-bet-display">$0</div>
-        </div>
-        <div class="bet-box" id="tiger-box">
-            <div class="card-display" id="tiger-card"></div>
-            <div class="bet-amount" id="tiger-bet-display">$0</div>
-        </div>
-
-        <div id="chip-rail"></div>
-
-        <div id="controls" style="display: none;">
-            <button id="deal-btn">Deal</button>
-            <button id="reset-btn">Reset</button>
-            <button id="play-again-btn">Play Again</button>
-        </div>
+        <div id="game-message">DRAGON WINS!</div>
     </div>
-    
-    <script src="script.js"></script>
 
+    <script>
+        // --- Pehle User Ka Data Check Karein ---
+        window.onload = function() {
+            const userCoins = localStorage.getItem('userCoins');
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('Please login first!');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const coinsElement = document.getElementById('user-coins');
+            if (coinsElement && userCoins) {
+                coinsElement.textContent = parseFloat(userCoins).toFixed(2);
+            }
+        };
+
+        // --- Backend Se Live Connection Banayein ---
+        const socket = io("https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev");
+
+        const timerElement = document.getElementById('timer');
+        const gameMessageElement = document.getElementById('game-message');
+
+        // Jab server se 'connection' ho jaye
+        socket.on('connect', () => {
+            console.log('Successfully connected to the game server!', socket.id);
+        });
+
+        // Jab server shuru ki state bheje
+        socket.on('initial_state', (data) => {
+            console.log('Initial game state received:', data);
+            timerElement.textContent = data.timer;
+        });
+        
+        // Jab server har second game ka update bheje
+        socket.on('game_update', (data) => {
+            // console.log('Game update received:', data); // Isay on kar ke console mein live data dekh sakte hain
+            timerElement.textContent = data.timer;
+        });
+
+        // Jab server round ka result bheje
+        socket.on('round_result', (data) => {
+            console.log('Round result:', data);
+            gameMessageElement.textContent = `${data.winner.toUpperCase()} WINS!`;
+            gameMessageElement.style.display = 'block';
+
+            // 5 second baad message ghayab kar dein
+            setTimeout(() => {
+                gameMessageElement.style.display = 'none';
+            }, 5000);
+        });
+
+    </script>
 </body>
 </html>
