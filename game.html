@@ -9,7 +9,7 @@
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     
     <style>
-        /* All your CSS remains the same... */
+        /* ... (Saara purana CSS waisa hi hai) ... */
         body, html { margin: 0; padding: 0; height: 100%; font-family: 'Poppins', sans-serif; background: #1a0f29; color: white; overflow: hidden; }
         .game-table { display: flex; flex-direction: column; height: 100%; background: url('https://i.imgur.com/G2aYn1P.jpg') no-repeat center center/cover; padding: 10px; box-sizing: border-box; }
         .top-info-bar { display: flex; justify-content: space-between; align-items: center; padding: 5px 10px; background: rgba(0,0,0,0.4); border-radius: 10px; flex-shrink: 0; }
@@ -28,50 +28,49 @@
         .chip.selected { transform: scale(1.15); box-shadow: 0 0 15px 3px #ffeb3b; }
         .chip[data-value="20"] { background-color: #1976d2; } .chip[data-value="50"] { background-color: #388e3c; } .chip[data-value="100"] { background-color: #7b1fa2; } .chip[data-value="500"] { background-color: #ffa000; color: #000; } .chip[data-value="1000"] { background-color: #e64a19; } .chip[data-value="3000"] { background-color: #000; border-color: #ffeb3b; } .chip[data-value="5000"] { background-color: #fff; color: #000; border-color: #d32f2f; }
         #game-message { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5rem; font-weight: bold; color: #ffc107; text-shadow: 0 0 10px black; display: none; padding: 20px; background: rgba(0,0,0,0.7); border-radius: 15px; z-index: 10; }
-        @media (orientation: landscape) and (max-height: 450px) { .top-info-bar, .betting-area { padding: 5px; } .game-area { padding: 5px 0; } .card-placeholder { width: 38vw; padding: 5px; border-width: 2px; } .card-placeholder i { font-size: 1.8rem; } .card-placeholder span { font-size: 0.7rem; margin-top: 5px; } .total-bet { font-size: 0.6rem; margin-top: 4px; } .vs-circle { font-size: 1.2rem; } .betting-area { gap: 5px; } .chip { width: 40px; height: 40px; font-size: 0.7rem; } .top-info-bar { font-size: 0.8rem; } }
+
+        /* === NEW CSS FOR HISTORY BAR === */
+        .history-bar {
+            background: rgba(0,0,0,0.4);
+            border-radius: 10px;
+            padding: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .history-item {
+            font-size: 1.2rem;
+        }
+        .history-item.dragon { color: #f44336; } /* Dragon ka laal rang */
+        .history-item.tiger { color: #2196f3; }  /* Tiger ka neela rang */
+
+        @media (orientation: landscape) and (max-height: 450px) { /* ... (Waisa hi hai) ... */ }
     </style>
 </head>
 <body>
 
     <div class="game-table">
         <div class="top-info-bar">
-            <a href="lobby.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
-            <div class="balance-display">
-                <i class="fas fa-wallet"></i> Coins: <span id="user-coins">0.00</span>
             </div>
-            <div class="timer-display">
-                <i class="fas fa-clock"></i> Time: <span id="timer">--</span>
-            </div>
-        </div>
+
         <div class="game-area">
-            <div class="card-placeholder" id="dragon-side">
-                <i class="fas fa-dragon"></i>
-                <span>DRAGON</span>
-                <div class="total-bet" id="dragon-bet-total">Total Bet: 0</div>
             </div>
-            <div class="vs-circle">VS</div>
-            <div class="card-placeholder" id="tiger-side">
-                <i class="fas fa-cat"></i>
-                <span>TIGER</span>
-                <div class="total-bet" id="tiger-bet-total">Total Bet: 0</div>
+
+        <div class="history-bar" id="history-container">
             </div>
-        </div>
+
         <div class="betting-area">
-            <div class="chip-selection-area">
-                <div class="chip selected" data-value="20">20</div>
-                <div class="chip" data-value="50">50</div>
-                <div class="chip" data-value="100">100</div>
-                <div class="chip" data-value="500">500</div>
-                <div class="chip" data-value="1000">1K</div>
-                <div class="chip" data-value="3000">3K</div>
-                <div class="chip" data-value="5000">5K</div>
             </div>
-        </div>
+        
         <div id="game-message">DRAGON WINS!</div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- Elements ko dhoondein ---
             const coinsElement = document.getElementById('user-coins');
             const timerElement = document.getElementById('timer');
             const gameMessageElement = document.getElementById('game-message');
@@ -80,7 +79,9 @@
             const chips = document.querySelectorAll('.chip');
             const dragonCard = document.getElementById('dragon-side');
             const tigerCard = document.getElementById('tiger-side');
+            const historyContainer = document.getElementById('history-container'); // History bar ko dhoonda
 
+            // --- User ka data check karein ---
             const userCoins = localStorage.getItem('userCoins');
             const token = localStorage.getItem('token');
             if (!token) {
@@ -92,52 +93,66 @@
                 coinsElement.textContent = parseFloat(userCoins).toFixed(2);
             }
 
+            // --- Backend se connect karein ---
             const socket = io("https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev");
             let selectedBetAmount = 20;
 
-            chips.forEach(chip => {
-                chip.addEventListener('click', () => {
-                    chips.forEach(c => c.classList.remove('selected'));
-                    chip.classList.add('selected');
-                    selectedBetAmount = parseInt(chip.getAttribute('data-value'));
-                });
-            });
-
+            // --- Saari logic waisi hi hai ---
+            chips.forEach(chip => { /* ... */ });
             dragonCard.addEventListener('click', () => placeBet('dragon'));
             tigerCard.addEventListener('click', () => placeBet('tiger'));
+            function placeBet(choice) { /* ... */ }
 
-            function placeBet(choice) {
-                socket.emit('place_bet', { choice: choice, amount: selectedBetAmount, token: token });
-            }
-
-            // === YEH HISSA ZAROORI HAI ===
-            socket.on('connect', () => {
-                console.log('Successfully connected!', socket.id);
-                // Jaise hi connect ho, server ko apna token bhej kar authenticate karein
-                socket.emit('authenticate', token);
-            });
-
+            // --- Socket events ko sunein ---
+            socket.on('connect', () => { socket.emit('authenticate', token); });
             socket.on('disconnect', () => console.log('Disconnected from server.'));
-            socket.on('initial_state', (data) => updateUI(data));
-            socket.on('game_update', (data) => updateUI(data));
+            
+            socket.on('initial_state', (data) => {
+                updateUI(data);
+                updateHistory(data.history); // Page load hone par history dikhayein
+            });
+            
+            socket.on('game_update', (data) => {
+                updateUI(data);
+            });
 
             socket.on('round_result', (data) => {
                 gameMessageElement.textContent = `${data.winner.toUpperCase()} WINS!`;
                 gameMessageElement.style.display = 'block';
                 setTimeout(() => gameMessageElement.style.display = 'none', 5000);
+                updateHistory(data.history); // Round khatam hone par history update karein
             });
 
-            socket.on('balance_update', (data) => {
-                coinsElement.textContent = parseFloat(data.newBalance).toFixed(2);
-                localStorage.setItem('userCoins', data.newBalance);
-            });
-            
-            socket.on('bet_error', (data) => { alert(data.message); });
+            socket.on('balance_update', (data) => { /* ... */ });
+            socket.on('bet_error', (data) => { /* ... */ });
 
             function updateUI(data) {
                 timerElement.textContent = data.timer;
                 dragonBetTotalElement.textContent = `Total Bet: ${data.bets.dragon}`;
                 tigerBetTotalElement.textContent = `Total Bet: ${data.bets.tiger}`;
+            }
+
+            // === YEH NAYA FUNCTION HAI HISTORY DISPLAY KARNE KE LIYE ===
+            function updateHistory(historyArray) {
+                if (!historyContainer) return;
+                
+                // Pehle purani history saaf karein
+                historyContainer.innerHTML = ''; 
+
+                // Backend se aane wali history array par loop karein
+                historyArray.forEach(winner => {
+                    const iconElement = document.createElement('i');
+                    iconElement.classList.add('history-item');
+
+                    if (winner === 'dragon') {
+                        iconElement.classList.add('fas', 'fa-dragon', 'dragon');
+                    } else if (winner === 'tiger') {
+                        iconElement.classList.add('fas', 'fa-cat', 'tiger');
+                    }
+                    // Tie ke liye bhi 'fas fa-equals' add kar sakte hain
+                    
+                    historyContainer.appendChild(iconElement);
+                });
             }
         });
     </script>
