@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Dragon vs Tiger</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -28,33 +28,36 @@
         .balance-display, .timer-display { font-weight: 600; }
         .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
         
-        /* === GAME AREA KO ADJUST KIYA GAYA HAI === */
+        /* === FINAL CHANGE YAHAN HAI === */
         .game-area {
-            flex-grow: 1; display: flex; justify-content: space-around;
-            align-items: center; padding: 10px 0; overflow: hidden;
-            /* Extra margin takay cards center me fit hon */
+            flex-grow: 1; 
+            display: flex; 
+            justify-content: center; /* space-around se center kar diya takay cards paas aa jayein */
+            align-items: center; 
+            padding: 10px 0; 
+            overflow: hidden;
             margin: 2vh 0;
+            gap: 20px; /* Cards ke beech me thoda space add kiya */
         }
 
-        /* === CARD KA SIZE CHOTA KIYA GAYA HAI === */
         .card-placeholder {
             width: 30vw;
-            max-width: 130px; /* Max width kam kar di */
-            border: 2px solid #ffc107; /* Dashed se solid border */
+            max-width: 130px;
+            border: 2px solid #ffc107;
             border-radius: 10px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             background: rgba(0,0,0,0.6);
             text-align: center;
-            padding: 8px; /* Padding kam ki */
-            aspect-ratio: 2 / 2.8; /* Aspect ratio adjust kiya */
+            padding: 8px;
+            aspect-ratio: 2 / 2.8;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
         }
         .card-placeholder:hover { transform: scale(1.05); box-shadow: 0 0 15px #ffc107; }
-        .card-placeholder i { font-size: 2rem; color: #ffc107; } /* Icon size chota kiya */
-        .card-placeholder span { margin-top: 5px; font-weight: 700; font-size: 0.9rem; } /* Text size chota kiya */
-        .total-bet { font-size: 0.7rem; margin-top: 5px; } /* Total bet text chota kiya */
-        .vs-circle { font-size: 1.5rem; font-weight: 700; flex-shrink: 0; } /* VS size chota kiya */
+        .card-placeholder i { font-size: 2rem; color: #ffc107; }
+        .card-placeholder span { margin-top: 5px; font-weight: 700; font-size: 0.9rem; }
+        .total-bet { font-size: 0.7rem; margin-top: 5px; }
+        .vs-circle { font-size: 1.5rem; font-weight: 700; flex-shrink: 0; }
         
         .betting-area {
             padding: 8px; background: rgba(0,0,0,0.5); border-radius: 10px;
@@ -63,12 +66,11 @@
         }
         .chip-selection-area { display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
         
-        /* === CHIPS KA SIZE CHOTA KIYA GAYA HAI === */
         .chip {
-            width: 40px;   /* Width kam ki */
-            height: 40px;  /* Height kam ki */
+            width: 40px;
+            height: 40px;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-weight: bold; font-size: 0.7rem; /* Font size kam kiya */
+            font-weight: bold; font-size: 0.7rem;
             cursor: pointer;
             border: 2px solid #fff; transition: all 0.2s;
         }
@@ -98,10 +100,9 @@
         .history-item.dragon { color: #f44336; }
         .history-item.tiger { color: #2196f3; }
 
-        /* === LANDSCAPE MODE KE LIYE BHI SIZE ADJUST KIYA GAYA HAI === */
         @media (orientation: landscape) and (max-height: 500px) {
             .top-info-bar, .betting-area, .history-bar { padding: 5px; }
-            .game-area { padding: 5px 0; margin: 0; }
+            .game-area { padding: 5px 0; margin: 0; gap: 15px; }
             .card-placeholder { width: 28vw; max-width: 110px; padding: 5px; border-width: 2px; }
             .card-placeholder i { font-size: 1.8rem; }
             .card-placeholder span { font-size: 0.7rem; margin-top: 5px; }
