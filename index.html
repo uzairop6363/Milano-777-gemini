@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Milano 777</title>
+
+    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+
     <style>
         /* Basic Reset and Font */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Teko:wght@700&display=swap');
@@ -345,10 +349,10 @@
                 });
                 
                 const message = await response.text();
-                alert(message); // Server se aaya hua message dikhayein
+                alert(message);
 
                 if (response.ok) {
-                    showLoginView(); // Register ke baad user ko login screen par bhej dein
+                    showLoginView();
                 }
             } catch (error) {
                 alert('Error connecting to the server. Please try again.');
@@ -372,23 +376,19 @@
                     body: JSON.stringify({ number, password }),
                 });
 
-                // Response ko JSON mein parhne ki koshish karein
                 const data = await response.json();
 
-                if (response.ok) { // Status 200-299 ka matlab hai success
-                    // Data ko browser ki memory (localStorage) mein save karein
+                if (response.ok) {
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('userNumber', data.user.number);
                     localStorage.setItem('userCoins', data.user.virtualCoins);
                     
-                    alert(data.message); // Server se aaya hua success message dikhayein
-                    window.location.href = 'lobby.html'; // Success par lobby mein jayein
+                    alert(data.message);
+                    window.location.href = 'lobby.html';
                 } else {
-                    // Agar server ne error bheja (jaise 401), to uska message dikhayein
-                    alert(data); // `data` ab text message hoga jo server ne bheja
+                    alert(data);
                 }
             } catch (error) {
-                // Yeh error tab aata hai jab network issue ho ya server JSON na bheje
                 alert('Error connecting to the server or processing response.');
                 console.error('Error:', error);
             }
