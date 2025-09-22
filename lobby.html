@@ -130,7 +130,6 @@
     </div>
 
     <script>
-        // Yeh function tab chalega jab poora HTML page load ho jayega
         document.addEventListener('DOMContentLoaded', function() {
             
             // --- User Data Display Logic ---
@@ -141,7 +140,7 @@
             if (!token) {
                 alert('Please login first!');
                 window.location.href = 'index.html';
-                return; // Script ko yahin rok dein
+                return; 
             }
 
             const coinsElement = document.getElementById('user-coins');
@@ -166,7 +165,7 @@
             if(logoutOption) {
                 logoutOption.addEventListener('click', (event) => {
                     event.preventDefault();
-                    localStorage.clear(); // Saari saved values clear kar dein
+                    localStorage.clear();
                     alert('You have been logged out successfully.');
                     window.location.href = 'index.html';
                 });
@@ -181,14 +180,13 @@
                 });
             }
             
-            // Kahin aur click karne se menu band ho jayega
             window.addEventListener('click', () => {
                 if (settingsDropdown && !settingsDropdown.classList.contains('hidden')) {
                     settingsDropdown.classList.add('hidden');
                 }
             });
 
-            // --- Withdrawal Modal Logic (Aapka Original Code) ---
+            // --- Withdrawal Modal Logic ---
             const withdrawBtn = document.getElementById('withdraw-btn');
             const withdrawModal = document.getElementById('withdraw-modal');
             const closeModalBtn = document.getElementById('close-modal-btn');
