@@ -19,6 +19,7 @@
             display: flex; flex-direction: column; height: 100%;
             background: url('background.png') no-repeat center center/cover;
             padding: 10px; box-sizing: border-box;
+            position: relative; /* Added for positioning children */
         }
         
         .top-info-bar {
@@ -47,36 +48,65 @@
             justify-self: center;
         }
 
-        /* === NEW CSS CHANGES START HERE === */
-        .betting-area {
-            padding: 8px; 
-            background: none; /* Kaali patti (overlay) hata di gayi hai */
-            display: flex; justify-content: center; align-items: center;
-            gap: 20px; flex-shrink: 0;
-        }
         .history-bar {
-            background: none; /* History wali patti bhi hata di gayi hai */
-            padding: 8px; margin-bottom: 8px;
+            background: none;
+            padding: 8px;
             display: flex; justify-content: center;
             align-items: center; gap: 8px;
             flex-shrink: 0;
+            /* Isko neeche betting area ke upar rakha hai */
+            position: absolute;
+            bottom: 70px; /* Adjust this value to position it above chips */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
         }
-        /* ==================================== */
+
+        /* === YAHAN SE CHANGES SHURU HAIN === */
+
+        .bottom-controls-container {
+            position: absolute;
+            bottom: 10px; /* Neeche se thora sa upar */
+            left: 10px;   /* Left side se thora sa space */
+            display: flex;
+            align-items: center; /* Vertical alignment */
+            gap: 10px; /* Coins box aur chips ke darmiyan space */
+            z-index: 10;
+        }
 
         .balance-display {
-            font-weight: 600; padding: 8px 15px;
-            border-radius: 20px;
+            font-weight: 600; 
+            padding: 6px 12px; /* Size chota karne ke liye padding kam ki */
+            font-size: 0.9rem; /* Font size chota kiya */
+            border-radius: 15px; /* Thora chota radius */
             background: linear-gradient(145deg, #4caf50, #2e7d32);
             box-shadow: 0 2px 5px rgba(0,0,0,0.4);
             border: 1px solid #81c784;
-            flex-shrink: 0;
+            flex-shrink: 0; /* Takay yeh shrink na ho */
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
+
         .chip-selection-area { 
-            display: flex; justify-content: center; 
-            align-items: center; gap: 6px; flex-wrap: nowrap;
+            display: flex; 
+            align-items: center; 
+            gap: 5px; /* Chips ke darmiyan gap kam kiya */
+            flex-wrap: nowrap;
             overflow-x: auto;
         }
         
+        .chip {
+            width: 36px; height: 36px; /* Chip ka size chota kiya */
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-weight: bold; font-size: 0.65rem; /* Chip ka font size chota kiya */
+            flex-shrink: 0;
+            cursor: pointer; border: 2px solid #fff; transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        /* === CHANGES YAHAN KHATAM === */
+
         .game-area {
             flex-grow: 1; display: flex; 
             justify-content: center; align-items: center; 
@@ -97,13 +127,6 @@
         .total-bet { font-size: 0.7rem; margin-top: 5px; }
         .vs-circle { font-size: 1.5rem; font-weight: 700; flex-shrink: 0; }
         
-        .chip {
-            width: 40px; height: 40px;
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-weight: bold; font-size: 0.7rem; flex-shrink: 0;
-            cursor: pointer; border: 2px solid #fff; transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Thora shadow takay saaf dikhein */
-        }
         .chip.selected { transform: scale(1.15); box-shadow: 0 0 15px 3px #ffeb3b; }
         .chip[data-value="20"] { background-color: #1976d2; } .chip[data-value="50"] { background-color: #388e3c; } .chip[data-value="100"] { background-color: #7b1fa2; } .chip[data-value="500"] { background-color: #ffa000; color: #000; } .chip[data-value="1000"] { background-color: #e64a19; } .chip[data-value="3000"] { background-color: #000; border-color: #ffeb3b; } .chip[data-value="5000"] { background-color: #fff; color: #000; border-color: #d32f2f; }
         
@@ -117,13 +140,15 @@
         
         .history-item { 
             font-size: 1.2rem;
-            text-shadow: 0 0 5px rgba(0,0,0,0.7); /* Thora shadow takay saaf dikhein */
+            text-shadow: 0 0 5px rgba(0,0,0,0.7);
         }
         .history-item.dragon { color: #f44336; }
         .history-item.tiger { color: #2196f3; }
 
         @media (orientation: landscape) and (max-height: 500px) {
-            .top-info-bar,.betting-area,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:110px;padding:5px;border-width:2px}.card-placeholder i{font-size:1.8rem}.card-placeholder span{font-size:.7rem;margin-top:5px}.total-bet{font-size:.6rem;margin-top:4px}.vs-circle{font-size:1.2rem}.betting-area{gap:10px}.chip{width:36px;height:36px;font-size:.7rem}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}
+            .top-info-bar,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:110px;padding:5px;border-width:2px}.card-placeholder i{font-size:1.8rem}.card-placeholder span{font-size:.7rem;margin-top:5px}.total-bet{font-size:.6rem;margin-top:4px}.vs-circle{font-size:1.2rem}.chip{width:32px;height:32px;font-size:.6rem}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}
+            .bottom-controls-container { bottom: 5px; left: 5px; } /* Landscape mode me thori aur adjustment */
+            .history-bar { bottom: 50px; }
         }
     </style>
 </head>
@@ -153,10 +178,10 @@
         </div>
 
         <div class="history-bar" id="history-container"></div>
-
-        <div class="betting-area">
+        
+        <div class="bottom-controls-container">
             <div class="balance-display">
-                <i class="fas fa-wallet"></i> Coins: <span id="user-coins">0.00</span>
+                <i class="fas fa-coins"></i> Coins: <span id="user-coins">0.00</span>
             </div>
             <div class="chip-selection-area">
                 <div class="chip selected" data-value="20">20</div>
@@ -256,4 +281,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
