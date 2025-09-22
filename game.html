@@ -13,45 +13,67 @@
             margin: 0; padding: 0; height: 100%;
             font-family: 'Poppins', sans-serif;
             background: #1a0f29; color: white;
-            overflow: hidden;
+            overflow: hidden; user-select: none;
         }
         .game-table {
             display: flex; flex-direction: column; height: 100%;
             background: url('background.png') no-repeat center center/cover;
             padding: 10px; box-sizing: border-box;
         }
-        .top-info-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 5px 10px; background: rgba(0,0,0,0.5); border-radius: 10px;
-            flex-shrink: 0;
-        }
-        .balance-display, .timer-display { font-weight: 600; }
-        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
         
-        /* === FINAL CHANGE YAHAN HAI === */
+        /* === YAHAN TABDEELI KI GAYI HAI === */
+        .top-info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px; /* Thori padding takay cheezein screen se na chipkein */
+            background: none; /* Black overlay hata diya gaya hai */
+            flex-shrink: 0;
+            z-index: 5; /* Takay yeh sab se upar rahe */
+        }
+        .balance-display {
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #4caf50, #2e7d32); /* Green Box */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            border: 1px solid #81c784;
+        }
+        .timer-display {
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #ffc107, #ff8f00); /* Golden Gradient Box */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            color: #000;
+            border: 1px solid #ffd54f;
+        }
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-size: 1.8rem; /* Thora bara takay aasani se nazar aaye */
+            padding: 5px;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.9); /* Takay background par saaf dikhe */
+        }
+        /* ==================================== */
+
         .game-area {
             flex-grow: 1; 
             display: flex; 
-            justify-content: center; /* space-around se center kar diya takay cards paas aa jayein */
+            justify-content: center;
             align-items: center; 
             padding: 10px 0; 
             overflow: hidden;
             margin: 2vh 0;
-            gap: 20px; /* Cards ke beech me thoda space add kiya */
+            gap: 20px;
         }
-
         .card-placeholder {
-            width: 30vw;
-            max-width: 130px;
-            border: 2px solid #ffc107;
-            border-radius: 10px;
+            width: 30vw; max-width: 130px;
+            border: 2px solid #ffc107; border-radius: 10px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.6);
-            text-align: center;
-            padding: 8px;
-            aspect-ratio: 2 / 2.8;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: rgba(0,0,0,0.6); text-align: center;
+            padding: 8px; aspect-ratio: 2 / 2.8;
+            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
         }
         .card-placeholder:hover { transform: scale(1.05); box-shadow: 0 0 15px #ffc107; }
         .card-placeholder i { font-size: 2rem; color: #ffc107; }
@@ -65,14 +87,11 @@
             gap: 8px; flex-shrink: 0;
         }
         .chip-selection-area { display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
-        
         .chip {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
             font-weight: bold; font-size: 0.7rem;
-            cursor: pointer;
-            border: 2px solid #fff; transition: all 0.2s;
+            cursor: pointer; border: 2px solid #fff; transition: all 0.2s;
         }
         .chip.selected { transform: scale(1.15); box-shadow: 0 0 15px 3px #ffeb3b; }
         .chip[data-value="20"] { background-color: #1976d2; } .chip[data-value="50"] { background-color: #388e3c; } .chip[data-value="100"] { background-color: #7b1fa2; } .chip[data-value="500"] { background-color: #ffa000; color: #000; } .chip[data-value="1000"] { background-color: #e64a19; } .chip[data-value="3000"] { background-color: #000; border-color: #ffeb3b; } .chip[data-value="5000"] { background-color: #fff; color: #000; border-color: #d32f2f; }
@@ -84,16 +103,11 @@
             display: none; padding: 20px;
             background: rgba(0,0,0,0.7); border-radius: 15px; z-index: 10;
         }
-
         .history-bar {
-            background: rgba(0,0,0,0.4);
-            border-radius: 10px;
-            padding: 8px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
+            background: rgba(0,0,0,0.4); border-radius: 10px;
+            padding: 8px; margin-bottom: 8px;
+            display: flex; justify-content: center;
+            align-items: center; gap: 8px;
             flex-shrink: 0;
         }
         .history-item { font-size: 1.2rem; }
@@ -101,16 +115,7 @@
         .history-item.tiger { color: #2196f3; }
 
         @media (orientation: landscape) and (max-height: 500px) {
-            .top-info-bar, .betting-area, .history-bar { padding: 5px; }
-            .game-area { padding: 5px 0; margin: 0; gap: 15px; }
-            .card-placeholder { width: 28vw; max-width: 110px; padding: 5px; border-width: 2px; }
-            .card-placeholder i { font-size: 1.8rem; }
-            .card-placeholder span { font-size: 0.7rem; margin-top: 5px; }
-            .total-bet { font-size: 0.6rem; margin-top: 4px; }
-            .vs-circle { font-size: 1.2rem; }
-            .betting-area { gap: 5px; }
-            .chip { width: 36px; height: 36px; font-size: 0.7rem; }
-            .top-info-bar { font-size: 0.8rem; }
+            .top-info-bar{padding:5px}.betting-area,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:110px;padding:5px;border-width:2px}.card-placeholder i{font-size:1.8rem}.card-placeholder span{font-size:.7rem;margin-top:5px}.total-bet{font-size:.6rem;margin-top:4px}.vs-circle{font-size:1.2rem}.betting-area{gap:5px}.chip{width:36px;height:36px;font-size:.7rem}.top-info-bar{font-size:.8rem}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}
         }
     </style>
 </head>
@@ -141,8 +146,7 @@
             </div>
         </div>
 
-        <div class="history-bar" id="history-container">
-            </div>
+        <div class="history-bar" id="history-container"></div>
 
         <div class="betting-area">
             <div class="chip-selection-area">
@@ -171,7 +175,8 @@
             const tigerCard = document.getElementById('tiger-side');
             const historyContainer = document.getElementById('history-container');
 
-            const token = localStorage.getItem('userCoins');
+            // ZAROORI FIX: Yahan 'token' get karna hai, 'userCoins' nahi.
+            const token = localStorage.getItem('token');
             if (!token) {
                 alert('Please login first!');
                 window.location.href = 'index.html';
@@ -196,14 +201,12 @@
             tigerCard.addEventListener('click', () => placeBet('tiger'));
 
             function placeBet(choice) {
-                const authToken = localStorage.getItem('token');
-                if (!authToken) { alert('Authentication error. Please login again.'); return; }
-                socket.emit('place_bet', { choice: choice, amount: selectedBetAmount, token: authToken });
+                if (!token) { alert('Authentication error. Please login again.'); return; }
+                socket.emit('place_bet', { choice: choice, amount: selectedBetAmount, token: token });
             }
 
             socket.on('connect', () => {
-                const authToken = localStorage.getItem('token');
-                if (authToken) socket.emit('authenticate', authToken);
+                if (token) socket.emit('authenticate', token);
             });
             
             socket.on('disconnect', () => console.log('Disconnected from server.'));
@@ -223,12 +226,12 @@
 
             function updateUI(data) {
                 timerElement.textContent = data.timer;
-                dragonBetTotalElement.textContent = `Total Bet: ${data.bets.dragon}`;
-                tigerBetTotalElement.textContent = `Total Bet: ${data.bets.tiger}`;
+                dragonBetTotalElement.textContent = `Total Bet: ${data.bets.dragon || 0}`;
+                tigerBetTotalElement.textContent = `Total Bet: ${data.bets.tiger || 0}`;
             }
 
             function updateHistory(historyArray) {
-                if (!historyContainer) return;
+                if (!historyContainer || !Array.isArray(historyArray)) return;
                 historyContainer.innerHTML = ''; 
                 historyArray.forEach(winner => {
                     const iconElement = document.createElement('i');
