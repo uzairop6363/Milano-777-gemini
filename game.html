@@ -9,82 +9,26 @@
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     
     <style>
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            font-family: 'Poppins', sans-serif;
-            background: #1a0f29; color: white;
-            overflow: hidden;
-        }
-        .game-table {
-            display: flex; flex-direction: column; height: 100%;
-            /* === FINAL, WORKING BACKGROUND IMAGE === */
-            background: url('https://i.imgur.com/G2aYn1P.jpg') no-repeat center center/cover;
-            padding: 10px; box-sizing: border-box;
-        }
-        .top-info-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 5px 10px; background: rgba(0,0,0,0.5); border-radius: 10px;
-            flex-shrink: 0;
-        }
+        /* All your CSS remains the same... */
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Poppins', sans-serif; background: #1a0f29; color: white; overflow: hidden; }
+        .game-table { display: flex; flex-direction: column; height: 100%; background: url('https://i.imgur.com/G2aYn1P.jpg') no-repeat center center/cover; padding: 10px; box-sizing: border-box; }
+        .top-info-bar { display: flex; justify-content: space-between; align-items: center; padding: 5px 10px; background: rgba(0,0,0,0.4); border-radius: 10px; flex-shrink: 0; }
         .balance-display, .timer-display { font-weight: 600; }
         .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
-        .game-area {
-            flex-grow: 1; display: flex; justify-content: space-around;
-            align-items: center; padding: 10px 0; overflow: hidden;
-        }
-        .card-placeholder {
-            width: 40vw; max-width: 180px;
-            border: 3px dashed #ffc107; border-radius: 10px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.6);
-            text-align: center;
-            padding: 10px;
-            aspect-ratio: 2 / 3;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+        .game-area { flex-grow: 1; display: flex; justify-content: space-around; align-items: center; padding: 10px 0; overflow: hidden; }
+        .card-placeholder { width: 40vw; max-width: 180px; border: 3px dashed #ffc107; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.6); text-align: center; padding: 10px; aspect-ratio: 2 / 3; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
         .card-placeholder:hover { transform: scale(1.05); box-shadow: 0 0 15px #ffc107; }
         .card-placeholder i { font-size: 2.5rem; color: #ffc107; }
         .card-placeholder span { margin-top: 10px; font-weight: 700; font-size: 1rem; }
         .total-bet { font-size: 0.8rem; margin-top: 8px; }
         .vs-circle { font-size: 2rem; font-weight: 700; flex-shrink: 0; }
-        
-        .betting-area {
-            padding: 8px; background: rgba(0,0,0,0.5); border-radius: 10px;
-            display: flex; flex-direction: column; align-items: center;
-            gap: 8px; flex-shrink: 0;
-        }
+        .betting-area { padding: 8px; background: rgba(0,0,0,0.5); border-radius: 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; }
         .chip-selection-area { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .chip {
-            width: 45px; height: 45px;
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-weight: bold; font-size: 0.8rem; cursor: pointer;
-            border: 2px solid #fff; transition: all 0.2s;
-        }
+        .chip { width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 0.8rem; cursor: pointer; border: 2px solid #fff; transition: all 0.2s; }
         .chip.selected { transform: scale(1.15); box-shadow: 0 0 15px 3px #ffeb3b; }
-        .chip[data-value="20"] { background-color: #1976d2; }
-        .chip[data-value="50"] { background-color: #388e3c; }
-        .chip[data-value="100"] { background-color: #7b1fa2; }
-        .chip[data-value="500"] { background-color: #ffa000; color: #000; }
-        .chip[data-value="1000"] { background-color: #e64a19; }
-        .chip[data-value="3000"] { background-color: #000; border-color: #ffeb3b; }
-        .chip[data-value="5000"] { background-color: #fff; color: #000; border-color: #d32f2f; }
-        
-        #game-message {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); font-size: 2.5rem; font-weight: bold;
-            color: #ffc107; text-shadow: 0 0 10px black;
-            display: none; padding: 20px;
-            background: rgba(0,0,0,0.7); border-radius: 15px; z-index: 10;
-        }
-        @media (orientation: landscape) and (max-height: 450px) {
-            .top-info-bar, .betting-area { padding: 5px; } .game-area { padding: 5px 0; }
-            .card-placeholder { width: 38vw; padding: 5px; border-width: 2px; }
-            .card-placeholder i { font-size: 1.8rem; } .card-placeholder span { font-size: 0.7rem; margin-top: 5px; }
-            .total-bet { font-size: 0.6rem; margin-top: 4px; } .vs-circle { font-size: 1.2rem; }
-            .betting-area { gap: 5px; } .chip { width: 40px; height: 40px; font-size: 0.7rem; }
-            .top-info-bar { font-size: 0.8rem; }
-        }
+        .chip[data-value="20"] { background-color: #1976d2; } .chip[data-value="50"] { background-color: #388e3c; } .chip[data-value="100"] { background-color: #7b1fa2; } .chip[data-value="500"] { background-color: #ffa000; color: #000; } .chip[data-value="1000"] { background-color: #e64a19; } .chip[data-value="3000"] { background-color: #000; border-color: #ffeb3b; } .chip[data-value="5000"] { background-color: #fff; color: #000; border-color: #d32f2f; }
+        #game-message { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5rem; font-weight: bold; color: #ffc107; text-shadow: 0 0 10px black; display: none; padding: 20px; background: rgba(0,0,0,0.7); border-radius: 15px; z-index: 10; }
+        @media (orientation: landscape) and (max-height: 450px) { .top-info-bar, .betting-area { padding: 5px; } .game-area { padding: 5px 0; } .card-placeholder { width: 38vw; padding: 5px; border-width: 2px; } .card-placeholder i { font-size: 1.8rem; } .card-placeholder span { font-size: 0.7rem; margin-top: 5px; } .total-bet { font-size: 0.6rem; margin-top: 4px; } .vs-circle { font-size: 1.2rem; } .betting-area { gap: 5px; } .chip { width: 40px; height: 40px; font-size: 0.7rem; } .top-info-bar { font-size: 0.8rem; } }
     </style>
 </head>
 <body>
@@ -128,7 +72,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Pehle zaroori elements ko dhoondein
             const coinsElement = document.getElementById('user-coins');
             const timerElement = document.getElementById('timer');
             const gameMessageElement = document.getElementById('game-message');
@@ -138,7 +81,6 @@
             const dragonCard = document.getElementById('dragon-side');
             const tigerCard = document.getElementById('tiger-side');
 
-            // User ka data check karein
             const userCoins = localStorage.getItem('userCoins');
             const token = localStorage.getItem('token');
             if (!token) {
@@ -150,11 +92,9 @@
                 coinsElement.textContent = parseFloat(userCoins).toFixed(2);
             }
 
-            // Backend se connect karein
             const socket = io("https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev");
-            let selectedBetAmount = 20; // Default bet
+            let selectedBetAmount = 20;
 
-            // Chip selection logic
             chips.forEach(chip => {
                 chip.addEventListener('click', () => {
                     chips.forEach(c => c.classList.remove('selected'));
@@ -163,7 +103,6 @@
                 });
             });
 
-            // Card click betting logic
             dragonCard.addEventListener('click', () => placeBet('dragon'));
             tigerCard.addEventListener('click', () => placeBet('tiger'));
 
@@ -171,17 +110,16 @@
                 socket.emit('place_bet', { choice: choice, amount: selectedBetAmount, token: token });
             }
 
-            // Socket events ko sunein
-            socket.on('connect', () => console.log('Successfully connected!', socket.id));
-            socket.on('disconnect', () => console.log('Disconnected from server.'));
+            // === YEH HISSA ZAROORI HAI ===
+            socket.on('connect', () => {
+                console.log('Successfully connected!', socket.id);
+                // Jaise hi connect ho, server ko apna token bhej kar authenticate karein
+                socket.emit('authenticate', token);
+            });
 
-            socket.on('initial_state', (data) => {
-                updateUI(data);
-            });
-            
-            socket.on('game_update', (data) => {
-                updateUI(data);
-            });
+            socket.on('disconnect', () => console.log('Disconnected from server.'));
+            socket.on('initial_state', (data) => updateUI(data));
+            socket.on('game_update', (data) => updateUI(data));
 
             socket.on('round_result', (data) => {
                 gameMessageElement.textContent = `${data.winner.toUpperCase()} WINS!`;
@@ -194,11 +132,8 @@
                 localStorage.setItem('userCoins', data.newBalance);
             });
             
-            socket.on('bet_error', (data) => {
-                alert(data.message);
-            });
+            socket.on('bet_error', (data) => { alert(data.message); });
 
-            // UI update karne ka helper function
             function updateUI(data) {
                 timerElement.textContent = data.timer;
                 dragonBetTotalElement.textContent = `Total Bet: ${data.bets.dragon}`;
