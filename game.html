@@ -9,174 +9,8 @@
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     
     <style>
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            font-family: 'Poppins', sans-serif;
-            background: #1a0f29; color: white;
-            overflow: hidden; user-select: none;
-        }
-        .game-table {
-            display: flex; flex-direction: column; height: 100%;
-            background: url('background.png') no-repeat center center/cover;
-            padding: 10px; box-sizing: border-box;
-            position: relative;
-        }
-        
-        .top-info-bar {
-            display: grid; grid-template-columns: 1fr auto 1fr;
-            align-items: center; padding: 5px;
-            background: none; flex-shrink: 0; z-index: 5;
-        }
-        .back-btn {
-            color: white; text-decoration: none; font-size: 1.8rem;
-            text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
-            justify-self: start;
-        }
-        .timer-display {
-            font-weight: 600; padding: 8px 15px; border-radius: 20px;
-            background: linear-gradient(145deg, #ffc107, #ff8f00);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-            color: #000; border: 1px solid #ffd54f;
-            grid-column: 2; justify-self: center;
-        }
-        .history-bar {
-            background: none; padding: 8px; margin-bottom: 8px;
-            display: flex; justify-content: center; align-items: center;
-            gap: 8px; flex-shrink: 0;
-        }
-        
-        .balance-display {
-            font-weight: 600; padding: 8px 15px; border-radius: 20px;
-            background: linear-gradient(145deg, #4caf50, #2e7d32);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-            border: 1px solid #81c784;
-            flex-shrink: 0;
-            position: absolute; bottom: 20px;
-            left: 15px; z-index: 10;
-        }
-        .chip-selection-area { 
-            display: flex; justify-content: center; align-items: center;
-            gap: 10px;
-            position: absolute; bottom: 20px;
-            left: 50%; transform: translateX(-50%);
-            z-index: 10;
-        }
-
-        .game-area {
-            flex-grow: 1; display: flex; 
-            justify-content: center; align-items: center; 
-            padding: 10px 0; overflow: hidden;
-            margin: 1vh 0; gap: 20px;
-        }
-        
-        .card-placeholder {
-            width: 35vw; 
-            max-width: 150px;
-            border: 3px solid #ffc107; 
-            border-radius: 10px;
-            background-color: #33254e; 
-            text-align: center;
-            aspect-ratio: 2 / 2.8;
-            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            position: relative;
-            overflow: hidden;
-            display: flex; /* For centering the overlay */
-            flex-direction: column; /* For stacking text */
-            justify-content: flex-end; /* Puts content at the bottom */
-            align-items: center;
-        }
-        #dragon-side {
-            background-image: url('dragon.png');
-            background-size: cover;
-            background-position: center;
-        }
-        #tiger-side {
-            background-image: url('tiger.png');
-            background-size: cover;
-            background-position: center;
-        }
-        .card-placeholder:hover { transform: scale(1.05); box-shadow: 0 0 20px #ffc107; }
-
-        .card-text-overlay {
-            width: 100%;
-            padding-top: 20px; 
-            padding-bottom: 8px;
-            background: linear-gradient(to top, rgba(0,0,0,0.85) 40%, transparent);
-            box-sizing: border-box; /* Padding border box ke andar rahe */
-        }
-        .card-placeholder span { 
-            font-weight: 700; font-size: 1rem;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-        }
-        .total-bet { 
-            font-size: 0.8rem; margin-top: 4px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-        }
-
-        /* === NEW CSS FOR WINNING GIFS === */
-        .winning-gif-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            display: none; /* By default hidden */
-            justify-content: center;
-            align-items: center;
-            z-index: 20; /* Card content ke upar dikhe */
-            background-color: rgba(0,0,0,0.7); /* Thora dark background */
-            border-radius: 8px; /* Card ke border radius se match kare */
-        }
-        .winning-gif-overlay img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* GIF poore area ko cover kare */
-            border-radius: 8px;
-        }
-        /* ==================================== */
-
-        .vs-circle { font-size: 1.5rem; font-weight: 700; flex-shrink: 0; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
-        
-        .chip {
-            width: 45px; height: 45px;
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
-            cursor: pointer; transition: all 0.2s ease-in-out;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 2px 3px rgba(0,0,0,0.3);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-            box-sizing: border-box;
-        }
-        .chip.selected {
-            transform: scale(1.15) translateY(-5px);
-            box-shadow: 0 6px 20px rgba(255, 235, 59, 0.6), 0 0 15px 5px rgba(255, 235, 59, 0.8);
-            border-color: #ffeb3b;
-        }
-        .chip[data-value="20"] { background: radial-gradient(circle, #42a5f5 60%, #1e88e5 100%); border: 4px solid #bbdefb; color: #fff; }
-        .chip[data-value="50"] { background: radial-gradient(circle, #66bb6a 60%, #43a047 100%); border: 4px solid #c8e6c9; color: #fff; }
-        .chip[data-value="100"] { background: radial-gradient(circle, #ab47bc 60%, #8e24aa 100%); border: 4px solid #e1bee7; color: #fff; }
-        .chip[data-value="500"] { background: radial-gradient(circle, #ffa726 60%, #fb8c00 100%); border: 4px solid #ffe0b2; color: #000; }
-        .chip[data-value="1000"] { background: radial-gradient(circle, #ef5350 60%, #e53935 100%); border: 4px solid #ffcdd2; color: #fff; }
-        .chip[data-value="3000"] { background: radial-gradient(circle, #424242 60%, #212121 100%); border: 4px solid #eeeeee; color: #ffeb3b; }
-        .chip[data-value="5000"] { background: radial-gradient(circle, #f5f5f5 60%, #e0e0e0 100%); border: 4px solid #ef5350; color: #d32f2f; }
-        
-        #game-message { /* Ab ye sirf error messages ke liye use hoga */
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); font-size: 1.5rem; font-weight: bold;
-            color: #ffc107; text-shadow: 0 0 10px black;
-            display: none; padding: 15px;
-            background: rgba(0,0,0,0.8); border-radius: 10px; z-index: 30;
-            white-space: nowrap; /* Text ko ek line me rakhe */
-        }
-        
-        .history-item { 
-            font-size: 1.2rem;
-            text-shadow: 0 0 5px rgba(0,0,0,0.7);
-        }
-        .history-item.dragon { color: #f44336; }
-        .history-item.tiger { color: #2196f3; }
-
-        @media (orientation: landscape) and (max-height: 500px) {
-            .top-info-bar,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:120px;padding:0;border-width:2px}.card-text-overlay{padding-top:15px;padding-bottom:5px}.card-placeholder span{font-size:.8rem}.total-bet{font-size:.7rem;margin-top:2px}.vs-circle{font-size:1.2rem}.chip{width:40px;height:40px;font-size:.7rem;border-width:3px}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}.balance-display{bottom:10px;left:10px}.chip-selection-area{bottom:10px;gap:8px}
-        }
+        /* CSS mein koi tabdeeli nahi ki gayi, woh bilkul theek hai */
+        body,html{margin:0;padding:0;height:100%;font-family:'Poppins',sans-serif;background:#1a0f29;color:white;overflow:hidden;user-select:none}.game-table{display:flex;flex-direction:column;height:100%;background:url(background.png) no-repeat center center/cover;padding:10px;box-sizing:border-box;position:relative}.top-info-bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:5px;background:none;flex-shrink:0;z-index:5}.back-btn{color:white;text-decoration:none;font-size:1.8rem;text-shadow:0 0 8px rgba(0,0,0,.9);justify-self:start}.timer-display{font-weight:600;padding:8px 15px;border-radius:20px;background:linear-gradient(145deg,#ffc107,#ff8f00);box-shadow:0 2px 5px rgba(0,0,0,.4);color:#000;border:1px solid #ffd54f;grid-column:2;justify-self:center}.history-bar{background:none;padding:8px;margin-bottom:8px;display:flex;justify-content:center;align-items:center;gap:8px;flex-shrink:0}.balance-display{font-weight:600;padding:8px 15px;border-radius:20px;background:linear-gradient(145deg,#4caf50,#2e7d32);box-shadow:0 2px 5px rgba(0,0,0,.4);border:1px solid #81c784;flex-shrink:0;position:absolute;bottom:20px;left:15px;z-index:10}.chip-selection-area{display:flex;justify-content:center;align-items:center;gap:10px;position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:10}.game-area{flex-grow:1;display:flex;justify-content:center;align-items:center;padding:10px 0;overflow:hidden;margin:1vh 0;gap:20px}.card-placeholder{width:35vw;max-width:150px;border:3px solid #ffc107;border-radius:10px;background-color:#33254e;text-align:center;aspect-ratio:2/2.8;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 10px rgba(0,0,0,.5);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}#dragon-side{background-image:url(dragon.png);background-size:cover;background-position:center}#tiger-side{background-image:url(tiger.png);background-size:cover;background-position:center}.card-placeholder:hover{transform:scale(1.05);box-shadow:0 0 20px #ffc107}.card-text-overlay{width:100%;padding-top:20px;padding-bottom:8px;background:linear-gradient(to top,rgba(0,0,0,.85) 40%,transparent);box-sizing:border-box}.card-placeholder span{font-weight:700;font-size:1rem;text-shadow:1px 1px 3px rgba(0,0,0,.7)}.total-bet{font-size:.8rem;margin-top:4px;text-shadow:1px 1px 3px rgba(0,0,0,.7)}.winning-gif-overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:none;justify-content:center;align-items:center;z-index:20;background-color:rgba(0,0,0,.7);border-radius:8px}.winning-gif-overlay img{width:100%;height:100%;object-fit:cover;border-radius:8px}.vs-circle{font-size:1.5rem;font-weight:700;flex-shrink:0;text-shadow:0 0 5px rgba(0,0,0,.5)}.chip{width:45px;height:45px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-weight:700;font-size:.8rem;flex-shrink:0;cursor:pointer;transition:all .2s ease-in-out;box-shadow:0 4px 8px rgba(0,0,0,.5),inset 0 2px 3px rgba(0,0,0,.3);text-shadow:0 1px 2px rgba(0,0,0,.4);box-sizing:border-box}.chip.selected{transform:scale(1.15) translateY(-5px);box-shadow:0 6px 20px rgba(255,235,59,.6),0 0 15px 5px rgba(255,235,59,.8);border-color:#ffeb3b}.chip[data-value="20"]{background:radial-gradient(circle,#42a5f5 60%,#1e88e5 100%);border:4px solid #bbdefb;color:#fff}.chip[data-value="50"]{background:radial-gradient(circle,#66bb6a 60%,#43a047 100%);border:4px solid #c8e6c9;color:#fff}.chip[data-value="100"]{background:radial-gradient(circle,#ab47bc 60%,#8e24aa 100%);border:4px solid #e1bee7;color:#fff}.chip[data-value="500"]{background:radial-gradient(circle,#ffa726 60%,#fb8c00 100%);border:4px solid #ffe0b2;color:#000}.chip[data-value="1000"]{background:radial-gradient(circle,#ef5350 60%,#e53935 100%);border:4px solid #ffcdd2;color:#fff}.chip[data-value="3000"]{background:radial-gradient(circle,#424242 60%,#212121 100%);border:4px solid #eee;color:#ffeb3b}.chip[data-value="5000"]{background:radial-gradient(circle,#f5f5f5 60%,#e0e0e0 100%);border:4px solid #ef5350;color:#d32f2f}#game-message{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.5rem;font-weight:bold;color:#ffc107;text-shadow:0 0 10px black;display:none;padding:15px;background:rgba(0,0,0,.8);border-radius:10px;z-index:30;white-space:nowrap}.history-item{font-size:1.2rem;text-shadow:0 0 5px rgba(0,0,0,.7)}.history-item.dragon{color:#f44336}.history-item.tiger{color:#2196f3}@media (orientation:landscape) and (max-height:500px){.top-info-bar,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:120px;padding:0;border-width:2px}.card-text-overlay{padding-top:15px;padding-bottom:5px}.card-placeholder span{font-size:.8rem}.total-bet{font-size:.7rem;margin-top:2px}.vs-circle{font-size:1.2rem}.chip{width:40px;height:40px;font-size:.7rem;border-width:3px}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}.balance-display{bottom:10px;left:10px}.chip-selection-area{bottom:10px;gap:8px}}
     </style>
 </head>
 <body>
@@ -227,10 +61,12 @@
             <div class="chip" data-value="5000">5K</div>
         </div>
         
-        <div id="game-message"></div> </div>
+        <div id="game-message"></div> 
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Elements ko get karna
             const coinsElement = document.getElementById('user-coins');
             const timerElement = document.getElementById('timer');
             const gameMessageElement = document.getElementById('game-message');
@@ -241,9 +77,13 @@
             const tigerCard = document.getElementById('tiger-side');
             const historyContainer = document.getElementById('history-container');
             
+            // Winning GIF elements
             const dragonWinGifOverlay = document.getElementById('dragon-win-gif-overlay');
             const tigerWinGifOverlay = document.getElementById('tiger-win-gif-overlay');
+            const dragonWinGifImg = dragonWinGifOverlay.querySelector('img');
+            const tigerWinGifImg = tigerWinGifOverlay.querySelector('img');
 
+            // Token aur initial setup
             const token = localStorage.getItem('token');
             if (!token) {
                 alert('Please login first!');
@@ -254,9 +94,11 @@
                 coinsElement.textContent = parseFloat(localStorage.getItem('userCoins')).toFixed(2);
             }
 
+            // Socket connection
             const socket = io("https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev");
             let selectedBetAmount = 20;
 
+            // Event Listeners for chips and cards
             chips.forEach(chip => {
                 chip.addEventListener('click', () => {
                     chips.forEach(c => c.classList.remove('selected'));
@@ -273,6 +115,7 @@
                 socket.emit('place_bet', { choice: choice, amount: selectedBetAmount, token: token });
             }
 
+            // Socket Event Handlers
             socket.on('connect', () => {
                 if (token) socket.emit('authenticate', token);
             });
@@ -281,23 +124,26 @@
             socket.on('initial_state', (data) => { updateUI(data); updateHistory(data.history); });
             socket.on('game_update', (data) => updateUI(data));
             
+            // === JAVASCRIPT CODE MEIN YAHAN TABDEELI KI GAYI HAI ===
             socket.on('round_result', (data) => {
-                // Pehle koi bhi GIF dikh rahi ho to usay hide kar dein
                 dragonWinGifOverlay.style.display = 'none';
                 tigerWinGifOverlay.style.display = 'none';
 
-                // Winning GIF ko dikhayein
                 if (data.winner === 'dragon') {
-                    dragonWinGifOverlay.style.display = 'flex'; // 'flex' use karein taake GIF center ho
+                    // GIF ko zabardasti replay karwane ke liye (cache ko bypass karna)
+                    dragonWinGifImg.src = 'dragon_win.gif?t=' + new Date().getTime();
+                    dragonWinGifOverlay.style.display = 'flex';
                 } else if (data.winner === 'tiger') {
+                    // GIF ko zabardasti replay karwane ke liye
+                    tigerWinGifImg.src = 'tiger_win.gif?t=' + new Date().getTime();
                     tigerWinGifOverlay.style.display = 'flex';
                 }
 
-                // Thodi der baad GIF ko hide kar dein
+                // GIF ko 4 second ke baad hide karna
                 setTimeout(() => {
                     dragonWinGifOverlay.style.display = 'none';
                     tigerWinGifOverlay.style.display = 'none';
-                }, 3000); // GIF 3 seconds tak dikhegi
+                }, 4000); 
 
                 updateHistory(data.history);
             });
@@ -310,9 +156,10 @@
             socket.on('bet_error', (data) => { 
                 gameMessageElement.textContent = data.message;
                 gameMessageElement.style.display = 'block';
-                setTimeout(() => gameMessageElement.style.display = 'none', 3000); // Error 3 seconds tak dikhega
+                setTimeout(() => gameMessageElement.style.display = 'none', 3000);
             });
 
+            // Helper Functions
             function updateUI(data) {
                 timerElement.textContent = data.timer;
                 dragonBetTotalElement.textContent = `Total Bet: ${data.bets.dragon || 0}`;
@@ -322,7 +169,6 @@
             function updateHistory(historyArray) {
                 if (!historyContainer || !Array.isArray(historyArray)) return;
                 historyContainer.innerHTML = ''; 
-                // Only show a limited number of history items, e.g., last 10
                 const lastTen = historyArray.slice(-10); 
                 lastTen.forEach(winner => {
                     const iconElement = document.createElement('i');
