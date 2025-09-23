@@ -19,7 +19,7 @@
             display: flex; flex-direction: column; height: 100%;
             background: url('background.png') no-repeat center center/cover;
             padding: 10px; box-sizing: border-box;
-            position: relative; /* Positioning context for absolute elements */
+            position: relative;
         }
         
         .top-info-bar {
@@ -45,28 +45,22 @@
             gap: 8px; flex-shrink: 0;
         }
         
-        /* === NEW CSS CHANGES FOR CENTERING CHIPS === */
         .balance-display {
             font-weight: 600; padding: 8px 15px; border-radius: 20px;
             background: linear-gradient(145deg, #4caf50, #2e7d32);
             box-shadow: 0 2px 5px rgba(0,0,0,0.4);
             border: 1px solid #81c784;
             flex-shrink: 0;
-            position: absolute; /* Left corner me fix */
-            bottom: 20px;
-            left: 15px;
-            z-index: 10;
+            position: absolute; bottom: 20px;
+            left: 15px; z-index: 10;
         }
         .chip-selection-area { 
             display: flex; justify-content: center; align-items: center;
-            gap: 8px; /* Thora gap barha diya hai */
-            position: absolute; /* Screen ke center me fix */
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            gap: 10px;
+            position: absolute; bottom: 20px;
+            left: 50%; transform: translateX(-50%);
             z-index: 10;
         }
-        /* ==================================== */
 
         .game-area {
             flex-grow: 1; display: flex; 
@@ -88,16 +82,52 @@
         .total-bet { font-size: 0.7rem; margin-top: 5px; }
         .vs-circle { font-size: 1.5rem; font-weight: 700; flex-shrink: 0; }
         
+        /* === NEW MODERN CASINO CHIP STYLE START === */
         .chip {
-            width: 40px; height: 40px;
+            width: 45px; height: 45px;
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-weight: bold; font-size: 0.7rem; flex-shrink: 0;
-            cursor: pointer; border: 2px solid #fff; transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
+            cursor: pointer; transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 2px 3px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+            box-sizing: border-box; /* Border ko size me shamil karne ke liye */
         }
-        .chip.selected { transform: scale(1.15); box-shadow: 0 0 15px 3px #ffeb3b; }
-        .chip[data-value="20"] { background-color: #1976d2; } .chip[data-value="50"] { background-color: #388e3c; } .chip[data-value="100"] { background-color: #7b1fa2; } .chip[data-value="500"] { background-color: #ffa000; color: #000; } .chip[data-value="1000"] { background-color: #e64a19; } .chip[data-value="3000"] { background-color: #000; border-color: #ffeb3b; } .chip[data-value="5000"] { background-color: #fff; color: #000; border-color: #d32f2f; }
-        
+        .chip.selected {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 6px 20px rgba(255, 235, 59, 0.6), 0 0 15px 5px rgba(255, 235, 59, 0.8);
+            border-color: #ffeb3b;
+        }
+        .chip[data-value="20"] {
+            background: radial-gradient(circle, #42a5f5 60%, #1e88e5 100%);
+            border: 4px solid #bbdefb; color: #fff;
+        }
+        .chip[data-value="50"] {
+            background: radial-gradient(circle, #66bb6a 60%, #43a047 100%);
+            border: 4px solid #c8e6c9; color: #fff;
+        }
+        .chip[data-value="100"] {
+            background: radial-gradient(circle, #ab47bc 60%, #8e24aa 100%);
+            border: 4px solid #e1bee7; color: #fff;
+        }
+        .chip[data-value="500"] {
+            background: radial-gradient(circle, #ffa726 60%, #fb8c00 100%);
+            border: 4px solid #ffe0b2; color: #000;
+        }
+        .chip[data-value="1000"] {
+            background: radial-gradient(circle, #ef5350 60%, #e53935 100%);
+            border: 4px solid #ffcdd2; color: #fff;
+        }
+        .chip[data-value="3000"] {
+            background: radial-gradient(circle, #424242 60%, #212121 100%);
+            border: 4px solid #eeeeee; color: #ffeb3b; /* Gold text */
+        }
+        .chip[data-value="5000"] {
+            background: radial-gradient(circle, #f5f5f5 60%, #e0e0e0 100%);
+            border: 4px solid #ef5350; /* Red border */
+            color: #d32f2f; /* Red text */
+        }
+        /* ==================================== */
+
         #game-message {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%); font-size: 2.5rem; font-weight: bold;
@@ -114,7 +144,7 @@
         .history-item.tiger { color: #2196f3; }
 
         @media (orientation: landscape) and (max-height: 500px) {
-            .top-info-bar,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:110px;padding:5px;border-width:2px}.card-placeholder i{font-size:1.8rem}.card-placeholder span{font-size:.7rem;margin-top:5px}.total-bet{font-size:.6rem;margin-top:4px}.vs-circle{font-size:1.2rem}.chip{width:36px;height:36px;font-size:.7rem}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}.balance-display{bottom:10px;left:10px}.chip-selection-area{bottom:10px}
+            .top-info-bar,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:110px;padding:5px;border-width:2px}.card-placeholder i{font-size:1.8rem}.card-placeholder span{font-size:.7rem;margin-top:5px}.total-bet{font-size:.6rem;margin-top:4px}.vs-circle{font-size:1.2rem}.chip{width:40px;height:40px;font-size:.7rem;border-width:3px}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}.balance-display{bottom:10px;left:10px}.chip-selection-area{bottom:10px;gap:8px}
         }
     </style>
 </head>
