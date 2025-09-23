@@ -77,7 +77,7 @@
             background-color: #33254e; 
             text-align: center;
             aspect-ratio: 2 / 2.8;
-            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer; transition: all 0.2s; /* Transition me opacity bhi add ki */
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             position: relative;
             overflow: hidden;
@@ -98,6 +98,18 @@
         }
         .card-placeholder:hover { transform: scale(1.05); box-shadow: 0 0 20px #ffc107; }
 
+        /* === NEW CSS TO DISABLE CARDS === */
+        .card-placeholder.disabled {
+            cursor: not-allowed;
+            opacity: 0.7; /* Thora sa halka dikhega */
+            pointer-events: none; /* Is par click nahi ho sakega */
+        }
+        .card-placeholder.disabled:hover {
+            transform: none; /* Hover effect bhi band */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        /* ================================ */
+
         .card-text-overlay {
             width: 100%;
             padding-top: 20px; 
@@ -114,25 +126,19 @@
             text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
         }
 
-        /* === CSS CHANGE: Winning GIF ko VIDEO se badal diya gaya hai === */
         .winning-animation-overlay {
-            position: absolute;
-            top: 0; left: 0;
+            position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 20;
+            display: none; justify-content: center;
+            align-items: center; z-index: 20;
             background-color: rgba(0,0,0,0.7);
             border-radius: 8px;
         }
         .winning-animation-overlay video {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             object-fit: cover;
             border-radius: 8px;
         }
-        /* ==================================== */
 
         .vs-circle { font-size: 1.5rem; font-weight: 700; flex-shrink: 0; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
         
@@ -193,7 +199,7 @@
         <div class="game-area">
             <div class="card-placeholder" id="dragon-side">
                 <div class="winning-animation-overlay" id="dragon-win-overlay">
-                    <video src="dragon_win.mp4" autoplay muted loop playsinline class="winning-video"></video>
+                    <video src="dragon_win.mp4" autoplay muted loop playsinline></video>
                 </div>
                 <div class="card-text-overlay">
                     <span>DRAGON</span>
@@ -202,8 +208,8 @@
             </div>
             <div class="vs-circle">VS</div>
             <div class="card-placeholder" id="tiger-side">
-                 <div class="winning-animation-overlay" id="tiger-win-overlay">
-                    <video src="tiger_win.mp4" autoplay muted loop playsinline class="winning-video"></video>
+                <div class="winning-animation-overlay" id="tiger-win-overlay">
+                    <video src="tiger_win.mp4" autoplay muted loop playsinline></video>
                 </div>
                 <div class="card-text-overlay">
                     <span>TIGER</span>
@@ -243,13 +249,11 @@
             const tigerCard = document.getElementById('tiger-side');
             const historyContainer = document.getElementById('history-container');
             
-            // JAVASCRIPT CHANGE: Winning VIDEO elements
             const dragonWinOverlay = document.getElementById('dragon-win-overlay');
             const tigerWinOverlay = document.getElementById('tiger-win-overlay');
             const dragonWinVideo = dragonWinOverlay.querySelector('video');
             const tigerWinVideo = tigerWinOverlay.querySelector('video');
 
-            // Token and initial setup
             const token = localStorage.getItem('token');
             if (!token) {
                 alert('Please login first!');
@@ -263,7 +267,6 @@
             const socket = io("https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev");
             let selectedBetAmount = 20;
 
-            // Event Listeners
             chips.forEach(chip => {
                 chip.addEventListener('click', () => {
                     chips.forEach(c => c.classList.remove('selected'));
@@ -280,29 +283,25 @@
                 socket.emit('place_bet', { choice: choice, amount: selectedBetAmount, token: token });
             }
 
-            // Socket Event Handlers
-            socket.on('connect', () => {
-                if (token) socket.emit('authenticate', token);
-            });
-            
+            socket.on('connect', () => { if (token) socket.emit('authenticate', token); });
             socket.on('disconnect', () => console.log('Disconnected from server.'));
+            
+            // JAVASCRIPT CHANGES HERE
             socket.on('initial_state', (data) => { updateUI(data); updateHistory(data.history); });
             socket.on('game_update', (data) => updateUI(data));
-            
-            // JAVASCRIPT CHANGE: 'round_result' ab video play karega
+
             socket.on('round_result', (data) => {
                 dragonWinOverlay.style.display = 'none';
                 tigerWinOverlay.style.display = 'none';
 
                 if (data.winner === 'dragon') {
                     dragonWinOverlay.style.display = 'flex';
-                    dragonWinVideo.play(); // Video ko play karein
+                    dragonWinVideo.play();
                 } else if (data.winner === 'tiger') {
                     tigerWinOverlay.style.display = 'flex';
-                    tigerWinVideo.play(); // Video ko play karein
+                    tigerWinVideo.play();
                 }
 
-                // Video ko 4 second ke baad hide karna
                 setTimeout(() => {
                     dragonWinOverlay.style.display = 'none';
                     tigerWinOverlay.style.display = 'none';
@@ -322,13 +321,21 @@
                 setTimeout(() => gameMessageElement.style.display = 'none', 3000);
             });
 
-            // Helper Functions
             function updateUI(data) {
                 timerElement.textContent = data.timer;
                 dragonBetTotalElement.textContent = `Total Bet: ${data.bets.dragon || 0}`;
                 tigerBetTotalElement.textContent = `Total Bet: ${data.bets.tiger || 0}`;
+                
+                // Yeh naya code hai jo cards ko disable/enable karega
+                if (data.isBettingPhase) {
+                    dragonCard.classList.remove('disabled');
+                    tigerCard.classList.remove('disabled');
+                } else {
+                    dragonCard.classList.add('disabled');
+                    tigerCard.classList.add('disabled');
+                }
             }
-
+            
             function updateHistory(historyArray) {
                 if (!historyContainer || !Array.isArray(historyArray)) return;
                 historyContainer.innerHTML = ''; 
