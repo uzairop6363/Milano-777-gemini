@@ -158,18 +158,16 @@
             white-space: nowrap;
         }
         
-        .history-item { 
-            font-size: 1.2rem;
-            text-shadow: 0 0 5px rgba(0,0,0,0.7);
-        }
+        .history-item { font-size: 1.2rem; text-shadow: 0 0 5px rgba(0,0,0,0.7); }
         .history-item.dragon { color: #f44336; }
         .history-item.tiger { color: #2196f3; }
 
         /* === NEW CSS FOR PLAYER ANIMATIONS START === */
         @keyframes place-bet-anim-left { 50% { transform: translateX(5px) scale(1.05); } }
         @keyframes place-bet-anim-right { 50% { transform: translateX(-5px) scale(1.05); } }
-        .player-list.left .player-item.is-betting { animation: place-bet-anim-left 0.4s ease-in-out; }
-        .player-list.right .player-item.is-betting { animation: place-bet-anim-right 0.4s ease-in-out; }
+        /* CHANGE: Animation tez kar di gayi hai (0.4s se 0.3s) */
+        .player-list.left .player-item.is-betting { animation: place-bet-anim-left 0.3s ease-in-out; }
+        .player-list.right .player-item.is-betting { animation: place-bet-anim-right 0.3s ease-in-out; }
 
         .player-list {
             position: absolute; top: 70px;
@@ -197,7 +195,7 @@
         .win-lose-amount {
             position: absolute;
             top: 0; left: 50%;
-            font-weight: bold;
+            font-weight: bold; font-size: 0.9rem;
             text-shadow: 0 0 5px black;
             opacity: 0;
             pointer-events: none;
@@ -271,10 +269,8 @@
     </div>
 
     <script>
-        // === SCRIPT AB PURI TARAH SE ORGANIZE AUR THEEK KAR DIYA GAYA HAI ===
         document.addEventListener('DOMContentLoaded', function() {
             
-            // -- PART 1: Saare Elements ko Get Karna --
             const coinsElement = document.getElementById('user-coins');
             const timerElement = document.getElementById('timer');
             const gameMessageElement = document.getElementById('game-message');
@@ -290,8 +286,7 @@
             const tigerWinVideo = tigerWinOverlay.querySelector('video');
             const playerListLeft = document.getElementById('player-list-left');
             const playerListRight = document.getElementById('player-list-right');
-
-            // -- PART 2: State Variables --
+            
             const token = localStorage.getItem('token');
             const socket = io("https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev");
             let selectedBetAmount = 20;
@@ -304,9 +299,6 @@
                 { id: 6, name: 'Guest987654', avatar: 'frame3.png', coins: 50000, side: 'right', element: null, currentBet: null }
             ];
 
-            // -- PART 3: Functions --
-
-            // Real Player Functions
             function placeBet(choice) {
                 if (!token) { alert('Authentication error. Please login again.'); return; }
                 socket.emit('place_bet', { choice: choice, amount: selectedBetAmount, token: token });
@@ -342,7 +334,6 @@
                 });
             }
             
-            // Fake Player Functions
             function renderPlayerLists() {
                 playerListLeft.innerHTML = '';
                 playerListRight.innerHTML = '';
@@ -371,12 +362,21 @@
                 });
             }
             
+            // CHANGE: Betting animation logic update hui hai
             function animateFakeBettors() {
-                const playersToAnimate = fakePlayers.filter(() => Math.random() < 0.3);
+                // Decide karein ke kitne players (1 se 4 tak) ek saath move karenge
+                const numToAnimate = Math.floor(Math.random() * 4) + 1;
+                // Players ki list ko randomly shuffle karein
+                const shuffledPlayers = [...fakePlayers].sort(() => 0.5 - Math.random());
+                // Shuffled list se pehle kuch players select karein
+                const playersToAnimate = shuffledPlayers.slice(0, numToAnimate);
+                
                 playersToAnimate.forEach(player => {
                     if (player.element && !player.element.classList.contains('is-betting')) {
                         player.element.classList.add('is-betting');
-                        setTimeout(() => player.element.classList.remove('is-betting'), 400);
+                        setTimeout(() => {
+                            player.element.classList.remove('is-betting');
+                        }, 300); // Animation duration se match karein
                     }
                 });
             }
@@ -386,7 +386,7 @@
                     if (!player.currentBet || !player.element) return;
                     
                     const winLoseEl = player.element.querySelector('.win-lose-amount');
-                    winLoseEl.className = 'win-lose-amount'; // Purani classes (show, win, lose) hata dein
+                    winLoseEl.className = 'win-lose-amount'; 
 
                     if (player.currentBet.choice === winner) {
                         const winnings = player.currentBet.amount;
@@ -411,7 +411,6 @@
                 setTimeout(renderPlayerLists, 2000);
             }
 
-            // -- PART 4: Initial Game Setup --
             if (!token) {
                 alert('Please login first!');
                 window.location.href = 'index.html';
@@ -420,7 +419,7 @@
             if (coinsElement && localStorage.getItem('userCoins')) {
                 coinsElement.textContent = parseFloat(localStorage.getItem('userCoins')).toFixed(2);
             }
-            renderPlayerLists(); // Shuru me players ko dikhayein
+            renderPlayerLists();
             
             chips.forEach(chip => {
                 chip.addEventListener('click', () => {
@@ -432,7 +431,6 @@
             dragonCard.addEventListener('click', () => placeBet('dragon'));
             tigerCard.addEventListener('click', () => placeBet('tiger'));
 
-            // -- PART 5: Socket.IO Listeners --
             socket.on('connect', () => { if (token) socket.emit('authenticate', token); });
             socket.on('disconnect', () => console.log('Disconnected from server.'));
             
@@ -444,12 +442,18 @@
             
             socket.on('game_update', (data) => {
                 updateUI(data);
-                if (data.isBettingPhase && data.timer % 3 === 0 && data.timer > 2) {
+                // CHANGE: Animation ab har 2 second me trigger hogi
+                if (data.isBettingPhase && data.timer % 2 === 0 && data.timer > 2) {
                     animateFakeBettors();
                 }
             });
             
-            socket.on('new_round', () => { simulateBets(); });
+            socket.on('new_round', () => { 
+                simulateBets(); 
+                // CHANGE: Yahan par saari win/loss animations hide ho jayengi
+                const allWinLoseElements = document.querySelectorAll('.win-lose-amount');
+                allWinLoseElements.forEach(el => el.classList.remove('show'));
+            });
             
             socket.on('round_result', (data) => {
                 dragonWinOverlay.style.display = 'none';
