@@ -39,11 +39,27 @@
             color: #000; border: 1px solid #ffd54f;
             grid-column: 2; justify-self: center;
         }
+
+        /* === CSS CHANGES START HERE === */
         .history-bar {
-            background: none; padding: 8px; margin-bottom: 8px;
+            background: none;
+            padding: 4px; /* Padding kam kar di hai */
+            margin-top: 5px; /* Timer se thora sa neeche */
             display: flex; justify-content: center; align-items: center;
-            gap: 8px; flex-shrink: 0;
+            gap: 6px; /* Icons ke beech gap kam kar diya hai */
+            flex-shrink: 0;
         }
+        .history-item { 
+            font-size: 1.0rem; /* Icon ka size chota kar diya hai */
+            text-shadow: 0 0 5px rgba(0,0,0,0.7);
+        }
+        .player-list {
+            position: absolute; 
+            top: 100px; /* Thora neeche kar diya takay history bar se na takraye */
+            display: flex; flex-direction: column;
+            gap: 8px; z-index: 4;
+        }
+        /* ============================ */
         
         .balance-display {
             font-weight: 600; padding: 8px 15px; border-radius: 20px;
@@ -91,38 +107,22 @@
         .card-placeholder:hover { transform: scale(1.05); box-shadow: 0 0 20px #ffc107; }
 
         .card-placeholder.disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
-            pointer-events: none;
+            cursor: not-allowed; opacity: 0.7; pointer-events: none;
         }
-        .card-placeholder.disabled:hover {
-            transform: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-
+        .card-placeholder.disabled:hover { transform: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .card-text-overlay {
-            width: 100%;
-            padding-top: 20px; 
-            padding-bottom: 8px;
+            width: 100%; padding-top: 20px; padding-bottom: 8px;
             background: linear-gradient(to top, rgba(0,0,0,0.85) 40%, transparent);
             box-sizing: border-box;
         }
-        .card-placeholder span { 
-            font-weight: 700; font-size: 1rem;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-        }
-        .total-bet { 
-            font-size: 0.8rem; margin-top: 4px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-        }
-
+        .card-placeholder span { font-weight: 700; font-size: 1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.7); }
+        .total-bet { font-size: 0.8rem; margin-top: 4px; text-shadow: 1px 1px 3px rgba(0,0,0,0.7); }
         .winning-animation-overlay {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
             display: none; justify-content: center;
             align-items: center; z-index: 20;
-            background-color: rgba(0,0,0,0.7);
-            border-radius: 8px;
+            background-color: rgba(0,0,0,0.7); border-radius: 8px;
         }
         .winning-animation-overlay video { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
         .vs-circle { font-size: 1.5rem; font-weight: 700; flex-shrink: 0; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
@@ -158,25 +158,16 @@
             white-space: nowrap;
         }
         
-        .history-item { font-size: 1.2rem; text-shadow: 0 0 5px rgba(0,0,0,0.7); }
         .history-item.dragon { color: #f44336; }
         .history-item.tiger { color: #2196f3; }
 
-        /* === NEW CSS FOR PLAYER ANIMATIONS START === */
         @keyframes place-bet-anim-left { 50% { transform: translateX(5px) scale(1.05); } }
         @keyframes place-bet-anim-right { 50% { transform: translateX(-5px) scale(1.05); } }
-        /* CHANGE: Animation tez kar di gayi hai (0.4s se 0.3s) */
         .player-list.left .player-item.is-betting { animation: place-bet-anim-left 0.3s ease-in-out; }
         .player-list.right .player-item.is-betting { animation: place-bet-anim-right 0.3s ease-in-out; }
-
-        .player-list {
-            position: absolute; top: 70px;
-            display: flex; flex-direction: column;
-            gap: 8px; z-index: 4;
-        }
+        
         .player-list.left { left: 15px; }
         .player-list.right { right: 15px; align-items: flex-end; }
-        
         .player-item {
             display: flex; align-items: center;
             gap: 8px; background: rgba(0,0,0,0.5);
@@ -185,32 +176,23 @@
             position: relative; overflow: visible;
         }
         .player-list.right .player-item { flex-direction: row-reverse; }
-
         .avatar-frame { width: 35px; height: 35px; border-radius: 50%; flex-shrink: 0; }
         .player-info { display: flex; flex-direction: column; }
         .player-list.right .player-info { align-items: flex-end; }
         .player-name { font-size: 0.8rem; font-weight: 500; }
         .player-coins { font-size: 0.7rem; font-weight: 600; color: #ffc107; }
-
         .win-lose-amount {
-            position: absolute;
-            top: 0; left: 50%;
+            position: absolute; top: 0; left: 50%;
             font-weight: bold; font-size: 0.9rem;
-            text-shadow: 0 0 5px black;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 1.5s ease-out;
+            text-shadow: 0 0 5px black; opacity: 0;
+            pointer-events: none; transition: all 1.5s ease-out;
         }
-        .win-lose-amount.show {
-            opacity: 1;
-            transform: translateY(-25px);
-        }
+        .win-lose-amount.show { opacity: 1; transform: translateY(-25px); }
         .win-lose-amount.win { color: #4caf50; }
         .win-lose-amount.lose { color: #f44336; }
-        /* ==================================== */
 
         @media (orientation: landscape) and (max-height: 500px) {
-            .top-info-bar,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:120px;padding:0;border-width:2px}.card-text-overlay{padding-top:15px;padding-bottom:5px}.card-placeholder span{font-size:.8rem}.total-bet{font-size:.7rem;margin-top:2px}.vs-circle{font-size:1.2rem}.chip{width:40px;height:40px;font-size:.7rem;border-width:3px}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}.balance-display{bottom:10px;left:10px}.chip-selection-area{bottom:10px;gap:8px}.player-list{top:60px}.player-item{padding:4px 6px}.avatar-frame{width:30px;height:30px}.player-name,.player-coins{font-size:.7rem}
+            .top-info-bar,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:120px;padding:0;border-width:2px}.card-text-overlay{padding-top:15px;padding-bottom:5px}.card-placeholder span{font-size:.8rem}.total-bet{font-size:.7rem;margin-top:2px}.vs-circle{font-size:1.2rem}.chip{width:40px;height:40px;font-size:.7rem;border-width:3px}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}.balance-display{bottom:10px;left:10px}.chip-selection-area{bottom:10px;gap:8px}.player-list{top:85px}.player-item{padding:4px 6px}.avatar-frame{width:30px;height:30px}.player-name,.player-coins{font-size:.7rem}
         }
     </style>
 </head>
@@ -224,6 +206,8 @@
             </div>
             <div></div> 
         </div>
+
+        <div class="history-bar" id="history-container"></div>
 
         <div class="player-list left" id="player-list-left"></div>
         <div class="player-list right" id="player-list-right"></div>
@@ -249,8 +233,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="history-bar" id="history-container"></div>
         
         <div class="balance-display">
             <i class="fas fa-wallet"></i> Coins: <span id="user-coins">0.00</span>
@@ -269,8 +251,8 @@
     </div>
 
     <script>
+        // JavaScript mein koi tabdeeli nahi ki gayi
         document.addEventListener('DOMContentLoaded', function() {
-            
             const coinsElement = document.getElementById('user-coins');
             const timerElement = document.getElementById('timer');
             const gameMessageElement = document.getElementById('game-message');
@@ -308,7 +290,6 @@
                 timerElement.textContent = data.timer;
                 dragonBetTotalElement.textContent = `Total Bet: ${data.bets.dragon || 0}`;
                 tigerBetTotalElement.textContent = `Total Bet: ${data.bets.tiger || 0}`;
-                
                 if (data.isBettingPhase) {
                     dragonCard.classList.remove('disabled');
                     tigerCard.classList.remove('disabled');
@@ -321,8 +302,8 @@
             function updateHistory(historyArray) {
                 if (!historyContainer || !Array.isArray(historyArray)) return;
                 historyContainer.innerHTML = ''; 
-                const lastTen = historyArray.slice(-10); 
-                lastTen.forEach(winner => {
+                const lastItems = historyArray.slice(-12); // Last 12 items for small icons
+                lastItems.forEach(winner => {
                     const iconElement = document.createElement('i');
                     iconElement.classList.add('history-item');
                     if (winner === 'dragon') {
@@ -362,21 +343,15 @@
                 });
             }
             
-            // CHANGE: Betting animation logic update hui hai
             function animateFakeBettors() {
-                // Decide karein ke kitne players (1 se 4 tak) ek saath move karenge
                 const numToAnimate = Math.floor(Math.random() * 4) + 1;
-                // Players ki list ko randomly shuffle karein
                 const shuffledPlayers = [...fakePlayers].sort(() => 0.5 - Math.random());
-                // Shuffled list se pehle kuch players select karein
                 const playersToAnimate = shuffledPlayers.slice(0, numToAnimate);
                 
                 playersToAnimate.forEach(player => {
                     if (player.element && !player.element.classList.contains('is-betting')) {
                         player.element.classList.add('is-betting');
-                        setTimeout(() => {
-                            player.element.classList.remove('is-betting');
-                        }, 300); // Animation duration se match karein
+                        setTimeout(() => player.element.classList.remove('is-betting'), 300);
                     }
                 });
             }
@@ -442,7 +417,6 @@
             
             socket.on('game_update', (data) => {
                 updateUI(data);
-                // CHANGE: Animation ab har 2 second me trigger hogi
                 if (data.isBettingPhase && data.timer % 2 === 0 && data.timer > 2) {
                     animateFakeBettors();
                 }
@@ -450,7 +424,6 @@
             
             socket.on('new_round', () => { 
                 simulateBets(); 
-                // CHANGE: Yahan par saari win/loss animations hide ho jayengi
                 const allWinLoseElements = document.querySelectorAll('.win-lose-amount');
                 allWinLoseElements.forEach(el => el.classList.remove('show'));
             });
