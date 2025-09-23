@@ -69,19 +69,22 @@
             margin: 1vh 0; gap: 20px;
         }
         
-        /* === NEW CSS CHANGES FOR FULL SCREEN CARD IMAGES === */
         .card-placeholder {
-            width: 35vw; /* Thora sa size barha diya hai */
+            width: 35vw; 
             max-width: 150px;
-            border: 3px solid #ffc107; /* Border thora mota kar diya hai */
+            border: 3px solid #ffc107; 
             border-radius: 10px;
-            background-color: #33254e; /* Fallback color agar image load na ho */
+            background-color: #33254e; 
             text-align: center;
             aspect-ratio: 2 / 2.8;
             cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            position: relative; /* Text ko position karne ke liye zaroori hai */
-            overflow: hidden; /* Takay text border se bahar na nikle */
+            position: relative;
+            overflow: hidden;
+            display: flex; /* For centering the overlay */
+            flex-direction: column; /* For stacking text */
+            justify-content: flex-end; /* Puts content at the bottom */
+            align-items: center;
         }
         #dragon-side {
             background-image: url('dragon.png');
@@ -96,13 +99,11 @@
         .card-placeholder:hover { transform: scale(1.05); box-shadow: 0 0 20px #ffc107; }
 
         .card-text-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding-top: 20px; /* Gradient ke liye space */
+            width: 100%;
+            padding-top: 20px; 
             padding-bottom: 8px;
             background: linear-gradient(to top, rgba(0,0,0,0.85) 40%, transparent);
+            box-sizing: border-box; /* Padding border box ke andar rahe */
         }
         .card-placeholder span { 
             font-weight: 700; font-size: 1rem;
@@ -111,6 +112,25 @@
         .total-bet { 
             font-size: 0.8rem; margin-top: 4px;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+        }
+
+        /* === NEW CSS FOR WINNING GIFS === */
+        .winning-gif-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: none; /* By default hidden */
+            justify-content: center;
+            align-items: center;
+            z-index: 20; /* Card content ke upar dikhe */
+            background-color: rgba(0,0,0,0.7); /* Thora dark background */
+            border-radius: 8px; /* Card ke border radius se match kare */
+        }
+        .winning-gif-overlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* GIF poore area ko cover kare */
+            border-radius: 8px;
         }
         /* ==================================== */
 
@@ -138,12 +158,13 @@
         .chip[data-value="3000"] { background: radial-gradient(circle, #424242 60%, #212121 100%); border: 4px solid #eeeeee; color: #ffeb3b; }
         .chip[data-value="5000"] { background: radial-gradient(circle, #f5f5f5 60%, #e0e0e0 100%); border: 4px solid #ef5350; color: #d32f2f; }
         
-        #game-message {
+        #game-message { /* Ab ye sirf error messages ke liye use hoga */
             position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); font-size: 2.5rem; font-weight: bold;
+            transform: translate(-50%, -50%); font-size: 1.5rem; font-weight: bold;
             color: #ffc107; text-shadow: 0 0 10px black;
-            display: none; padding: 20px;
-            background: rgba(0,0,0,0.7); border-radius: 15px; z-index: 10;
+            display: none; padding: 15px;
+            background: rgba(0,0,0,0.8); border-radius: 10px; z-index: 30;
+            white-space: nowrap; /* Text ko ek line me rakhe */
         }
         
         .history-item { 
@@ -171,6 +192,9 @@
 
         <div class="game-area">
             <div class="card-placeholder" id="dragon-side">
+                <div class="winning-gif-overlay" id="dragon-win-gif-overlay">
+                    <img src="dragon_win.gif" alt="Dragon Wins GIF">
+                </div>
                 <div class="card-text-overlay">
                     <span>DRAGON</span>
                     <div class="total-bet" id="dragon-bet-total">Total Bet: 0</div>
@@ -178,6 +202,9 @@
             </div>
             <div class="vs-circle">VS</div>
             <div class="card-placeholder" id="tiger-side">
+                <div class="winning-gif-overlay" id="tiger-win-gif-overlay">
+                    <img src="tiger_win.gif" alt="Tiger Wins GIF">
+                </div>
                 <div class="card-text-overlay">
                     <span>TIGER</span>
                     <div class="total-bet" id="tiger-bet-total">Total Bet: 0</div>
@@ -200,11 +227,9 @@
             <div class="chip" data-value="5000">5K</div>
         </div>
         
-        <div id="game-message">DRAGON WINS!</div>
-    </div>
+        <div id="game-message"></div> </div>
 
     <script>
-        // Aapka JavaScript bilkul theek hai, ismein koi tabdeeli nahi ki gayi
         document.addEventListener('DOMContentLoaded', function() {
             const coinsElement = document.getElementById('user-coins');
             const timerElement = document.getElementById('timer');
@@ -215,6 +240,9 @@
             const dragonCard = document.getElementById('dragon-side');
             const tigerCard = document.getElementById('tiger-side');
             const historyContainer = document.getElementById('history-container');
+            
+            const dragonWinGifOverlay = document.getElementById('dragon-win-gif-overlay');
+            const tigerWinGifOverlay = document.getElementById('tiger-win-gif-overlay');
 
             const token = localStorage.getItem('token');
             if (!token) {
@@ -252,17 +280,38 @@
             socket.on('disconnect', () => console.log('Disconnected from server.'));
             socket.on('initial_state', (data) => { updateUI(data); updateHistory(data.history); });
             socket.on('game_update', (data) => updateUI(data));
+            
             socket.on('round_result', (data) => {
-                gameMessageElement.textContent = `${data.winner.toUpperCase()} WINS!`;
-                gameMessageElement.style.display = 'block';
-                setTimeout(() => gameMessageElement.style.display = 'none', 5000);
+                // Pehle koi bhi GIF dikh rahi ho to usay hide kar dein
+                dragonWinGifOverlay.style.display = 'none';
+                tigerWinGifOverlay.style.display = 'none';
+
+                // Winning GIF ko dikhayein
+                if (data.winner === 'dragon') {
+                    dragonWinGifOverlay.style.display = 'flex'; // 'flex' use karein taake GIF center ho
+                } else if (data.winner === 'tiger') {
+                    tigerWinGifOverlay.style.display = 'flex';
+                }
+
+                // Thodi der baad GIF ko hide kar dein
+                setTimeout(() => {
+                    dragonWinGifOverlay.style.display = 'none';
+                    tigerWinGifOverlay.style.display = 'none';
+                }, 3000); // GIF 3 seconds tak dikhegi
+
                 updateHistory(data.history);
             });
+
             socket.on('balance_update', (data) => {
                 coinsElement.textContent = parseFloat(data.newBalance).toFixed(2);
                 localStorage.setItem('userCoins', data.newBalance);
             });
-            socket.on('bet_error', (data) => { alert(data.message); });
+            
+            socket.on('bet_error', (data) => { 
+                gameMessageElement.textContent = data.message;
+                gameMessageElement.style.display = 'block';
+                setTimeout(() => gameMessageElement.style.display = 'none', 3000); // Error 3 seconds tak dikhega
+            });
 
             function updateUI(data) {
                 timerElement.textContent = data.timer;
@@ -273,7 +322,9 @@
             function updateHistory(historyArray) {
                 if (!historyContainer || !Array.isArray(historyArray)) return;
                 historyContainer.innerHTML = ''; 
-                historyArray.forEach(winner => {
+                // Only show a limited number of history items, e.g., last 10
+                const lastTen = historyArray.slice(-10); 
+                lastTen.forEach(winner => {
                     const iconElement = document.createElement('i');
                     iconElement.classList.add('history-item');
                     if (winner === 'dragon') {
