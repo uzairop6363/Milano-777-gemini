@@ -68,30 +68,52 @@
             padding: 10px 0; overflow: hidden;
             margin: 1vh 0; gap: 20px;
         }
+        
+        /* === NEW CSS CHANGES FOR FULL SCREEN CARD IMAGES === */
         .card-placeholder {
-            width: 30vw; max-width: 130px;
-            border: 2px solid #ffc107; border-radius: 10px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(43, 33, 64, 0.8); /* Darker purple background for cards */
+            width: 35vw; /* Thora sa size barha diya hai */
+            max-width: 150px;
+            border: 3px solid #ffc107; /* Border thora mota kar diya hai */
+            border-radius: 10px;
+            background-color: #33254e; /* Fallback color agar image load na ho */
             text-align: center;
-            padding: 8px; aspect-ratio: 2 / 2.8;
+            aspect-ratio: 2 / 2.8;
             cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            position: relative; /* Text ko position karne ke liye zaroori hai */
+            overflow: hidden; /* Takay text border se bahar na nikle */
         }
-        .card-placeholder:hover { transform: scale(1.05); box-shadow: 0 0 15px #ffc107; }
+        #dragon-side {
+            background-image: url('dragon.png');
+            background-size: cover;
+            background-position: center;
+        }
+        #tiger-side {
+            background-image: url('tiger.png');
+            background-size: cover;
+            background-position: center;
+        }
+        .card-placeholder:hover { transform: scale(1.05); box-shadow: 0 0 20px #ffc107; }
 
-        /* === NEW CSS FOR IMAGES INSIDE CARDS === */
-        .card-image {
-            width: 70%; /* Image card ke 70% hisse me ayegi */
-            height: auto;
-            object-fit: contain; /* Image stretch nahi hogi */
-            margin-bottom: 8px; /* Image aur text ke beech space */
+        .card-text-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding-top: 20px; /* Gradient ke liye space */
+            padding-bottom: 8px;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 40%, transparent);
         }
-        /* Icon wala purana CSS hata diya gaya hai */
+        .card-placeholder span { 
+            font-weight: 700; font-size: 1rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+        }
+        .total-bet { 
+            font-size: 0.8rem; margin-top: 4px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+        }
         /* ==================================== */
 
-        .card-placeholder span { font-weight: 700; font-size: 0.9rem; }
-        .total-bet { font-size: 0.7rem; margin-top: 5px; }
         .vs-circle { font-size: 1.5rem; font-weight: 700; flex-shrink: 0; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
         
         .chip {
@@ -132,7 +154,7 @@
         .history-item.tiger { color: #2196f3; }
 
         @media (orientation: landscape) and (max-height: 500px) {
-            .top-info-bar,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:110px;padding:5px;border-width:2px}.card-placeholder span{font-size:.7rem;margin-top:5px}.total-bet{font-size:.6rem;margin-top:4px}.vs-circle{font-size:1.2rem}.chip{width:40px;height:40px;font-size:.7rem;border-width:3px}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}.balance-display{bottom:10px;left:10px}.chip-selection-area{bottom:10px;gap:8px}
+            .top-info-bar,.history-bar{padding:5px}.game-area{padding:5px 0;margin:0;gap:15px}.card-placeholder{width:28vw;max-width:120px;padding:0;border-width:2px}.card-text-overlay{padding-top:15px;padding-bottom:5px}.card-placeholder span{font-size:.8rem}.total-bet{font-size:.7rem;margin-top:2px}.vs-circle{font-size:1.2rem}.chip{width:40px;height:40px;font-size:.7rem;border-width:3px}.balance-display,.timer-display{padding:5px 10px;font-size:.8rem}.back-btn{font-size:1.5rem}.balance-display{bottom:10px;left:10px}.chip-selection-area{bottom:10px;gap:8px}
         }
     </style>
 </head>
@@ -149,15 +171,17 @@
 
         <div class="game-area">
             <div class="card-placeholder" id="dragon-side">
-                <img src="dragon.png" alt="Dragon" class="card-image">
-                <span>DRAGON</span>
-                <div class="total-bet" id="dragon-bet-total">Total Bet: 0</div>
+                <div class="card-text-overlay">
+                    <span>DRAGON</span>
+                    <div class="total-bet" id="dragon-bet-total">Total Bet: 0</div>
+                </div>
             </div>
             <div class="vs-circle">VS</div>
             <div class="card-placeholder" id="tiger-side">
-                <img src="tiger.png" alt="Tiger" class="card-image">
-                <span>TIGER</span>
-                <div class="total-bet" id="tiger-bet-total">Total Bet: 0</div>
+                <div class="card-text-overlay">
+                    <span>TIGER</span>
+                    <div class="total-bet" id="tiger-bet-total">Total Bet: 0</div>
+                </div>
             </div>
         </div>
 
