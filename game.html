@@ -148,72 +148,62 @@
             white-space: nowrap;
         }
         
-        .history-item { 
-            font-size: 1.2rem;
-            text-shadow: 0 0 5px rgba(0,0,0,0.7);
-        }
+        .history-item { font-size: 1.2rem; text-shadow: 0 0 5px rgba(0,0,0,0.7); }
         .history-item.dragon { color: #f44336; }
         .history-item.tiger { color: #2196f3; }
 
-        /* === NEW DYNAMIC PLAYER LISTS CSS === */
+        /* === NEW CSS FOR PLAYER ANIMATIONS START === */
+        @keyframes place-bet-anim-left {
+            50% { transform: translateX(5px) scale(1.05); }
+        }
+        @keyframes place-bet-anim-right {
+            50% { transform: translateX(-5px) scale(1.05); }
+        }
+        .player-list.left .player-item.is-betting {
+            animation: place-bet-anim-left 0.4s ease-in-out;
+        }
+        .player-list.right .player-item.is-betting {
+            animation: place-bet-anim-right 0.4s ease-in-out;
+        }
+
         .player-list {
-            position: absolute;
-            top: 70px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 4;
+            position: absolute; top: 70px;
+            display: flex; flex-direction: column;
+            gap: 8px; z-index: 4;
         }
         .player-list.left { left: 15px; }
         .player-list.right { right: 15px; align-items: flex-end; }
         
         .player-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0,0,0,0.5);
-            padding: 5px;
-            border-radius: 20px;
+            display: flex; align-items: center;
+            gap: 8px; background: rgba(0,0,0,0.5);
+            padding: 5px; border-radius: 20px;
             border: 1px solid rgba(255,255,255,0.2);
-            position: relative; /* Winning amount ke liye zaroori */
-            overflow: visible; /* Takay winning amount bahar dikhe */
+            position: relative; overflow: visible;
         }
         .player-list.right .player-item { flex-direction: row-reverse; }
 
-        .avatar-frame {
-            width: 35px; height: 35px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-        .player-info {
-            display: flex;
-            flex-direction: column;
-        }
+        .avatar-frame { width: 35px; height: 35px; border-radius: 50%; flex-shrink: 0; }
+        .player-info { display: flex; flex-direction: column; }
         .player-list.right .player-info { align-items: flex-end; }
-        .player-name {
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        .player-coins {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #ffc107;
-        }
-        .win-amount {
+        .player-name { font-size: 0.8rem; font-weight: 500; }
+        .player-coins { font-size: 0.7rem; font-weight: 600; color: #ffc107; }
+
+        .win-lose-amount {
             position: absolute;
-            top: 0;
-            left: 50%;
-            color: #4caf50;
+            top: 0; left: 50%;
             font-weight: bold;
             text-shadow: 0 0 5px black;
             opacity: 0;
             pointer-events: none;
-            transition: all 2s;
+            transition: all 1.5s ease-out; /* Animation lamba kar diya hai */
         }
-        .win-amount.show {
+        .win-lose-amount.show {
             opacity: 1;
             transform: translateY(-25px);
         }
+        .win-lose-amount.win { color: #4caf50; } /* Green for win */
+        .win-lose-amount.lose { color: #f44336; } /* Red for lose */
         /* ==================================== */
 
         @media (orientation: landscape) and (max-height: 500px) {
@@ -284,23 +274,21 @@
             // ... baaki ke elements ...
             
             // ===============================================
-            // === NEW JAVASCRIPT LOGIC FOR FAKE PLAYERS START ===
+            // === JAVASCRIPT LOGIC FOR FAKE PLAYERS START ===
             // ===============================================
-
-            // 1. Fake player data store karna
+            
             let fakePlayers = [
                 { id: 1, name: 'Guest693638', avatar: 'frame1.png', coins: 36000, side: 'left', element: null, currentBet: null },
-                { id: 2, name: 'Guest646392', avatar: 'frame2.png', coins: 32000, side: 'left', element: null, currentBet: null },
-                { id: 3, name: 'Guest749373', avatar: 'frame3.png', coins: 28000, side: 'left', element: null, currentBet: null },
-                { id: 4, name: 'Guest882311', avatar: 'frame1.png', coins: 68400, side: 'right', element: null, currentBet: null },
-                { id: 5, name: 'Guest123456', avatar: 'frame2.png', coins: 74450, side: 'right', element: null, currentBet: null },
-                { id: 6, name: 'Guest987654', avatar: 'frame3.png', coins: 45000, side: 'right', element: null, currentBet: null }
+                { id: 2, name: 'Guest646392', avatar: 'frame2.png', coins: 39000, side: 'left', element: null, currentBet: null },
+                { id: 3, name: 'Guest749373', avatar: 'frame3.png', coins: 29000, side: 'left', element: null, currentBet: null },
+                { id: 4, name: 'Guest882311', avatar: 'frame1.png', coins: 70400, side: 'right', element: null, currentBet: null },
+                { id: 5, name: 'Guest123456', avatar: 'frame2.png', coins: 81450, side: 'right', element: null, currentBet: null },
+                { id: 6, name: 'Guest987654', avatar: 'frame3.png', coins: 50000, side: 'right', element: null, currentBet: null }
             ];
             
             const playerListLeft = document.getElementById('player-list-left');
             const playerListRight = document.getElementById('player-list-right');
 
-            // 2. Player lists ko screen par dikhane ka function
             function renderPlayerLists() {
                 playerListLeft.innerHTML = '';
                 playerListRight.innerHTML = '';
@@ -314,7 +302,7 @@
                             <span class="player-name">${player.name}</span>
                             <span class="player-coins">${player.coins.toLocaleString()}</span>
                         </div>
-                        <span class="win-amount"></span>
+                        <span class="win-lose-amount"></span>
                     `;
                     
                     if (player.side === 'left') {
@@ -322,62 +310,76 @@
                     } else {
                         playerListRight.appendChild(playerItem);
                     }
-                    player.element = playerItem; // Taa ke hum isay baad me aasani se access kar sakein
+                    player.element = playerItem;
                 });
             }
 
-            // 3. Fake players ke liye bet lagane ka function
             function simulateBets() {
                 fakePlayers.forEach(player => {
                     const betChoice = Math.random() < 0.5 ? 'dragon' : 'tiger';
-                    const betAmount = Math.floor(Math.random() * 5 + 1) * 1000; // 1000 se 5000 tak ki bet
+                    const betAmount = Math.floor(Math.random() * 10 + 1) * 1000;
                     player.currentBet = { choice: betChoice, amount: betAmount };
                 });
             }
 
-            // 4. Result aane par balances update karne ka function
+            // NEW: Betting animation function
+            function animateFakeBettors() {
+                // Randomly 1 ya 2 player select karein
+                const playersToAnimate = fakePlayers.filter(() => Math.random() < 0.3); // 30% chance for each player to animate
+                
+                playersToAnimate.forEach(player => {
+                    if (player.element && !player.element.classList.contains('is-betting')) {
+                        player.element.classList.add('is-betting');
+                        setTimeout(() => {
+                            player.element.classList.remove('is-betting');
+                        }, 400); // Animation ke time ke baad class hata dein
+                    }
+                });
+            }
+
             function handleResults(winner) {
                 fakePlayers.forEach(player => {
                     if (!player.currentBet) return;
+                    
+                    const winLoseEl = player.element.querySelector('.win-lose-amount');
+                    winLoseEl.classList.remove('show', 'win', 'lose'); // Purani classes hata dein
 
                     if (player.currentBet.choice === winner) {
-                        // Player jeet gaya
-                        const winnings = player.currentBet.amount; // 1:1 Payout
+                        const winnings = player.currentBet.amount;
                         player.coins += winnings;
 
-                        // Winning amount animation
-                        const winAmountEl = player.element.querySelector('.win-amount');
-                        winAmountEl.textContent = `+${winnings.toLocaleString()}`;
-                        winAmountEl.classList.add('show');
-                        setTimeout(() => {
-                           winAmountEl.classList.remove('show');
-                        }, 2000); // 2 second baad gayab
-
+                        winLoseEl.textContent = `+${winnings.toLocaleString()}`;
+                        winLoseEl.classList.add('win');
                     } else {
-                        // Player haar gaya
-                        player.coins -= player.currentBet.amount;
+                        const losses = player.currentBet.amount;
+                        player.coins -= losses;
+
+                        winLoseEl.textContent = `-${losses.toLocaleString()}`;
+                        winLoseEl.classList.add('lose');
                     }
 
-                    // Balance ki limits check karna
-                    if (player.coins > 300000) {
-                        player.coins = Math.floor(Math.random() * 100000) + 150000; // 1.5 lakh se 2.5 lakh ke beech
-                    }
-                    if (player.coins < 10000) {
-                        player.coins = Math.floor(Math.random() * 20000) + 20000; // 20k se 40k ke beech
-                    }
+                    // Show animation
+                    setTimeout(() => { // Thora sa delay takay animation saaf dikhe
+                        winLoseEl.classList.add('show');
+                        setTimeout(() => {
+                           winLoseEl.classList.remove('show');
+                        }, 1500);
+                    }, Math.random() * 500); // Har player ke liye random delay
+
+                    if (player.coins > 300000) player.coins = Math.floor(Math.random() * 100000) + 150000;
+                    if (player.coins < 10000) player.coins = Math.floor(Math.random() * 20000) + 20000;
                 });
-
-                // Screen par naya balance dikhana
-                renderPlayerLists();
+                
+                // 2 second baad screen par naya balance update karein
+                setTimeout(renderPlayerLists, 2000);
             }
-
-            // Initial render
+            
             renderPlayerLists();
             
             // ===============================================
-            // === NEW JAVASCRIPT LOGIC FOR FAKE PLAYERS END ===
+            // === JAVASCRIPT LOGIC FOR FAKE PLAYERS END ===
             // ===============================================
-
+            
             const dragonBetTotalElement = document.getElementById('dragon-bet-total');
             const tigerBetTotalElement = document.getElementById('tiger-bet-total');
             const chips = document.querySelectorAll('.chip');
@@ -403,102 +405,13 @@
             const socket = io("https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev");
             let selectedBetAmount = 20;
 
-            chips.forEach(chip => { /* ... (baaki ka code waisa hi hai) ... */ });
+            chips.forEach(chip => { /* ... (same as before) ... */ });
             dragonCard.addEventListener('click', () => placeBet('dragon'));
             tigerCard.addEventListener('click', () => placeBet('tiger'));
-
-            function placeBet(choice) { /* ... (baaki ka code waisa hi hai) ... */ }
+            function placeBet(choice) { /* ... (same as before) ... */ }
 
             socket.on('connect', () => { if (token) socket.emit('authenticate', token); });
             socket.on('disconnect', () => console.log('Disconnected from server.'));
             
-            // Socket events me fake player logic ko call karna
             socket.on('initial_state', (data) => { updateUI(data); updateHistory(data.history); simulateBets(); });
-            socket.on('game_update', (data) => updateUI(data));
-
-            // Naya round shuru hone par bets simulate karna
-            socket.on('new_round', () => {
-                simulateBets();
-            });
-            
-            socket.on('round_result', (data) => {
-                // Winning video play karna
-                dragonWinOverlay.style.display = 'none';
-                tigerWinOverlay.style.display = 'none';
-                if (data.winner === 'dragon') {
-                    dragonWinOverlay.style.display = 'flex';
-                    dragonWinVideo.play(); 
-                } else if (data.winner === 'tiger') {
-                    tigerWinOverlay.style.display = 'flex';
-                    tigerWinVideo.play(); 
-                }
-                setTimeout(() => {
-                    dragonWinOverlay.style.display = 'none';
-                    tigerWinOverlay.style.display = 'none';
-                }, 4000); 
-
-                updateHistory(data.history);
-                // Fake players ke result handle karna
-                handleResults(data.winner);
-            });
-
-            socket.on('balance_update', (data) => { /* ... (baaki ka code waisa hi hai) ... */ });
-            socket.on('bet_error', (data) => {  /* ... (baaki ka code waisa hi hai) ... */  });
-            
-            function updateUI(data) { /* ... (baaki ka code waisa hi hai) ... */ }
-            function updateHistory(historyArray) { /* ... (baaki ka code waisa hi hai) ... */ }
-
-            // Puranay code ko paste kar dein (jo functions upar comment kiye gaye hain)
-            chips.forEach(chip => {
-                chip.addEventListener('click', () => {
-                    chips.forEach(c => c.classList.remove('selected'));
-                    chip.classList.add('selected');
-                    selectedBetAmount = parseInt(chip.getAttribute('data-value'));
-                });
-            });
-            function placeBet(choice) {
-                if (!token) { alert('Authentication error. Please login again.'); return; }
-                socket.emit('place_bet', { choice: choice, amount: selectedBetAmount, token: token });
-            }
-            socket.on('balance_update', (data) => {
-                coinsElement.textContent = parseFloat(data.newBalance).toFixed(2);
-                localStorage.setItem('userCoins', data.newBalance);
-            });
-            socket.on('bet_error', (data) => { 
-                gameMessageElement.textContent = data.message;
-                gameMessageElement.style.display = 'block';
-                setTimeout(() => gameMessageElement.style.display = 'none', 3000);
-            });
-            function updateUI(data) {
-                timerElement.textContent = data.timer;
-                dragonBetTotalElement.textContent = `Total Bet: ${data.bets.dragon || 0}`;
-                tigerBetTotalElement.textContent = `Total Bet: ${data.bets.tiger || 0}`;
-                
-                if (data.isBettingPhase) {
-                    dragonCard.classList.remove('disabled');
-                    tigerCard.classList.remove('disabled');
-                } else {
-                    dragonCard.classList.add('disabled');
-                    tigerCard.classList.add('disabled');
-                }
-            }
-            function updateHistory(historyArray) {
-                if (!historyContainer || !Array.isArray(historyArray)) return;
-                historyContainer.innerHTML = ''; 
-                const lastTen = historyArray.slice(-10); 
-                lastTen.forEach(winner => {
-                    const iconElement = document.createElement('i');
-                    iconElement.classList.add('history-item');
-                    if (winner === 'dragon') {
-                        iconElement.classList.add('fas', 'fa-dragon', 'dragon');
-                    } else if (winner === 'tiger') {
-                        iconElement.classList.add('fas', 'fa-cat', 'tiger');
-                    }
-                    historyContainer.appendChild(iconElement);
-                });
-            }
-
-        });
-    </script>
-</body>
-</html>
+         
