@@ -20,16 +20,10 @@
         }
 
         body::after {
-            content: '';
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: inherit;
-            background-size: inherit;
-            animation: inherit;
-            z-index: -1;
-            filter: blur(80px);
-            transform: scale(1.2);
+            content: ''; position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: inherit; background-size: inherit; animation: inherit;
+            z-index: -1; filter: blur(80px); transform: scale(1.2);
         }
 
         @keyframes gradientAnimation {
@@ -104,31 +98,46 @@
         
         .game-grid { 
             flex-grow: 1; display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
             gap: 15px; padding: 20px 10px; overflow-y: auto; 
         }
         .game-grid a.game-card { text-decoration: none; color: #ffffff; }
+
+        /* === CSS CHANGES FOR GAME CARDS START === */
         .game-card { 
-            background: linear-gradient(145deg, #4a3c63, #2a223f); 
-            border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.2); 
-            display: flex; flex-direction: column; justify-content: center; 
-            align-items: center; text-align: center; cursor: pointer; 
-            transition: all 0.3s ease; aspect-ratio: 1.2 / 1; 
-            padding: 10px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 193, 7, 0.8);
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            aspect-ratio: 1 / 1.2; /* Thora lamba card */
             box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: flex-end; /* Text neeche ayega */
+            align-items: center;
         }
         .game-card:hover { 
             transform: translateY(-8px); 
             box-shadow: 0 0 25px #ffc107; 
-            border-color: #ffc107;
         }
-        .game-card .game-icon {
-            width: 60%;
-            height: auto;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        /* Har game card ke liye alag background image */
+        #ludo-card { background-image: url('ludo_poster.png'); }
+        #rummy-card { background-image: url('rummy_poster.png'); }
+        #teenpatti-card { background-image: url('teenpatti_poster.png'); }
+        #dragontiger-card { background-image: url('dragontiger_poster.png'); }
+
+        .game-card-title {
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 20%, transparent);
+            padding: 20px 10px 10px 10px;
+            font-weight: 700;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            text-shadow: 0 1px 3px #000;
         }
-        .game-card span { font-weight: 600; font-size: clamp(0.8rem, 2.5vw, 1rem); }
+        /* ==================================== */
         
         .bottom-nav { 
             background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.5)); 
@@ -142,14 +151,10 @@
         }
         .nav-item:hover { color: #ffc107; transform: translateY(-3px); }
         
-        /* === CSS CHANGE: Naya style Nav Icons ke liye === */
         .nav-icon {
-            width: 28px;
-            height: 28px;
-            object-fit: contain; /* Image stretch na ho */
+            width: 28px; height: 28px;
+            object-fit: contain;
         }
-        /* Purana icon ka style (i tag) ab zaroori nahi */
-        /* ==================================== */
         
         @media (orientation: landscape) { 
             .game-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 25px; } 
@@ -157,6 +162,7 @@
             .nav-icon { width: 32px; height: 32px; }
         }
         
+        /* Modal styles same as before */
         .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);display:none;justify-content:center;align-items:center;z-index:1000;padding:10px}.modal-content{background:linear-gradient(135deg,#4c3c64,#2a2a4e);padding:25px;border-radius:20px;border:2px solid #ffc107;width:100%;max-width:400px;position:relative;box-shadow:0 0 20px rgba(255,193,7,.5);max-height:95%;overflow-y:auto}.modal-close{position:absolute;top:10px;right:15px;font-size:1.8rem;color:#fff;cursor:pointer;border:none;background:none}.modal-content h2{text-align:center;margin-bottom:20px;color:#ffc107}.payment-options{display:flex;justify-content:space-around;margin-bottom:20px}.payment-option{padding:10px 20px;border-radius:10px;border:2px solid #888;cursor:pointer;font-weight:600;transition:all .2s}.payment-option.selected{border-color:#ffc107;background-color:rgba(255,193,7,.2)}.form-group{margin-bottom:15px}.form-group label{display:block;margin-bottom:5px;font-weight:500;color:#ddd}.form-group input{width:100%;padding:12px;border-radius:8px;border:1px solid #888;background-color:#333;color:#fff;font-size:1rem}.submit-btn{width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(180deg,#ffc107,#ff9800);color:#000;font-size:1.1rem;font-weight:700;cursor:pointer;margin-top:10px}
     </style>
 </head>
@@ -192,17 +198,17 @@
         </header>
 
         <main class="game-grid">
-            <a href="#" class="game-card"> 
-                <img class="game-icon" src="ludo_icon.png" alt="Ludo"> <span>Ludo</span> 
+            <a href="#" class="game-card" id="ludo-card"> 
+                <div class="game-card-title">Ludo</div> 
             </a>
-            <a href="#" class="game-card">
-                <img class="game-icon" src="rummy_icon.png" alt="Rummy"> <span>Rummy</span> 
+            <a href="#" class="game-card" id="rummy-card">
+                <div class="game-card-title">Rummy</div>
             </a>
-            <a href="#" class="game-card">
-                <img class="game-icon" src="teenpatti_icon.png" alt="Teen Patti"> <span>Teen Patti</span> 
+            <a href="#" class="game-card" id="teenpatti-card">
+                <div class="game-card-title">Teen Patti</div>
             </a>
-            <a href="game.html" class="game-card"> 
-                <img class="game-icon" src="dragontiger_icon.png" alt="Dragon Tiger"> <span>Dragon Tiger</span> 
+            <a href="game.html" class="game-card" id="dragontiger-card"> 
+                <div class="game-card-title">Dragon Tiger</div>
             </a>
         </main>
 
@@ -217,26 +223,10 @@
     </div>
 
     <div class="modal-overlay" id="withdraw-modal">
-        <div class="modal-content">
-            <button class="modal-close" id="close-modal-btn">&times;</button>
-            <h2>Withdraw Funds</h2>
-            <div class="payment-options">
-                <div class="payment-option" data-method="Easypaisa">Easypaisa</div>
-                <div class="payment-option" data-method="Jazzcash">Jazzcash</div>
-            </div>
-            <div class="form-group">
-                <label for="account-number">Account Number</label>
-                <input type="tel" id="account-number" placeholder="e.g., 03xxxxxxxxx">
-            </div>
-            <div class="form-group">
-                <label for="amount">Amount</label>
-                <input type="number" id="amount" placeholder="Enter amount in PKR">
-            </div>
-            <button class="submit-btn" id="confirm-withdraw-btn">Confirm Withdrawal</button>
         </div>
-    </div>
 
     <script>
+        // JavaScript mein koi tabdeeli nahi ki gayi
         document.addEventListener('DOMContentLoaded', function() {
             const userCoins = localStorage.getItem('userCoins');
             const userNumber = localStorage.getItem('userNumber');
@@ -269,6 +259,7 @@
                 window.location.href = 'index.html';
             });
 
+            // Withdrawal Modal Logic
             const withdrawBtn = document.getElementById('withdraw-btn');
             const withdrawModal = document.getElementById('withdraw-modal');
             const closeModalBtn = document.getElementById('close-modal-btn');
