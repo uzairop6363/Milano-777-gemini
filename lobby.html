@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* CSS mein koi tabdeeli nahi ki gayi, woh bilkul theek hai */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; overflow: hidden; }
         body { 
@@ -62,8 +61,18 @@
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #ddd; text-decoration: none; gap: 4px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s; }
         .nav-item:hover { color: #ffc107; transform: translateY(-3px); }
         .nav-icon { width: 28px; height: 28px; object-fit: contain; }
+        
+        /* Modal Styles */
+        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);display:none;justify-content:center;align-items:center;z-index:1000;padding:10px}
+        .modal-content{background:linear-gradient(135deg,#4c3c64,#2a2a4e);padding:25px;border-radius:20px;border:2px solid #ffc107;width:100%;max-width:400px;position:relative;box-shadow:0 0 20px rgba(255,193,7,.5);max-height:95%;overflow-y:auto}
+        .modal-close{position:absolute;top:10px;right:15px;font-size:1.8rem;color:#fff;cursor:pointer;border:none;background:none}
+        .modal-content h2{text-align:center;margin-bottom:20px;color:#ffc107}
+        .payment-options{display:flex;justify-content:space-around;margin-bottom:20px}.payment-option{padding:10px 20px;border-radius:10px;border:2px solid #888;cursor:pointer;font-weight:600;transition:all .2s}.payment-option.selected{border-color:#ffc107;background-color:rgba(255,193,7,.2)}.form-group{margin-bottom:15px}.form-group label{display:block;margin-bottom:5px;font-weight:500;color:#ddd}.form-group input{width:100%;padding:12px;border-radius:8px;border:1px solid #888;background-color:#333;color:#fff;font-size:1rem}.submit-btn{width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(180deg,#ffc107,#ff9800);color:#000;font-size:1.1rem;font-weight:700;cursor:pointer;margin-top:10px}
+        
+        /* Bonus Modal Styles */
+        .bonus-modal-content{background:linear-gradient(135deg,#a88532,#f9d423);padding:25px;border-radius:20px;border:3px solid #FFD700;width:100%;max-width:400px;text-align:center;color:#000;text-shadow:0 1px 1px rgba(255,255,255,.5);box-shadow:0 0 30px rgba(255,215,0,.6);position:relative}.bonus-modal-content h2{font-size:2.5rem;margin-bottom:10px;color:#fff;text-shadow:0 2px 4px #000}.bonus-modal-content p{font-size:1.2rem;margin-bottom:25px}.collect-btn{width:100%;padding:15px;border-radius:10px;border:none;background:linear-gradient(180deg,#4CAF50,#2E7D32);color:white;font-size:1.5rem;font-weight:700;cursor:pointer;text-shadow:0 1px 3px rgba(0,0,0,.5);transition:transform .2s}.collect-btn:hover{transform:scale(1.05)}
+
         @media (orientation: landscape) { .game-grid { gap: 20px; padding: 25px; } .avatar-container { width: 50px; height: 50px; } .nav-icon { width: 32px; height: 32px; } }
-        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);display:none;justify-content:center;align-items:center;z-index:1000;padding:10px}.modal-content{background:linear-gradient(135deg,#4c3c64,#2a2a4e);padding:25px;border-radius:20px;border:2px solid #ffc107;width:100%;max-width:400px;position:relative;box-shadow:0 0 20px rgba(255,193,7,.5);max-height:95%;overflow-y:auto}.modal-close{position:absolute;top:10px;right:15px;font-size:1.8rem;color:#fff;cursor:pointer;border:none;background:none}.modal-content h2{text-align:center;margin-bottom:20px;color:#ffc107}.payment-options{display:flex;justify-content:space-around;margin-bottom:20px}.payment-option{padding:10px 20px;border-radius:10px;border:2px solid #888;cursor:pointer;font-weight:600;transition:all .2s}.payment-option.selected{border-color:#ffc107;background-color:rgba(255,193,7,.2)}.form-group{margin-bottom:15px}.form-group label{display:block;margin-bottom:5px;font-weight:500;color:#ddd}.form-group input{width:100%;padding:12px;border-radius:8px;border:1px solid #888;background-color:#333;color:#fff;font-size:1rem}.submit-btn{width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(180deg,#ffc107,#ff9800);color:#000;font-size:1.1rem;font-weight:700;cursor:pointer;margin-top:10px}
     </style>
 </head>
 <body>
@@ -83,7 +92,7 @@
                 <div class="currency-chip">
                     <span>PKR <span id="user-coins">0.00</span></span>
                 </div>
-                <button class="add-cash-btn">
+                <button class="add-cash-btn" onclick="location.href='deposit.html'">
                     <i class="fas fa-plus-circle"></i> ADD CASH
                 </button>
             </div>
@@ -125,75 +134,134 @@
     <div class="modal-overlay" id="withdraw-modal">
         </div>
 
+    <div class="modal-overlay" id="welcome-bonus-modal">
+        <div class="bonus-modal-content">
+            <h2>Welcome Bonus!</h2>
+            <p>Congratulations! Collect your 200 starting coins now!</p>
+            <button class="collect-btn" id="collect-bonus-btn">COLLECT</button>
+        </div>
+    </div>
+
     <script>
-        // === SCRIPT AB PURI TARAH SE THEEK KAR DIYA GAYA HAI ===
         document.addEventListener('DOMContentLoaded', function() {
-            
-            // --- User Data Display Logic ---
-            const userCoins = localStorage.getItem('userCoins');
-            const username = localStorage.getItem('username'); // 'userNumber' ke bajaye 'username'
-            const displayId = localStorage.getItem('displayId');   // Yeh nayi ID hai
-            const token = localStorage.getItem('token');
+            // === JAVASCRIPT KO PURI TARAH SE ORGANIZE KIYA GAYA HAI ===
 
-            // Agar token nahi, to login page par wapas bhej dein
-            if (!token) {
-                window.location.href = 'index.html';
-                return; 
-            }
-
-            // Elements ko get karein
+            // -- PART 1: Elements aur State Variables --
             const coinsElement = document.getElementById('user-coins');
             const nameElement = document.getElementById('user-name');
             const idElement = document.getElementById('user-id');
-
-            // Data ko screen par display karein
-            if (coinsElement) {
-                coinsElement.textContent = parseFloat(userCoins || 0).toFixed(2);
-            }
-            if (nameElement && username) {
-                nameElement.textContent = username;
-            }
-            if (idElement && displayId) {
-                idElement.textContent = 'ID: ' + displayId;
-            }
-
-            // --- Baaki ke page ki functionality ---
             const settingsBtn = document.getElementById('settings-btn');
             const settingsDropdown = document.getElementById('settings-dropdown');
             const logoutOption = document.getElementById('logout-option');
             const withdrawBtn = document.getElementById('withdraw-btn');
             const withdrawModal = document.getElementById('withdraw-modal');
+            const welcomeBonusModal = document.getElementById('welcome-bonus-modal');
+            const collectBonusBtn = document.getElementById('collect-bonus-btn');
 
-            if (settingsBtn && settingsDropdown) {
-                settingsBtn.addEventListener('click', (event) => {
-                    event.stopPropagation();
-                    settingsDropdown.style.display = settingsDropdown.style.display === 'block' ? 'none' : 'block';
-                });
+            const token = localStorage.getItem('token');
+            const backendUrl = 'https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev';
+
+            // -- PART 2: Initial Setup & User Data --
+            function initializeLobby() {
+                if (!token) {
+                    window.location.href = 'index.html';
+                    return; 
+                }
+                updateUserInfo();
+                setupEventListeners();
+                checkWelcomeBonus();
+            }
+
+            function updateUserInfo() {
+                const username = localStorage.getItem('username');
+                const displayId = localStorage.getItem('displayId');
+                const userCoins = localStorage.getItem('userCoins');
+
+                if (coinsElement) coinsElement.textContent = parseFloat(userCoins || 0).toFixed(2);
+                if (nameElement && username) nameElement.textContent = username;
+                if (idElement && displayId) idElement.textContent = 'ID: ' + displayId;
+            }
+
+            // -- PART 3: Welcome Bonus Logic --
+            function checkWelcomeBonus() {
+                const hasCollected = localStorage.getItem('hasCollectedWelcomeBonus');
+                if (hasCollected === 'false') {
+                    if (welcomeBonusModal) welcomeBonusModal.style.display = 'flex';
+                }
             }
             
-            if (logoutOption) {
-                logoutOption.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    localStorage.clear();
-                    window.location.href = 'index.html';
-                });
-            }
+            async function handleCollectBonus() {
+                if (!collectBonusBtn) return;
+                
+                collectBonusBtn.textContent = 'Collecting...';
+                collectBonusBtn.disabled = true;
 
-            if (withdrawBtn && withdrawModal) {
-                 withdrawBtn.addEventListener('click', (e) => { 
-                    e.preventDefault();
-                    // Yahan aap withdrawal modal ka content load kar sakte hain
-                    // Filhaal hum isay sirf show kar rahe hain
-                    withdrawModal.style.display = 'flex'; 
-                });
-            }
+                try {
+                    const response = await fetch(`${backendUrl}/collect-bonus`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
 
-            // Page par kahin bhi click karne se settings menu band ho jaye
-            window.addEventListener('click', () => {
-                if (settingsDropdown && settingsDropdown.style.display === 'block') {
-                    settingsDropdown.style.display = 'none';
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        localStorage.setItem('userCoins', result.newBalance);
+                        localStorage.setItem('hasCollectedWelcomeBonus', 'true');
+                        updateUserInfo(); // Screen par naya balance foran dikhayein
+                        if (welcomeBonusModal) welcomeBonusModal.style.display = 'none';
+                        alert('Bonus of 200 coins has been added!');
+                    } else {
+                        alert(`Error: ${result.message}`);
+                        collectBonusBtn.textContent = 'COLLECT';
+                        collectBonusBtn.disabled = false;
+                    }
+                } catch (error) {
+                    alert('An error occurred. Please try again.');
+                    collectBonusBtn.textContent = 'COLLECT';
+                    collectBonusBtn.disabled = false;
                 }
-            });
+            }
+
+            // -- PART 4: Event Listeners --
+            function setupEventListeners() {
+                if (settingsBtn && settingsDropdown) {
+                    settingsBtn.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        settingsDropdown.style.display = settingsDropdown.style.display === 'block' ? 'none' : 'block';
+                    });
+                }
+                
+                if (logoutOption) {
+                    logoutOption.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        localStorage.clear();
+                        window.location.href = 'index.html';
+                    });
+                }
+
+                if (withdrawBtn && withdrawModal) {
+                    withdrawBtn.addEventListener('click', (e) => { 
+                        e.preventDefault();
+                        withdrawModal.style.display = 'flex'; 
+                    });
+                }
+
+                if (collectBonusBtn) {
+                    collectBonusBtn.addEventListener('click', handleCollectBonus);
+                }
+
+                window.addEventListener('click', () => {
+                    if (settingsDropdown && settingsDropdown.style.display === 'block') {
+                        settingsDropdown.style.display = 'none';
+                    }
+                });
+            }
+
+            // -- PART 5: Run the App --
+            initializeLobby();
         });
     </script>
 </body>
