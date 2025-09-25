@@ -16,25 +16,21 @@
             background: linear-gradient(135deg, #1abc9c, #2ecc71, #3498db);
             background-size: 400% 400%;
             animation: gradientAnimation 15s ease infinite;
-            position: relative; /* Glow effect ke liye zaroori */
+            position: relative;
         }
 
-        /* === NEW GLOW EFFECT START === */
         body::after {
             content: '';
-            position: fixed; /* Poori screen par fix rahega */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: inherit; /* Body jaisa hi background lega */
-            background-size: inherit; /* Body jaisa hi size lega */
-            animation: inherit; /* Body jaisi hi animation karega */
-            z-index: -1; /* Sab cheezon ke peeche chala jayega */
-            filter: blur(80px); /* YEH ASAL GLOW EFFECT HAI */
-            transform: scale(1.2); /* Kinaron se bachne ke liye thora sa bara */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: inherit;
+            background-size: inherit;
+            animation: inherit;
+            z-index: -1;
+            filter: blur(80px);
+            transform: scale(1.2);
         }
-        /* ============================ */
 
         @keyframes gradientAnimation {
             0% { background-position: 0% 50%; }
@@ -51,7 +47,7 @@
         .game-container { 
             display: flex; flex-direction: column; 
             height: 100%; padding: 10px; 
-            background: rgba(0,0,0,0.4); /* Thora dark taake glow behtar dikhe */
+            background: rgba(0,0,0,0.4);
         }
         .top-bar, .bottom-nav { flex-shrink: 0; }
         .top-bar { 
@@ -142,14 +138,23 @@
         .nav-item { 
             display: flex; flex-direction: column; align-items: center; 
             color: #ddd; text-decoration: none; gap: 4px; 
-            font-size: 0.7rem; cursor: pointer; transition: color 0.2s;
+            font-size: 0.7rem; cursor: pointer; transition: all 0.2s;
         }
-        .nav-item:hover { color: #ffc107; }
-        .nav-item i { font-size: 1.6rem; }
+        .nav-item:hover { color: #ffc107; transform: translateY(-3px); }
+        
+        /* === CSS CHANGE: Naya style Nav Icons ke liye === */
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            object-fit: contain; /* Image stretch na ho */
+        }
+        /* Purana icon ka style (i tag) ab zaroori nahi */
+        /* ==================================== */
         
         @media (orientation: landscape) { 
             .game-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 25px; } 
             .avatar-container { width: 50px; height: 50px; }
+            .nav-icon { width: 32px; height: 32px; }
         }
         
         .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);display:none;justify-content:center;align-items:center;z-index:1000;padding:10px}.modal-content{background:linear-gradient(135deg,#4c3c64,#2a2a4e);padding:25px;border-radius:20px;border:2px solid #ffc107;width:100%;max-width:400px;position:relative;box-shadow:0 0 20px rgba(255,193,7,.5);max-height:95%;overflow-y:auto}.modal-close{position:absolute;top:10px;right:15px;font-size:1.8rem;color:#fff;cursor:pointer;border:none;background:none}.modal-content h2{text-align:center;margin-bottom:20px;color:#ffc107}.payment-options{display:flex;justify-content:space-around;margin-bottom:20px}.payment-option{padding:10px 20px;border-radius:10px;border:2px solid #888;cursor:pointer;font-weight:600;transition:all .2s}.payment-option.selected{border-color:#ffc107;background-color:rgba(255,193,7,.2)}.form-group{margin-bottom:15px}.form-group label{display:block;margin-bottom:5px;font-weight:500;color:#ddd}.form-group input{width:100%;padding:12px;border-radius:8px;border:1px solid #888;background-color:#333;color:#fff;font-size:1rem}.submit-btn{width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(180deg,#ffc107,#ff9800);color:#000;font-size:1.1rem;font-weight:700;cursor:pointer;margin-top:10px}
@@ -188,30 +193,26 @@
 
         <main class="game-grid">
             <a href="#" class="game-card"> 
-                <img class="game-icon" src="https://i.imgur.com/uF1hL6y.png" alt="Ludo">
-                <span>Ludo</span> 
+                <img class="game-icon" src="ludo_icon.png" alt="Ludo"> <span>Ludo</span> 
             </a>
             <a href="#" class="game-card">
-                <img class="game-icon" src="https://i.imgur.com/8aL4EGR.png" alt="Rummy">
-                <span>Rummy</span> 
+                <img class="game-icon" src="rummy_icon.png" alt="Rummy"> <span>Rummy</span> 
             </a>
             <a href="#" class="game-card">
-                <img class="game-icon" src="https://i.imgur.com/J4p34Jm.png" alt="Teen Patti">
-                <span>Teen Patti</span> 
+                <img class="game-icon" src="teenpatti_icon.png" alt="Teen Patti"> <span>Teen Patti</span> 
             </a>
             <a href="game.html" class="game-card"> 
-                <img class="game-icon" src="https://i.imgur.com/YNB2bms.png" alt="Dragon Tiger">
-                <span>Dragon Tiger</span> 
+                <img class="game-icon" src="dragontiger_icon.png" alt="Dragon Tiger"> <span>Dragon Tiger</span> 
             </a>
         </main>
 
         <footer class="bottom-nav">
-            <a href="#" class="nav-item"> <i class="fas fa-share-alt"></i> <span>Promote</span> </a>
-            <a href="#" class="nav-item"> <i class="fas fa-trophy"></i> <span>Ranking</span> </a>
-            <a href="#" class="nav-item"> <i class="fas fa-envelope"></i> <span>E-Mail</span> </a>
-            <a href="#" class="nav-item"> <i class="fas fa-headset"></i> <span>Support</span> </a>
-            <a href="#" class="nav-item"> <i class="fas fa-bell"></i> <span>Notice</span> </a>
-            <a href="#" class="nav-item" id="withdraw-btn"> <i class="fas fa-money-bill-wave"></i> <span>Withdraw</span> </a>
+            <a href="#" class="nav-item"> <img src="promote_icon.png" class="nav-icon" alt="Promote"> <span>Promote</span> </a>
+            <a href="#" class="nav-item"> <img src="ranking_icon.png" class="nav-icon" alt="Ranking"> <span>Ranking</span> </a>
+            <a href="#" class="nav-item"> <img src="email_icon.png" class="nav-icon" alt="E-Mail"> <span>E-Mail</span> </a>
+            <a href="#" class="nav-item"> <img src="support_icon.png" class="nav-icon" alt="Support"> <span>Support</span> </a>
+            <a href="#" class="nav-item"> <img src="notice_icon.png" class="nav-icon" alt="Notice"> <span>Notice</span> </a>
+            <a href="#" class="nav-item" id="withdraw-btn"> <img src="withdraw_icon.png" class="nav-icon" alt="Withdraw"> <span>Withdraw</span> </a>
         </footer>
     </div>
 
@@ -275,8 +276,6 @@
             if (withdrawBtn) withdrawBtn.addEventListener('click', (e) => { e.preventDefault(); withdrawModal.style.display = 'flex'; });
             if (closeModalBtn) closeModalBtn.addEventListener('click', () => { withdrawModal.style.display = 'none'; });
             if (withdrawModal) withdrawModal.addEventListener('click', (e) => { if (e.target === withdrawModal) withdrawModal.style.display = 'none'; });
-
-            // Note: Withdraw submit logic is just a placeholder for now.
         });
     </script>
 </body>
