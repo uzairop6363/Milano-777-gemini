@@ -239,17 +239,16 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const userCoins = localStorage.getItem('userCoins');
-            const userNumber = localStorage.getItem('userNumber');
-            const token = localStorage.getItem('token');
-
-            if (!token) {
-                window.location.href = 'index.html';
-                return; 
-            }
-
-            document.getElementById('user-coins').textContent = parseFloat(userCoins || 0).toFixed(2);
-            document.getElementById('user-name').textContent = userNumber || 'Guest';
-            document.getElementById('user-id').textContent = 'ID: ' + (userNumber || 'N/A');
+const username = localStorage.getItem('username'); // 'userNumber' ki jagah 'username'
+const displayId = localStorage.getItem('displayId'); // Yeh nayi line hai
+// ...
+const nameElement = document.getElementById('user-name');
+const idElement = document.getElementById('user-id');
+// ...
+if (username && displayId && nameElement && idElement) { 
+    nameElement.textContent = username; 
+    idElement.textContent = 'ID: ' + displayId; 
+} || 'N/A');
 
             const settingsBtn = document.getElementById('settings-btn');
             const settingsDropdown = document.getElementById('settings-dropdown');
