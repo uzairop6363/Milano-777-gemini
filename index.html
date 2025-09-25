@@ -47,6 +47,8 @@
                 <button class="btn btn-login" onclick="handleLogin()">Login</button>
                 <button class="btn btn-back" onclick="showInitialView()">Back</button>
             </div>
+            
+            <p id="message-area" style="color: #ffc107; margin-top: 15px; font-weight: bold; text-align: center;"></p>
         </div>
     </div>
 
@@ -55,11 +57,11 @@
         const registerView = document.getElementById('register-view');
         const loginView = document.getElementById('login-view');
         const captchaText = document.getElementById('captcha-text');
+        const messageArea = document.getElementById('message-area');
         let currentCaptcha = '';
 
         const backendUrl = 'https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev';
 
-        // --- View Management Functions ---
         function showInitialView() {
             initialView.classList.remove('hidden');
             registerView.classList.add('hidden');
@@ -89,11 +91,12 @@
             captchaText.textContent = currentCaptcha;
         }
         
-        // --- Button Handlers ---
         async function handleCreateAccount() {
             const number = document.getElementById('reg-number').value;
             const password = document.getElementById('reg-password').value;
             const captchaInput = document.getElementById('captcha-input').value;
+            
+            messageArea.textContent = '';
 
             if (number === '' || password === '') {
                 alert('Please enter both number and password.'); return;
@@ -105,6 +108,7 @@
                 return;
             }
 
+            messageArea.textContent = 'Creating account...';
             try {
                 const response = await fetch(backendUrl + '/register', {
                     method: 'POST',
@@ -117,6 +121,9 @@
 
                 if (response.ok) {
                     showLoginView();
+                    messageArea.textContent = 'Account created! Please login.';
+                } else {
+                    messageArea.textContent = message;
                 }
             } catch (error) {
                 alert('Error connecting to the server. Please try again.');
@@ -127,12 +134,15 @@
         async function handleLogin() {
             const number = document.getElementById('login-number').value;
             const password = document.getElementById('login-password').value;
+            
+            messageArea.textContent = '';
 
             if (number === '' || password === '') {
                 alert('Please enter both number and password.');
                 return;
             }
 
+            messageArea.textContent = 'Logging in...';
             try {
                 const response = await fetch(backendUrl + '/login', {
                     method: 'POST',
@@ -140,24 +150,22 @@
                     body: JSON.stringify({ number, password }),
                 });
 
-                const data = await response.json();
-
                 if (response.ok) {
+                    const data = await response.json();
+                    
                     // === YAHAN ZAROORI TABDEELI KI GAYI HAI ===
-                    // Purana 'userNumber' save karne ke bajaye, ab naya 'username' aur 'displayId' save hoga
+                    // Purana 'userNumber' save karne ke bajaye, ab naya data save hoga
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('username', data.user.username);
-      
                     localStorage.setItem('displayId', data.user.displayId);
                     localStorage.setItem('userCoins', data.user.virtualCoins);
+                    localStorage.setItem('hasCollectedWelcomeBonus', data.user.hasCollectedWelcomeBonus);
                     // ===========================================
                     
-                    alert(data.message);
                     window.location.href = 'lobby.html';
                 } else {
-                    // response.text() is used because server sends plain text for errors
                     const errorMessage = await response.text(); 
-                    alert(errorMessage);
+                    messageArea.textContent = errorMessage;
                 }
             } catch (error) {
                 alert('Error connecting to the server or processing response.');
@@ -165,7 +173,6 @@
             }
         }
 
-        // Check if already logged in when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             if (localStorage.getItem('token')) {
                 window.location.href = 'lobby.html';
