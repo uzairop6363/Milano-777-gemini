@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
+        /* CSS mein koi tabdeeli nahi ki gayi, woh bilkul theek hai */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; overflow: hidden; }
         body { 
@@ -26,154 +27,42 @@
             z-index: -1; filter: blur(80px); transform: scale(1.2);
         }
 
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes pulse-animation {
-            0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 200, 0, 0.5); }
-            50% { transform: scale(1.03); box-shadow: 0 0 20px rgba(255, 200, 0, 0.8); }
-            100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 200, 0, 0.5); }
-        }
+        @keyframes gradientAnimation { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes pulse-animation { 0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 200, 0, 0.5); } 50% { transform: scale(1.03); box-shadow: 0 0 20px rgba(255, 200, 0, 0.8); } 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 200, 0, 0.5); } }
 
-        .game-container { 
-            display: flex; flex-direction: column; 
-            height: 100%; padding: 10px; 
-            background: rgba(0,0,0,0.4);
-        }
+        .game-container { display: flex; flex-direction: column; height: 100%; padding: 10px; background: rgba(0,0,0,0.4); }
         .top-bar, .bottom-nav { flex-shrink: 0; }
-        .top-bar { 
-            display: flex; justify-content: space-between; 
-            align-items: center; padding: 0 5px; gap: 5px; 
-        }
-        .user-profile { 
-            display: flex; align-items: center; 
-            background: rgba(0,0,0,0.6); 
-            padding: 5px; border-radius: 50px; 
-            border: 1px solid rgba(255,255,255,0.3);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-        }
-        /* === AVATAR FRAME CHANGES START === */
-        .avatar-container {
-            width: 45px; /* Thora bada kiya */
-            height: 45px; /* Thora bada kiya */
-            border-radius: 50%;
-            border: 2px solid #ffc107; /* Golden border */
-            padding: 2px;
-            background: linear-gradient(145deg, #444, #222); /* Dark gradient background */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden; /* Image ko circle mein rakhega */
-        }
-        .avatar-container img { 
-            width: 100%; 
-            height: 100%; 
-            border-radius: 50%; /* Image ko bhi circular banayega */
-            object-fit: cover; /* Image ko frame ke andar fill karega */
-        }
-        /* ============================ */
-
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 5px; gap: 5px; }
+        .user-profile { display: flex; align-items: center; background: rgba(0,0,0,0.6); padding: 5px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 2px 5px rgba(0,0,0,0.4); }
+        .avatar-container { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #ffc107; padding: 2px; background: linear-gradient(145deg, #444, #222); display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        .avatar-container img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         .user-info { margin: 0 10px; }
         .user-info .name { font-weight: 600; font-size: clamp(0.8rem, 2.5vw, 1rem); }
         .user-info .id { font-size: clamp(0.6rem, 2vw, 0.8rem); color: #ccc; }
-        
         .balance-area { display: flex; align-items: center; gap: 10px; margin-left: auto; }
-        .currency-chip { 
-            background: rgba(0,0,0,0.6); 
-            padding: 8px 15px; border-radius: 50px; 
-            display: flex; align-items: center; gap: 8px; 
-            font-weight: 600; font-size: clamp(0.7rem, 2.2vw, 0.9rem);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .add-cash-btn { 
-            background: linear-gradient(to top, #ff9800, #ffc107);
-            border: none; border-radius: 20px; color: #000; 
-            padding: 10px 18px; font-weight: 700; 
-            font-size: clamp(0.7rem, 2.2vw, 0.9rem); cursor: pointer; 
-            display: flex; align-items: center; gap: 5px; 
-            box-shadow: 0 0 10px rgba(255, 200, 0, 0.5);
-            animation: pulse-animation 2.5s infinite ease-in-out;
-            transition: all 0.2s;
-        }
+        .currency-chip { background: rgba(0,0,0,0.6); padding: 8px 15px; border-radius: 50px; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: clamp(0.7rem, 2.2vw, 0.9rem); border: 1px solid rgba(255,255,255,0.3); }
+        .add-cash-btn { background: linear-gradient(to top, #ff9800, #ffc107); border: none; border-radius: 20px; color: #000; padding: 10px 18px; font-weight: 700; font-size: clamp(0.7rem, 2.2vw, 0.9rem); cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 0 10px rgba(255, 200, 0, 0.5); animation: pulse-animation 2.5s infinite ease-in-out; transition: all 0.2s; }
         .add-cash-btn:hover { animation-play-state: paused; transform: scale(1.05); }
-
-        .icon-btn { 
-            background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.3);
-            color: #ffc107; font-size: 1.2rem; cursor: pointer;
-            width: 40px; height: 40px; border-radius: 50%;
-        }
+        .icon-btn { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.3); color: #ffc107; font-size: 1.2rem; cursor: pointer; width: 40px; height: 40px; border-radius: 50%; }
         .settings-menu-container { position: relative; display: inline-block; }
         .dropdown-content { display: none; position: absolute; right: 0; top: 120%; background-color: #2a2a4e; min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5); z-index: 100; border-radius: 10px; border: 1px solid #ffc107; overflow: hidden; }
         .dropdown-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; font-size: 0.9rem; }
         .dropdown-content a:hover { background-color: #ffc107; color: #000; }
         .dropdown-content a i { margin-right: 10px; }
-        
-        .game-grid { 
-            flex-grow: 1; display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); 
-            gap: 15px; padding: 20px 10px; overflow-y: auto; 
-        }
+        .game-grid { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); gap: 15px; padding: 20px 10px; overflow-y: auto; }
         .game-grid a.game-card { text-decoration: none; color: #ffffff; }
-        .game-card { 
-            border-radius: 15px;
-            border: 2px solid rgba(255, 193, 7, 0.8);
-            cursor: pointer; 
-            transition: all 0.3s ease;
-            aspect-ratio: 1 / 1.1; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-            position: relative;
-            overflow: hidden;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-        }
-        .game-card:hover { 
-            transform: translateY(-8px); 
-            box-shadow: 0 0 25px #ffc107; 
-        }
+        .game-card { border-radius: 15px; border: 2px solid rgba(255, 193, 7, 0.8); cursor: pointer; transition: all 0.3s ease; aspect-ratio: 1 / 1.1; box-shadow: 0 5px 15px rgba(0,0,0,0.4); position: relative; overflow: hidden; background-size: cover; background-position: center; display: flex; justify-content: flex-end; align-items: center; }
+        .game-card:hover { transform: translateY(-8px); box-shadow: 0 0 25px #ffc107; }
         #ludo-card { background-image: url('ludo_poster.png'); }
         #rummy-card { background-image: url('rummy_poster.png'); }
         #teenpatti-card { background-image: url('teenpatti_poster.png'); }
         #dragontiger-card { background-image: url('dragontiger_poster.png'); }
-
-        .game-card-title {
-            width: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 20%, transparent);
-            padding: 20px 10px 10px 10px;
-            font-weight: 700;
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-            text-shadow: 0 1px 3px #000;
-        }
-        
-        .bottom-nav { 
-            background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.5)); 
-            display: flex; justify-content: space-around; 
-            padding: 8px 0; border-top: 1px solid rgba(255, 255, 255, 0.2); 
-        }
-        .nav-item { 
-            display: flex; flex-direction: column; align-items: center; 
-            color: #ddd; text-decoration: none; gap: 4px; 
-            font-size: 0.7rem; cursor: pointer; transition: all 0.2s;
-        }
+        .game-card-title { width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9) 20%, transparent); padding: 20px 10px 10px 10px; font-weight: 700; font-size: clamp(0.9rem, 2.5vw, 1.1rem); text-shadow: 0 1px 3px #000; }
+        .bottom-nav { background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.5)); display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid rgba(255, 255, 255, 0.2); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #ddd; text-decoration: none; gap: 4px; font-size: 0.7rem; cursor: pointer; transition: all 0.2s; }
         .nav-item:hover { color: #ffc107; transform: translateY(-3px); }
-        
-        .nav-icon {
-            width: 28px; height: 28px;
-            object-fit: contain;
-        }
-        
-        @media (orientation: landscape) { 
-            .game-grid { gap: 20px; padding: 25px; } 
-            .avatar-container { width: 50px; height: 50px; }
-            .nav-icon { width: 32px; height: 32px; }
-        }
-        
-        /* Modal styles same as before */
+        .nav-icon { width: 28px; height: 28px; object-fit: contain; }
+        @media (orientation: landscape) { .game-grid { gap: 20px; padding: 25px; } .avatar-container { width: 50px; height: 50px; } .nav-icon { width: 32px; height: 32px; } }
         .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);display:none;justify-content:center;align-items:center;z-index:1000;padding:10px}.modal-content{background:linear-gradient(135deg,#4c3c64,#2a2a4e);padding:25px;border-radius:20px;border:2px solid #ffc107;width:100%;max-width:400px;position:relative;box-shadow:0 0 20px rgba(255,193,7,.5);max-height:95%;overflow-y:auto}.modal-close{position:absolute;top:10px;right:15px;font-size:1.8rem;color:#fff;cursor:pointer;border:none;background:none}.modal-content h2{text-align:center;margin-bottom:20px;color:#ffc107}.payment-options{display:flex;justify-content:space-around;margin-bottom:20px}.payment-option{padding:10px 20px;border-radius:10px;border:2px solid #888;cursor:pointer;font-weight:600;transition:all .2s}.payment-option.selected{border-color:#ffc107;background-color:rgba(255,193,7,.2)}.form-group{margin-bottom:15px}.form-group label{display:block;margin-bottom:5px;font-weight:500;color:#ddd}.form-group input{width:100%;padding:12px;border-radius:8px;border:1px solid #888;background-color:#333;color:#fff;font-size:1rem}.submit-btn{width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(180deg,#ffc107,#ff9800);color:#000;font-size:1.1rem;font-weight:700;cursor:pointer;margin-top:10px}
     </style>
 </head>
@@ -237,44 +126,74 @@
         </div>
 
     <script>
+        // === SCRIPT AB PURI TARAH SE THEEK KAR DIYA GAYA HAI ===
         document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- User Data Display Logic ---
             const userCoins = localStorage.getItem('userCoins');
-const username = localStorage.getItem('username'); // 'userNumber' ki jagah 'username'
-const displayId = localStorage.getItem('displayId'); // Yeh nayi line hai
-// ...
-const nameElement = document.getElementById('user-name');
-const idElement = document.getElementById('user-id');
-// ...
-if (username && displayId && nameElement && idElement) { 
-    nameElement.textContent = username; 
-    idElement.textContent = 'ID: ' + displayId; 
-} || 'N/A');
+            const username = localStorage.getItem('username'); // 'userNumber' ke bajaye 'username'
+            const displayId = localStorage.getItem('displayId');   // Yeh nayi ID hai
+            const token = localStorage.getItem('token');
 
+            // Agar token nahi, to login page par wapas bhej dein
+            if (!token) {
+                window.location.href = 'index.html';
+                return; 
+            }
+
+            // Elements ko get karein
+            const coinsElement = document.getElementById('user-coins');
+            const nameElement = document.getElementById('user-name');
+            const idElement = document.getElementById('user-id');
+
+            // Data ko screen par display karein
+            if (coinsElement) {
+                coinsElement.textContent = parseFloat(userCoins || 0).toFixed(2);
+            }
+            if (nameElement && username) {
+                nameElement.textContent = username;
+            }
+            if (idElement && displayId) {
+                idElement.textContent = 'ID: ' + displayId;
+            }
+
+            // --- Baaki ke page ki functionality ---
             const settingsBtn = document.getElementById('settings-btn');
             const settingsDropdown = document.getElementById('settings-dropdown');
-            settingsBtn.addEventListener('click', (event) => {
-                event.stopPropagation();
-                settingsDropdown.style.display = settingsDropdown.style.display === 'block' ? 'none' : 'block';
-            });
+            const logoutOption = document.getElementById('logout-option');
+            const withdrawBtn = document.getElementById('withdraw-btn');
+            const withdrawModal = document.getElementById('withdraw-modal');
+
+            if (settingsBtn && settingsDropdown) {
+                settingsBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    settingsDropdown.style.display = settingsDropdown.style.display === 'block' ? 'none' : 'block';
+                });
+            }
+            
+            if (logoutOption) {
+                logoutOption.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.clear();
+                    window.location.href = 'index.html';
+                });
+            }
+
+            if (withdrawBtn && withdrawModal) {
+                 withdrawBtn.addEventListener('click', (e) => { 
+                    e.preventDefault();
+                    // Yahan aap withdrawal modal ka content load kar sakte hain
+                    // Filhaal hum isay sirf show kar rahe hain
+                    withdrawModal.style.display = 'flex'; 
+                });
+            }
+
+            // Page par kahin bhi click karne se settings menu band ho jaye
             window.addEventListener('click', () => {
-                if (settingsDropdown.style.display === 'block') {
+                if (settingsDropdown && settingsDropdown.style.display === 'block') {
                     settingsDropdown.style.display = 'none';
                 }
             });
-            
-            document.getElementById('logout-option').addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.clear();
-                window.location.href = 'index.html';
-            });
-
-            const withdrawBtn = document.getElementById('withdraw-btn');
-            const withdrawModal = document.getElementById('withdraw-modal');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            
-            if (withdrawBtn) withdrawBtn.addEventListener('click', (e) => { e.preventDefault(); withdrawModal.style.display = 'flex'; });
-            if (closeModalBtn) closeModalBtn.addEventListener('click', () => { withdrawModal.style.display = 'none'; });
-            if (withdrawModal) withdrawModal.addEventListener('click', (e) => { if (e.target === withdrawModal) withdrawModal.style.display = 'none'; });
         });
     </script>
 </body>
