@@ -12,13 +12,22 @@
         html, body { height: 100%; overflow: hidden; }
         body { 
             font-family: 'Poppins', sans-serif; 
-            background-color: #1a1a1a; 
-            background-image: url('https://i.imgur.com/bFxvSPm.jpg'); /* New, high-quality background */
-            background-size: cover; background-position: center; 
-            background-attachment: fixed; color: #ffffff; 
+            color: #ffffff; 
+            
+            /* === NEW ANIMATED GRADIENT BACKGROUND START === */
+            background: linear-gradient(135deg, #1abc9c, #2ecc71, #3498db); /* Green to light green to blueish-green */
+            background-size: 400% 400%; /* Gradient ko bada karein taake woh move ho sake */
+            animation: gradientAnimation 15s ease infinite; /* 15 seconds ka smooth animation */
+            /* === NEW ANIMATED GRADIENT BACKGROUND END === */
         }
-        
-        /* === NEW PROFESSIONAL UI STYLES START === */
+
+        /* === NEW KEYFRAMES FOR ANIMATED GRADIENT === */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        /* =========================================== */
         
         @keyframes pulse-animation {
             0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 200, 0, 0.5); }
@@ -29,7 +38,8 @@
         .game-container { 
             display: flex; flex-direction: column; 
             height: 100%; padding: 10px; 
-            background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.7)); 
+            /* BACKGROUND KO THORA SA TRANSPARENT KARNA HAI */
+            background: rgba(0,0,0,0.3); /* Pehle se halka transparent */
         }
         .top-bar, .bottom-nav { flex-shrink: 0; }
         .top-bar { 
@@ -132,7 +142,6 @@
         
         /* Modal styles same as before */
         .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.7);display:none;justify-content:center;align-items:center;z-index:1000;padding:10px}.modal-content{background:linear-gradient(135deg,#4c3c64,#2a2a4e);padding:25px;border-radius:20px;border:2px solid #ffc107;width:100%;max-width:400px;position:relative;box-shadow:0 0 20px rgba(255,193,7,.5);max-height:95%;overflow-y:auto}.modal-close{position:absolute;top:10px;right:15px;font-size:1.8rem;color:#fff;cursor:pointer;border:none;background:none}.modal-content h2{text-align:center;margin-bottom:20px;color:#ffc107}.payment-options{display:flex;justify-content:space-around;margin-bottom:20px}.payment-option{padding:10px 20px;border-radius:10px;border:2px solid #888;cursor:pointer;font-weight:600;transition:all .2s}.payment-option.selected{border-color:#ffc107;background-color:rgba(255,193,7,.2)}.form-group{margin-bottom:15px}.form-group label{display:block;margin-bottom:5px;font-weight:500;color:#ddd}.form-group input{width:100%;padding:12px;border-radius:8px;border:1px solid #888;background-color:#333;color:#fff;font-size:1rem}.submit-btn{width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(180deg,#ffc107,#ff9800);color:#000;font-size:1.1rem;font-weight:700;cursor:pointer;margin-top:10px}
-        /* ==================================== */
     </style>
 </head>
 <body>
@@ -212,9 +221,7 @@
     </div>
 
     <script>
-        // Aapke JavaScript mein koi zaroori tabdeeli nahi ki gayi
         document.addEventListener('DOMContentLoaded', function() {
-            
             const userCoins = localStorage.getItem('userCoins');
             const userNumber = localStorage.getItem('userNumber');
             const token = localStorage.getItem('token');
@@ -246,17 +253,39 @@
                 window.location.href = 'index.html';
             });
 
-            // Withdrawal Modal Logic
             const withdrawBtn = document.getElementById('withdraw-btn');
             const withdrawModal = document.getElementById('withdraw-modal');
             const closeModalBtn = document.getElementById('close-modal-btn');
+            const paymentOptions = document.querySelectorAll('.payment-option');
+            const confirmWithdrawBtn = document.getElementById('confirm-withdraw-btn');
             
-            if (withdrawBtn) withdrawBtn.addEventListener('click', (e) => { e.preventDefault(); withdrawModal.style.display = 'flex'; });
-            if (closeModalBtn) closeModalBtn.addEventListener('click', () => { withdrawModal.style.display = 'none'; });
-            if (withdrawModal) withdrawModal.addEventListener('click', (e) => { if (e.target === withdrawModal) withdrawModal.style.display = 'none'; });
+            if(withdrawBtn) { withdrawBtn.addEventListener('click', (event) => { event.preventDefault(); withdrawModal.style.display = 'flex'; }); }
+            if(closeModalBtn) { closeModalBtn.addEventListener('click', () => { withdrawModal.style.display = 'none'; }); }
+            if(withdrawModal) { withdrawModal.addEventListener('click', (event) => { if (event.target === withdrawModal) { withdrawModal.style.display = 'none'; } }); }
 
-            // Note: Withdraw submit logic abhi bhi sirf ek alert dikha raha hai
-            // Iski asal logic hum pehle discuss kar chuke hain
+            if(paymentOptions) {
+                let selectedPaymentMethod = null;
+                paymentOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        selectedPaymentMethod = option.getAttribute('data-method');
+                    });
+                });
+
+                if(confirmWithdrawBtn) {
+                    confirmWithdrawBtn.addEventListener('click', () => {
+                        const accountNumber = document.getElementById('account-number').value;
+                        const amount = document.getElementById('amount').value;
+                        if (!selectedPaymentMethod) { alert('Please select a payment method.'); return; }
+                        if (accountNumber.trim() === '') { alert('Please enter an account number.'); return; }
+                        if (amount.trim() === '' || parseFloat(amount) <= 0) { alert('Please enter a valid amount.'); return; }
+                        const confirmationMessage = `Withdrawal request submitted:\n\nMethod: ${selectedPaymentMethod}\nAccount: ${accountNumber}\nAmount: PKR ${amount}\n\nYour request is being processed.`;
+                        alert(confirmationMessage);
+                        withdrawModal.style.display = 'none';
+                    });
+                }
+            }
         });
     </script>
 </body>
