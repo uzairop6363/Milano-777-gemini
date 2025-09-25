@@ -5,244 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Milano 777</title>
 
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
-
     <style>
-        /* Basic Reset and Font */
+        /* CSS mein koi tabdeeli nahi ki gayi */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Teko:wght@700&display=swap');
-
-        :root {
-            --dark-purple: #1a0f29;
-            --mid-purple: #2c1d3e;
-            --accent-pink: #e040fb;
-            --accent-gold: #FFD700;
-        }
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Poppins', sans-serif;
-            background: var(--dark-purple);
-            background: linear-gradient(to right, var(--mid-purple), var(--dark-purple));
-            color: #fff;
-        }
-
-        /* Landscape Enforcement */
-        @media (orientation: portrait) {
-            #orientation-warning { display: flex; }
-            #main-container { display: none; }
-        }
-        @media (orientation: landscape) {
-            #orientation-warning { display: none; }
-            #main-container { display: flex; }
-        }
-
-        #orientation-warning {
-            width: 100%;
-            height: 100%;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-size: 1.2em;
-            color: #fff;
-            background-color: #000;
-        }
-
-        /* Main container for landscape layout */
-        #main-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        /* Image Container */
-        .image-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding-right: 20px;
-            position: relative;
-        }
-        
-        .casino-girl-img {
-            max-width: 100%;
-            max-height: 90vh;
-            height: auto;
-            border-radius: 20px;
-            box-shadow: 0 0 30px var(--accent-pink);
-            position: relative;
-            z-index: 2;
-        }
-
-        .image-container::before {
-            content: '';
-            position: absolute;
-            top: -5px; left: -5px; right: -5px; bottom: -5px;
-            background: linear-gradient(45deg, var(--accent-pink), var(--accent-gold), var(--accent-pink));
-            background-size: 400% 400%;
-            border-radius: 25px;
-            filter: blur(20px);
-            z-index: 1;
-            animation: glow-animation 8s ease infinite;
-        }
-
-        @keyframes glow-animation {
-            0% { opacity: 0.7; background-position: 0% 50%; }
-            50% { opacity: 1; background-position: 100% 50%; }
-            100% { opacity: 0.7; background-position: 0% 50%; }
-        }
-
-        /* Login Form Container */
-        .login-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            z-index: 3;
-        }
-        
-        .game-title {
-            font-family: 'Teko', sans-serif;
-            font-size: 4em;
-            font-weight: 700;
-            color: var(--accent-gold);
-            text-shadow: 0 0 5px var(--accent-gold), 0 0 15px var(--accent-gold), 0 0 30px var(--accent-pink), 0 0 50px var(--accent-pink);
-            margin-bottom: 20px;
-        }
-
-        .input-group, .form-view {
-            width: 100%;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 15px;
-            box-sizing: border-box;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--accent-gold);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 1em;
-            outline: none;
-            margin-bottom: 20px;
-        }
-        
-        .input-field::placeholder { color: #ccc; }
-
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.2em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 15px;
-        }
-
-        .btn-login {
-            background: linear-gradient(45deg, var(--accent-gold), #FFA500);
-            color: var(--dark-purple);
-        }
-        .btn-login:hover { box-shadow: 0 0 20px var(--accent-gold); }
-
-        .btn-create {
-            background: transparent;
-            color: var(--accent-gold);
-            border: 2px solid var(--accent-gold);
-        }
-        .btn-create:hover { background: var(--accent-gold); color: var(--dark-purple); }
-
-        .btn-back {
-            background: transparent;
-            color: #ccc;
-            border: 2px solid #ccc;
-            font-size: 1em;
-            margin-top: 10px;
-        }
-        .btn-back:hover { background: #ccc; color: var(--dark-purple); }
-
-        .hidden { display: none !important; }
-
-        /* Captcha Styles */
-        .captcha-box {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            margin-bottom: 20px;
-            gap: 10px;
-        }
-        #captcha-text {
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--accent-gold);
-            border-radius: 10px;
-            font-size: 1.2em;
-            font-weight: bold;
-            letter-spacing: 5px;
-            text-decoration: line-through;
-            user-select: none;
-            flex-grow: 1;
-            text-align: center;
-        }
-        #captcha-input {
-            width: 50%;
-            padding: 15px;
-            box-sizing: border-box;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--accent-gold);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 1em;
-            outline: none;
-        }
-
-        /* === MOBILE LANDSCAPE FIXES START HERE === */
-        @media (max-width: 900px) and (orientation: landscape) {
-            #main-container {
-                padding: 10px; /* Main padding kam kar di */
-                gap: 10px;
-            }
-
-            .image-container {
-                padding-right: 0;
-            }
-
-            .login-container {
-                padding: 20px; /* Login box ki padding bhi kam kar di */
-            }
-
-            .game-title {
-                font-size: 2.5em; /* Title thora chota kar diya */
-                margin-bottom: 15px;
-            }
-
-            .input-field, .btn, #captcha-text, #captcha-input {
-                padding: 12px; /* Buttons aur input fields ki padding adjust ki */
-                font-size: 0.9em;
-                margin-bottom: 12px;
-            }
-        }
-        /* === MOBILE LANDSCAPE FIXES END HERE === */
-
+        :root{--dark-purple:#1a0f29;--mid-purple:#2c1d3e;--accent-pink:#e040fb;--accent-gold:#FFD700}body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;font-family:'Poppins',sans-serif;background:var(--dark-purple);background:linear-gradient(to right,var(--mid-purple),var(--dark-purple));color:#fff}@media (orientation:portrait){#orientation-warning{display:flex}#main-container{display:none}}@media (orientation:landscape){#orientation-warning{display:none}#main-container{display:flex}}#orientation-warning{width:100%;height:100%;justify-content:center;align-items:center;text-align:center;font-size:1.2em;color:#fff;background-color:#000}#main-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}.image-container{flex:1;display:flex;justify-content:center;align-items:center;padding-right:20px;position:relative}.casino-girl-img{max-width:100%;max-height:90vh;height:auto;border-radius:20px;box-shadow:0 0 30px var(--accent-pink);position:relative;z-index:2}.image-container::before{content:'';position:absolute;top:-5px;left:-5px;right:-5px;bottom:-5px;background:linear-gradient(45deg,var(--accent-pink),var(--accent-gold),var(--accent-pink));background-size:400% 400%;border-radius:25px;filter:blur(20px);z-index:1;animation:glow-animation 8s ease infinite}@keyframes glow-animation{0%{opacity:.7;background-position:0% 50%}50%{opacity:1;background-position:100% 50%}100%{opacity:.7;background-position:0% 50%}}.login-container{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(0,0,0,.3);padding:40px;border-radius:20px;backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,.1);position:relative;z-index:3}.game-title{font-family:'Teko',sans-serif;font-size:4em;font-weight:700;color:var(--accent-gold);text-shadow:0 0 5px var(--accent-gold),0 0 15px var(--accent-gold),0 0 30px var(--accent-pink),0 0 50px var(--accent-pink);margin-bottom:20px}.input-group,.form-view{width:100%}.input-field{width:100%;padding:15px;box-sizing:border-box;background:rgba(255,255,255,.1);border:1px solid var(--accent-gold);border-radius:10px;color:#fff;font-size:1em;outline:none;margin-bottom:20px}.input-field::placeholder{color:#ccc}.btn{width:100%;padding:15px;border:none;border-radius:10px;font-size:1.2em;font-weight:bold;cursor:pointer;transition:all .3s ease;margin-bottom:15px}.btn-login{background:linear-gradient(45deg,var(--accent-gold),#FFA500);color:var(--dark-purple)}.btn-login:hover{box-shadow:0 0 20px var(--accent-gold)}.btn-create{background:transparent;color:var(--accent-gold);border:2px solid var(--accent-gold)}.btn-create:hover{background:var(--accent-gold);color:var(--dark-purple)}.btn-back{background:transparent;color:#ccc;border:2px solid #ccc;font-size:1em;margin-top:10px}.btn-back:hover{background:#ccc;color:var(--dark-purple)}.hidden{display:none!important}.captcha-box{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:20px;gap:10px}#captcha-text{padding:15px;background:rgba(255,255,255,.1);border:1px solid var(--accent-gold);border-radius:10px;font-size:1.2em;font-weight:bold;letter-spacing:5px;text-decoration:line-through;user-select:none;flex-grow:1;text-align:center}#captcha-input{width:50%;padding:15px;box-sizing:border-box;background:rgba(255,255,255,.1);border:1px solid var(--accent-gold);border-radius:10px;color:#fff;font-size:1em;outline:none}@media (max-width:900px) and (orientation:landscape){#main-container{padding:10px;gap:10px}.image-container{padding-right:0}.login-container{padding:20px}.game-title{font-size:2.5em;margin-bottom:15px}.input-field,.btn,#captcha-text,#captcha-input{padding:12px;font-size:.9em;margin-bottom:12px}}
     </style>
 </head>
 <body>
@@ -291,7 +57,6 @@
         const captchaText = document.getElementById('captcha-text');
         let currentCaptcha = '';
 
-        // Aapka backend server ka URL
         const backendUrl = 'https://b0158448-b383-4656-a22d-0b633d32aeb3-00-2iapxn0m9y2d8.pike.replit.dev';
 
         // --- View Management Functions ---
@@ -315,7 +80,7 @@
         }
 
         function generateCaptcha() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let result = '';
             for (let i = 0; i < 5; i++) {
                 result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -323,9 +88,8 @@
             currentCaptcha = result;
             captchaText.textContent = currentCaptcha;
         }
-
-        // --- FINAL, WORKING BUTTON HANDLERS ---
-
+        
+        // --- Button Handlers ---
         async function handleCreateAccount() {
             const number = document.getElementById('reg-number').value;
             const password = document.getElementById('reg-password').value;
@@ -379,16 +143,21 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Is naye code se badal dein
-localStorage.setItem('token', data.token);
-localStorage.setItem('username', data.user.username); // 'userNumber' ki jagah 'username'
-localStorage.setItem('displayId', data.user.displayId); // Yeh nayi line hai
-localStorage.setItem('userCoins', data.user.virtualCoins);
+                    // === YAHAN ZAROORI TABDEELI KI GAYI HAI ===
+                    // Purana 'userNumber' save karne ke bajaye, ab naya 'username' aur 'displayId' save hoga
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('username', data.user.username);
+      
+                    localStorage.setItem('displayId', data.user.displayId);
+                    localStorage.setItem('userCoins', data.user.virtualCoins);
+                    // ===========================================
                     
                     alert(data.message);
                     window.location.href = 'lobby.html';
                 } else {
-                    alert(data);
+                    // response.text() is used because server sends plain text for errors
+                    const errorMessage = await response.text(); 
+                    alert(errorMessage);
                 }
             } catch (error) {
                 alert('Error connecting to the server or processing response.');
@@ -396,7 +165,14 @@ localStorage.setItem('userCoins', data.user.virtualCoins);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', showInitialView);
+        // Check if already logged in when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('token')) {
+                window.location.href = 'lobby.html';
+            } else {
+                showInitialView();
+            }
+        });
     </script>
 </body>
 </html>
