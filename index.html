@@ -379,9 +379,11 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('userNumber', data.user.number);
-                    localStorage.setItem('userCoins', data.user.virtualCoins);
+                    // Is naye code se badal dein
+localStorage.setItem('token', data.token);
+localStorage.setItem('username', data.user.username); // 'userNumber' ki jagah 'username'
+localStorage.setItem('displayId', data.user.displayId); // Yeh nayi line hai
+localStorage.setItem('userCoins', data.user.virtualCoins);
                     
                     alert(data.message);
                     window.location.href = 'lobby.html';
